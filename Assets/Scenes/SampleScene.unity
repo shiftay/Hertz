@@ -521,8 +521,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteHandler: {fileID: 1266580980}
-  cardGOs: []
+  Deck: []
   cardPrefab: {fileID: 1773448044835626266, guid: 858791a15949c4249afe38dc05b6765f, type: 3}
+  dealPositions:
+  - {fileID: 1023258104}
+  - {fileID: 821017133}
+  - {fileID: 44449457}
+  - {fileID: 846550453}
 --- !u!4 &1266580979
 Transform:
   m_ObjectHideFlags: 0
