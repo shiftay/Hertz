@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class CardGO : MonoBehaviour
@@ -14,6 +15,15 @@ public class CardGO : MonoBehaviour
         
     }
 
+    [Button("Width")]
+    public void Width() {
+        Debug.Log("Width ? " + _currentSprite.bounds.size.x);
+    }
+
+    [Button("Height")]
+    public void Height() {
+        Debug.Log("Height ? " + _currentSprite.bounds.size.y);
+    }
     // Update is called once per frame
     void Update()
     {

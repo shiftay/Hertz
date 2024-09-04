@@ -30,10 +30,12 @@ public class Dealer : MonoBehaviour
 
     public void Deal() {
         for(int i = 0; i < Deck.Count; i++) {
-            Player curPlayer =  players[i%4];
+            Player curPlayer = players[i%4];
             Deck[i].transform.position = dealPositions[i % 4].transform.position;
+            Deck[i].transform.SetParent(dealPositions[i % 4]);
             Deck[i]._currentCard.CURRENTOWNER = curPlayer;
             curPlayer._currentHand.cards.Add(Deck[i]._currentCard);
+            
             if(!curPlayer.isPlayer) Deck[i]._currentSprite.sprite = spriteHandler.CardBack();
         }
     }
