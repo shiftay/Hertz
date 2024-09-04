@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class CPU_Player : Player
 {
-    // Start is called before the first frame update
-    void Start()
+    public CPU_Player(bool player) : base(player)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        isPlayer = player;
     }
 }
