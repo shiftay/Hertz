@@ -28,13 +28,24 @@ public class Dealer : MonoBehaviour
         Shuffle(Deck);
     }
 
+    [Button("Play A Card")]
+    public void PlayCard() {
+        CardGO objectToDestroy;
+        for(int i =0 ; i < players.Count; i++) {
+            objectToDestroy = players[i]._currentHand.cards[0];
+            Deck.Remove(objectToDestroy);
+            players[i]._currentHand.cards.Remove(objectToDestroy);
+            Destroy(objectToDestroy.gameObject);
+        }
+    }
+
     public void Deal() {
         for(int i = 0; i < Deck.Count; i++) {
             Player curPlayer = players[i%4];
             Deck[i].transform.position = dealPositions[i % 4].transform.position;
             Deck[i].transform.SetParent(dealPositions[i % 4]);
             Deck[i]._currentCard.CURRENTOWNER = curPlayer;
-            curPlayer._currentHand.cards.Add(Deck[i]._currentCard);
+            curPlayer._currentHand.cards.Add(Deck[i]);
             
             if(!curPlayer.isPlayer) Deck[i]._currentSprite.sprite = spriteHandler.CardBack();
         }

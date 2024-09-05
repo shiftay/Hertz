@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using TMPro.EditorUtilities;
 using UnityEngine;
 
 public class CardGO : MonoBehaviour
@@ -28,5 +29,10 @@ public class CardGO : MonoBehaviour
     void Update()
     {
         
+    }
+
+
+    void OnMouseDown() {
+        Debug.Log("Pressed: " + _currentCard.cardInfo.cardValue + " of " + _currentCard.cardInfo.cardSuit.ToString());
     }
 }

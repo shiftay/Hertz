@@ -131,6 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 44449457}
+  - component: {fileID: 44449458}
   m_Layer: 0
   m_Name: CPU Hands
   m_TagString: Untagged
@@ -153,6 +154,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &44449458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44449456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4773352331bce70469d5ab6eb468ebab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentXVal: 0
+  _currentYVal: 0
+  _signOfMiddle: 0
+  currentAXIS: 1
+  isCPU: 0
 --- !u!1 &445142699
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,7 +325,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -322,6 +340,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 821017133}
+  - component: {fileID: 821017134}
   m_Layer: 0
   m_Name: CPU Hands
   m_TagString: Untagged
@@ -344,6 +363,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &821017134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821017132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4773352331bce70469d5ab6eb468ebab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentXVal: 0
+  _currentYVal: 0
+  _signOfMiddle: 0
+  currentAXIS: 2
+  isCPU: 0
 --- !u!1 &846550452
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,6 +424,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4773352331bce70469d5ab6eb468ebab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentXVal: 0
+  _currentYVal: 0
+  _signOfMiddle: 0
+  currentAXIS: 0
+  isCPU: 0
 --- !u!1 &959622402
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,6 +522,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1023258104}
+  - component: {fileID: 1023258105}
   m_Layer: 0
   m_Name: CPU Hands
   m_TagString: Untagged
@@ -503,6 +545,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1023258105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023258103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4773352331bce70469d5ab6eb468ebab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentXVal: 0
+  _currentYVal: 0
+  _signOfMiddle: 0
+  currentAXIS: 3
+  isCPU: 1
 --- !u!1 &1266580977
 GameObject:
   m_ObjectHideFlags: 0
@@ -814,7 +873,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!114 &1700453946
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,5 +5,5 @@ using UnityEngine;
 [System.Serializable]
 public class Hand
 {
-    public List<Card> cards = new List<Card>();
+    public List<CardGO> cards = new List<CardGO>();
 }
