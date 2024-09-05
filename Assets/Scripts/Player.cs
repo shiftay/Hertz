@@ -15,6 +15,3 @@ public class Player
         _currentHand = new Hand();
     }
 }
-
-
-

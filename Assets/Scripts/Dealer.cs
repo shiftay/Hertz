@@ -58,9 +58,52 @@ public class Dealer : MonoBehaviour
     }
 
 
-    public void FindCard() {
+    /* 
+        
 
-    }
+        "Turns"
+            > One player at random will be labeled as the "Dealer" 
+                > This means they are the first person to play their card.
+            > Player should only really be able to interact with their cards if it is currently their turn to play.
+            > Cards will be played out in clockwise order by default
+
+            Post-Turn
+                > The High card wins the round, collecting all of the cards in the middle.
+                    > The cards will be moved towards the winning player, and a "Won Hands" UI Compartment will show up at the players area
+                > No scoring occurs until every card is played.
+
+            > "Won Hands"
+                > Will be a UI Showing the cards that the person has won
+                > Small and concise, will only show up on Hover of the Compartment itself. 
+    
+    
+    
+        "Rules"
+            > Players must follow the suit of the card played if at all possible.
+                > If player picks up a card that is not playable, snap it back to starting spot in hand and play animation on playable cards.
+            > High card wins the round.
+                > Eventually will have to put more logic forth
+                > The goal isn't necessarily to always win the round
+            > Collection of Hearts are inherently bad.
+                > Hearts are points against you. 
+                > Queen of Spades is a significant amount against you.
+            > Hearts can not be the starting suit played
+                > Only after a heart has been dumped in a non heart started suit, can a heart be the starting suit.
+            > IF a player is able to collect all of the hearts and the Queen of Spades they are rewarded.
+
+            
+        "AI"
+            > Multiple stages of Difficulty
+            > At no point should they "know" anything before it has been played.
+                > Focus on their ability to Attempt to swindle the player into winning Hearts
+                > Focus on the ability to use different strategies
+                > Search possible strategies through google.
+            > Possible Strategies:
+                > Attempting to dump a specific suit, so that they can start to play Hearts into the middle.
+                    > Example: "Winning all club hands, in order to lose a low club hand, allowing them to be out of clubs for any specific reason"
+    
+    
+    */
 
     private void CreateCards() {
         CardGO current = null;
@@ -89,14 +132,14 @@ public class Dealer : MonoBehaviour
                              set {  if(isDragging != value) playArea.animator.SetTrigger("Trigger"); 
                                     isDragging = value; }}
 
-    public void Dragging(CardGO clicked, bool dragging) {
+    public void StartDrag(CardGO clicked) {
         if(_currentSelected == null) _currentSelected = clicked;
 
         if(_currentSelected != clicked) {
             _currentSelected = clicked;
         }
 
-        IsDragging = dragging;
+        IsDragging = true;
     }
 
     public Vector3 EndDrag(Vector3 currentPos) {

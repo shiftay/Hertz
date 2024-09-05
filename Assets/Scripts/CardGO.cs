@@ -19,7 +19,7 @@ public class CardGO : MonoBehaviour
         if(!_currentCard.CURRENTOWNER.isPlayer) return;
 
         _startingPosition = transform.position;
-        Dealer.instance.Dragging(this, true);
+        Dealer.instance.StartDrag(this);
     }
 
 
