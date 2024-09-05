@@ -8,31 +8,34 @@ public class CardGO : MonoBehaviour
 {
     public Card _currentCard;
     public SpriteRenderer _currentSprite;
+    public GameObject _glow;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    [Button("Width")]
-    public void Width() {
-        Debug.Log("Width ? " + _currentSprite.bounds.size.x);
-    }
-
-    [Button("Height")]
-    public void Height() {
-        Debug.Log("Height ? " + _currentSprite.bounds.size.y);
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Vector3 _startingPosition;
 
 
     void OnMouseDown() {
+        if(!_currentCard.CURRENTOWNER.isPlayer) return;
+
+        _startingPosition = transform.position;
+        Dealer.instance.Selected(this);
         Debug.Log("Pressed: " + _currentCard.cardInfo.cardValue + " of " + _currentCard.cardInfo.cardSuit.ToString());
     }
+
+
+    void OnMouseDrag()
+    {
+        if(!_currentCard.CURRENTOWNER.isPlayer) return;
+
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0;
+        mousePos.z = Dealer.instance.insideBox(mousePos) ? _startingPosition.z : CONSTS.MAXZ;
+        transform.position = mousePos;
+    }
+
+
+    void OnMouseUp()
+    {
+        transform.position = _startingPosition;
+    }
+
 }

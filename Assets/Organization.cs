@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public enum AXIS { NORTH, EAST, SOUTH, WEST }
+
 
 
 public class Organization : MonoBehaviour
@@ -20,8 +20,9 @@ public class Organization : MonoBehaviour
     public float _signOfMiddle;
     private Vector3 _rotatePointA, _rotatePointB;
     private int currentChildAmount, lastUpdateChildAmount;
+    public BoxCollider2D boxCollider2D;
     
-    public AXIS currentAXIS;
+    public CONSTS.AXIS currentAXIS;
     private float _rotationMod;
     public bool isCPU;
 
@@ -43,15 +44,6 @@ public class Organization : MonoBehaviour
 
     private void Awake() {
         lastUpdateChildAmount = currentChildAmount = 0;
-        // _rotatePointA = new Vector3(transform.position.x, transform.position.y - CONSTS.ROTATEVALY, transform.position.z);
-        // _rotatePointB = new Vector3(transform.position.x, transform.position.y + CONSTS.HANDLINEVALUEY, transform.position.z);
-
-        // _currentXVal = CONSTS.HANDLINEVALUEX;
-        // _currentYVal = CONSTS.HANDLINEVALUEY;
-        // _startingPointY = transform.position.y;
-        // _endPointY = transform.position.y + _currentYVal;
-        // _startingPointX = transform.position.x - _currentXVal;
-        // _endPointX = transform.position.x + _currentXVal;
     }
 
 
@@ -81,17 +73,9 @@ public class Organization : MonoBehaviour
     private Transform _currentChild;
 
     private void OrganizeHand() {
-        /* 
-            TODO: Scale pointA and pointB by childcount.
-            
-            After a card is played, scale the VALUE
-        */
-
-        
 
         lastUpdateChildAmount = transform.childCount;
         UpdateAxis();
-        // ScaleValues();
         Sort();
 
         for(int i = 0; i < transform.childCount; i++) {
@@ -100,15 +84,6 @@ public class Organization : MonoBehaviour
             _currentChild.rotation = Quaternion.Euler(new Vector3(0, 0, _signOfMiddle * GetVectorInternalAngle(_rotatePointA, _currentChild.position,  _rotatePointB) - _rotationMod));
             _currentChild.position = new Vector3(_currentChild.position.x, _currentChild.position.y, i * -1);
         }
-                                                                                                                            /* 
-                                                                                                                                ABC - North South
-                                                                                                                                BAC ?
-                                                                                                                                BCA ?
-                                                                                                                                CBA ?
-                                                                                                                                CAB ? 
-                                                                                                                                ACB
-
-                                                                                                                            */
     }
 
     private Vector3 ReturnPosition(int i) {
@@ -122,11 +97,11 @@ public class Organization : MonoBehaviour
         if(distanceFromMid == midVal) distanceFromMid--;
 
         switch(currentAXIS) {
-            case AXIS.SOUTH:
-            case AXIS.NORTH:
+            case CONSTS.AXIS.SOUTH:
+            case CONSTS.AXIS.NORTH:
                 return new Vector3(Mathf.Lerp(_startingPointX, _endPointX, (float)i / ((float)transform.childCount - 1)), Mathf.Lerp(_startingPointY, _endPointY, distanceFromMid / midVal));
-            case AXIS.WEST:
-            case AXIS.EAST:
+            case CONSTS.AXIS.WEST:
+            case CONSTS.AXIS.EAST:
                 return new Vector3(Mathf.Lerp(_startingPointX, _endPointX, distanceFromMid / midVal), Mathf.Lerp(_startingPointY, _endPointY, (float)i / ((float)transform.childCount - 1)));
             default:
                 return Vector3.zero;
@@ -145,7 +120,7 @@ public class Organization : MonoBehaviour
 
         for(int i = 0; i < children.Count; i++) {
             children[i].transform.SetSiblingIndex(i);
-            children[i]._currentSprite.sortingOrder = i+1;
+            // children[i]._currentSprite.sortingOrder = i+1;
         }
     }
 
@@ -154,7 +129,7 @@ public class Organization : MonoBehaviour
         _currentYVal = Mathf.Lerp(0, CONSTS.HANDLINEVALUEY, transform.childCount / CONSTS.HANDSIZE);
 
         switch(currentAXIS) {
-            case AXIS.NORTH:
+            case CONSTS.AXIS.NORTH:
                 _rotationMod = 0;
                 _startingPointY = transform.position.y;
                 _endPointY = transform.position.y + _currentYVal;
@@ -165,7 +140,7 @@ public class Organization : MonoBehaviour
 
 
                 break;
-            case AXIS.EAST:
+            case CONSTS.AXIS.EAST:
                 _rotationMod = 90;
                 _startingPointY = transform.position.y - _currentXVal;
                 _endPointY = transform.position.y + _currentXVal;
@@ -176,7 +151,7 @@ public class Organization : MonoBehaviour
 
 
                 break;
-            case AXIS.SOUTH:
+            case CONSTS.AXIS.SOUTH:
                 _rotationMod = 0;
                 _startingPointY = transform.position.y;
                 _endPointY = transform.position.y - _currentYVal;
@@ -186,7 +161,7 @@ public class Organization : MonoBehaviour
                 _rotatePointB = new Vector3(transform.position.x, transform.position.y - CONSTS.HANDLINEVALUEY, transform.position.z);
 
                 break;
-            case AXIS.WEST:
+            case CONSTS.AXIS.WEST:
                 _rotationMod = 90;
                 _startingPointY = transform.position.y + _currentXVal;
                 _endPointY = transform.position.y - _currentXVal;

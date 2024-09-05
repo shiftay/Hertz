@@ -13,10 +13,15 @@ public class Dealer : MonoBehaviour
     public CardGO cardPrefab;
     public List<Transform> dealPositions;
 
+    public static Dealer instance;
+
+    public CardGO _currentSelected;
 
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
+
         for(int i = 0; i < 4; i++) players.Add(new Player(i % 4 == 3));
         CreateCards();
         Shuffle(Deck);
@@ -69,6 +74,24 @@ public class Dealer : MonoBehaviour
                 Deck.Add(current);
             }
         }
+    }
+
+    public BoxCollider2D playerArea;
+
+    public bool insideBox(Vector3 point) {
+        Debug.Log(playerArea.bounds.Contains(point) + " | " + point);
+        return playerArea.bounds.Contains(point);
+    }
+
+    public void Selected(CardGO clicked) {
+        if(_currentSelected == null) _currentSelected = clicked;
+
+        if(_currentSelected != clicked) {
+            _currentSelected._glow.SetActive(false);
+            _currentSelected = clicked;
+        }
+
+        _currentSelected._glow.SetActive(true);
     }
 
     private static System.Random random = new System.Random();
