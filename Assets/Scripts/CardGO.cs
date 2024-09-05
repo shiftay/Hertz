@@ -12,13 +12,14 @@ public class CardGO : MonoBehaviour
 
     public Vector3 _startingPosition;
 
+    private Vector3 mousePos;
+
 
     void OnMouseDown() {
         if(!_currentCard.CURRENTOWNER.isPlayer) return;
 
         _startingPosition = transform.position;
-        Dealer.instance.Selected(this);
-        Debug.Log("Pressed: " + _currentCard.cardInfo.cardValue + " of " + _currentCard.cardInfo.cardSuit.ToString());
+        Dealer.instance.Dragging(this, true);
     }
 
 
@@ -26,7 +27,7 @@ public class CardGO : MonoBehaviour
     {
         if(!_currentCard.CURRENTOWNER.isPlayer) return;
 
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0;
         mousePos.z = Dealer.instance.insideBox(mousePos) ? _startingPosition.z : CONSTS.MAXZ;
         transform.position = mousePos;
@@ -35,7 +36,9 @@ public class CardGO : MonoBehaviour
 
     void OnMouseUp()
     {
-        transform.position = _startingPosition;
+        mousePos.z = 0;
+        transform.position = Dealer.instance.EndDrag(mousePos);
+        // transform.position = _startingPosition;
     }
 
 }

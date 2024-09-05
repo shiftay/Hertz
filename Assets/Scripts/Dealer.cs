@@ -16,13 +16,14 @@ public class Dealer : MonoBehaviour
     public static Dealer instance;
 
     public CardGO _currentSelected;
-
+    public PlayArea playArea;
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
 
         for(int i = 0; i < 4; i++) players.Add(new Player(i % 4 == 3));
+        isDragging = false;
         CreateCards();
         Shuffle(Deck);
         Deal();
@@ -79,19 +80,34 @@ public class Dealer : MonoBehaviour
     public BoxCollider2D playerArea;
 
     public bool insideBox(Vector3 point) {
-        Debug.Log(playerArea.bounds.Contains(point) + " | " + point);
         return playerArea.bounds.Contains(point);
     }
 
-    public void Selected(CardGO clicked) {
+    private bool isDragging;
+
+    public bool IsDragging { get { return isDragging; }
+                             set {  if(isDragging != value) playArea.animator.SetTrigger("Trigger"); 
+                                    isDragging = value; }}
+
+    public void Dragging(CardGO clicked, bool dragging) {
         if(_currentSelected == null) _currentSelected = clicked;
 
         if(_currentSelected != clicked) {
-            _currentSelected._glow.SetActive(false);
             _currentSelected = clicked;
         }
 
-        _currentSelected._glow.SetActive(true);
+        IsDragging = dragging;
+    }
+
+    public Vector3 EndDrag(Vector3 currentPos) {
+        Debug.Log(currentPos);
+
+        Vector3 retVal = playArea.boxCollider.bounds.Contains(currentPos) ? currentPos : _currentSelected._startingPosition;
+
+        IsDragging = false;
+        _currentSelected = null;       
+
+        return retVal;
     }
 
     private static System.Random random = new System.Random();
