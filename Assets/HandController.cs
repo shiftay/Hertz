@@ -271,13 +271,13 @@ public class HandController : MonoBehaviour
                 if(CoinFlip()) {
                     if(player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART).Count > 0)
                         return ReturnHighCardSUITINCLUSIVE(CONSTS.CARDSUIT.HEART);
-                    else 
+                    else if (player._currentHand.cards.Find(n => n.IsQueenOfSpades())) // This might fail.
+                        return player._currentHand.cards.Find(n => n.IsQueenOfSpades());
+                    else
                         return ReturnHighCardSUITEXCLUSIVE(); 
                 } else {
                     return ReturnHighCardSUITEXCLUSIVE();         // Play High Card.
                 }
-
-
             }
             
         }
@@ -288,7 +288,14 @@ public class HandController : MonoBehaviour
     }
 
     private CardGO ReturnHighCardSUITINCLUSIVE(CONSTS.CARDSUIT suit) {
-        return player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == suit).OrderByDescending(n => n._currentCard.cardInfo.cardValue).ToList()[0];
+        List<CardGO> temp = player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == suit).OrderByDescending(n => n._currentCard.cardInfo.cardValue).ToList();
+        for(int i = 0; i < temp.Count; i++) {
+            if(temp[i].IsQueenOfSpades()) continue;
+
+            return temp[i];
+        }
+
+        return null;
     }
 
 

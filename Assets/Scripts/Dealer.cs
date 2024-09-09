@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -41,9 +42,36 @@ public class Dealer : MonoBehaviour
     private int currentHand;
     private int currentCard;
     private bool calculatingScore;
+    private float playTime;
 
 #endregion
 
+    /* 
+        "Turns"
+            > One player at random will be labeled as the "Dealer" 
+                > This means they are the first person to play their card.
+            > Player should only really be able to interact with their cards if it is currently their turn to play.
+            > Cards will be played out in clockwise order by default
+
+            Post-Turn
+                > The High card wins the round, collecting all of the cards in the middle.
+                    > The cards will be moved towards the winning player, and a "Won Hands" UI Compartment will show up at the players area
+                > No scoring occurs until every card is played.
+
+            > "Won Hands"
+                > Will be a UI Showing the cards that the person has won
+                > Small and concise, will only show up on Hover of the Compartment itself. 
+        "AI"
+            > Multiple stages of Difficulty
+            > At no point should they "know" anything before it has been played.
+                > Focus on their ability to Attempt to swindle the player into winning Hearts
+                > Focus on the ability to use different strategies
+                > Search possible strategies through google.
+            > Possible Strategies:
+                > Attempting to dump a specific suit, so that they can start to play Hearts into the middle.
+                    > Example: "Winning all club hands, in order to lose a low club hand, allowing them to be out of clubs for any specific reason"
+
+    */
 
     // Start is called before the first frame update
     void Start()
@@ -84,8 +112,10 @@ public class Dealer : MonoBehaviour
 
 
         _turnTimer += Time.deltaTime;
-        if(_turnTimer > 3.0f) {
+        if(_turnTimer > playTime) {
             _turnTimer = 0.0f;
+
+            playTime = UnityEngine.Random.Range(1.25f, 2.5f);
 
             EndTurn(dealPositions.Find(n => n.dealPos.player == currentTurn).dealPos.PlayCard());
         }
@@ -107,7 +137,7 @@ public class Dealer : MonoBehaviour
         currentCard++;
         if(currentCard == 4) {
             calculatingScore = true;
-            StartCoroutine(CalculateScore());
+            StartCoroutine(DetermineHandWinner());
         } else {
             int x = dealPositions.FindIndex(x => x.dealPos.player == currentTurn);
             x++;
@@ -116,7 +146,7 @@ public class Dealer : MonoBehaviour
         }
     }
 
-    private IEnumerator CalculateScore() {
+    private IEnumerator DetermineHandWinner() {
 
         yield return new WaitForSeconds(1.0f);
 
@@ -142,7 +172,25 @@ public class Dealer : MonoBehaviour
         currentHand++;
         currentCard = 0;
 
-        calculatingScore = false;
+        if(winnerOfHand._currentHand.cards.Count == 0)  {
+            /* 
+                "Scoring"
+                > Each Heart is worth 1 point
+                > Queen of Spade is worth 13
+
+                > IF a player collected all hearts and the queen of spades
+                    >"Shot the Moon"
+                    > 26 points are given to the other players.
+                    > Score to 100
+                    > Attempt to be lowest score.
+
+            
+            
+            */
+        } else {
+
+            calculatingScore = false;
+        }
     }
 
 #region Utility Callbacks
@@ -158,7 +206,8 @@ public class Dealer : MonoBehaviour
     }
 
     public bool HaveHeartsBeenPlayed() {
-        return playedCards.FindAll(n => n._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART).Count > 0;
+        return playedCards.FindAll(n => n._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART 
+        || (n._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.SPADE && n._currentCard.cardInfo.cardValue == 12)).Count > 0 || HeartInActiveHand();
     }
 
     public bool HeartInActiveHand() {
@@ -210,47 +259,8 @@ public class Dealer : MonoBehaviour
         }
 
         _gameStarted = true;
+        playTime = UnityEngine.Random.Range(1.25f, 2.5f);
     }
-
-    /* 
-        "Turns"
-            > One player at random will be labeled as the "Dealer" 
-                > This means they are the first person to play their card.
-            > Player should only really be able to interact with their cards if it is currently their turn to play.
-            > Cards will be played out in clockwise order by default
-
-            Post-Turn
-                > The High card wins the round, collecting all of the cards in the middle.
-                    > The cards will be moved towards the winning player, and a "Won Hands" UI Compartment will show up at the players area
-                > No scoring occurs until every card is played.
-
-            > "Won Hands"
-                > Will be a UI Showing the cards that the person has won
-                > Small and concise, will only show up on Hover of the Compartment itself. 
-    
-
-        "Scoring"
-            > Each Heart is worth 1 point
-            > Queen of Spade is worth 13
-
-            > IF a player collected all hearts and the queen of spades
-                >"Shot the Moon"
-                > 26 points are given to the other players.
-                > Score to 100
-                > Attempt to be lowest score.
-
-        "AI"
-            > Multiple stages of Difficulty
-            > At no point should they "know" anything before it has been played.
-                > Focus on their ability to Attempt to swindle the player into winning Hearts
-                > Focus on the ability to use different strategies
-                > Search possible strategies through google.
-            > Possible Strategies:
-                > Attempting to dump a specific suit, so that they can start to play Hearts into the middle.
-                    > Example: "Winning all club hands, in order to lose a low club hand, allowing them to be out of clubs for any specific reason"
-    
-    
-    */
 
     private void CreateCards() {
         CardGO current = null;
@@ -313,9 +323,30 @@ public class Dealer : MonoBehaviour
             int r = random.Next(i, array.Count);
             (array[r], array[i]) = (array[i], array[r]);
         }
-    }  
+    }
 
+    public bool IsCardPlayable(Card card)
+    {
+        if(currentCard == 0) {
+            if(card.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART && !HaveHeartsBeenPlayed()) {
+                currentTurn._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit != CONSTS.CARDSUIT.HEART).ForEach(n => n._animator.SetTrigger("Glow"));
+                return false;
+            } 
 
+            return true;
+        }
 
+        if((card.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART && !HaveHeartsBeenPlayed()) || card.cardInfo.cardSuit != CurrentSUIT())  {
 
+            if(currentTurn._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit ==  CurrentSUIT()).Count == 0) {
+                return true;
+            }
+
+            currentTurn._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == CurrentSUIT()).ForEach(n => n._animator.SetTrigger("Glow"));
+
+            return false;
+        }
+
+        return true;
+    }
 }
