@@ -1082,7 +1082,7 @@ MonoBehaviour:
     coinPos: {fileID: 577200018}
     cardPlayedPos: {fileID: 791786134}
   - dealPos: {fileID: 44449458}
-    coinPos: {fileID: 438552771}
+    coinPos: {fileID: 1298699841}
     cardPlayedPos: {fileID: 57008363}
   - dealPos: {fileID: 846550454}
     coinPos: {fileID: 1370261136}
