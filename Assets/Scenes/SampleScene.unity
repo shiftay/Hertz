@@ -122,6 +122,121 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &4384298
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4384299}
+  m_Layer: 0
+  m_Name: TokenSpot_CPU - W
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4384299
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4384298}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6, y: 1.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 959622404}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &38298932
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 38298934}
+  - component: {fileID: 38298933}
+  m_Layer: 0
+  m_Name: DealersCoin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &38298933
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38298932}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: 564381c898119464ca3e7f6bd4e5edc7, type: 3}
+  m_Color: {r: 0, g: 0.5315094, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &38298934
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38298932}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 959622404}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &44449456
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +248,7 @@ GameObject:
   - component: {fileID: 44449457}
   - component: {fileID: 44449458}
   m_Layer: 0
-  m_Name: CPU Hands
+  m_Name: CPU Hands - E
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,12 +281,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4773352331bce70469d5ab6eb468ebab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player:
+    _currentHand:
+      cards: []
+    wonHands: []
+    isPlayer: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
   boxCollider2D: {fileID: 0}
   currentAXIS: 1
-  isCPU: 0
 --- !u!1 &57008362
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 57008363}
   m_Layer: 0
-  m_Name: Capsule (3)
+  m_Name: Capsule (3) - E
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -275,7 +394,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: bcb419d2a22f5ec40bcacb55b5fbcba9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -562,6 +681,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &577200017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 577200018}
+  m_Layer: 0
+  m_Name: TokenSpot_CPU - N
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &577200018
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 577200017}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.15, y: 3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 959622404}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &791786133
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,7 +722,7 @@ GameObject:
   m_Component:
   - component: {fileID: 791786134}
   m_Layer: 0
-  m_Name: Capsule (1)
+  m_Name: Capsule (1) - N
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -604,7 +754,7 @@ GameObject:
   - component: {fileID: 821017133}
   - component: {fileID: 821017134}
   m_Layer: 0
-  m_Name: CPU Hands
+  m_Name: CPU Hands - N
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -637,12 +787,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4773352331bce70469d5ab6eb468ebab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player:
+    _currentHand:
+      cards: []
+    wonHands: []
+    isPlayer: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
   boxCollider2D: {fileID: 0}
-  currentAXIS: 2
-  isCPU: 0
+  currentAXIS: 0
 --- !u!1 &846550452
 GameObject:
   m_ObjectHideFlags: 0
@@ -655,7 +809,7 @@ GameObject:
   - component: {fileID: 846550454}
   - component: {fileID: 846550455}
   m_Layer: 0
-  m_Name: Player's Hand
+  m_Name: Player's Hand - S
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -670,7 +824,7 @@ Transform:
   m_GameObject: {fileID: 846550452}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -4.75, z: 0}
+  m_LocalPosition: {x: 0, y: -4.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -688,12 +842,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4773352331bce70469d5ab6eb468ebab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player:
+    _currentHand:
+      cards: []
+    wonHands: []
+    isPlayer: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
   boxCollider2D: {fileID: 0}
-  currentAXIS: 0
-  isCPU: 0
+  currentAXIS: 2
 --- !u!61 &846550455
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -821,10 +979,15 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 38298934}
   - {fileID: 438552771}
   - {fileID: 791786134}
   - {fileID: 1990525948}
   - {fileID: 57008363}
+  - {fileID: 1370261136}
+  - {fileID: 4384299}
+  - {fileID: 577200018}
+  - {fileID: 1298699841}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1023258103
@@ -838,7 +1001,7 @@ GameObject:
   - component: {fileID: 1023258104}
   - component: {fileID: 1023258105}
   m_Layer: 0
-  m_Name: CPU Hands
+  m_Name: CPU Hands - W
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -871,12 +1034,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4773352331bce70469d5ab6eb468ebab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player:
+    _currentHand:
+      cards: []
+    wonHands: []
+    isPlayer: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
   boxCollider2D: {fileID: 0}
   currentAXIS: 3
-  isCPU: 1
 --- !u!1 &1266580977
 GameObject:
   m_ObjectHideFlags: 0
@@ -911,12 +1078,21 @@ MonoBehaviour:
   Deck: []
   cardPrefab: {fileID: 1773448044835626266, guid: 858791a15949c4249afe38dc05b6765f, type: 3}
   dealPositions:
-  - {fileID: 1023258104}
-  - {fileID: 821017133}
-  - {fileID: 44449457}
-  - {fileID: 846550453}
-  _currentSelected: {fileID: 0}
+  - dealPos: {fileID: 821017134}
+    coinPos: {fileID: 577200018}
+    cardPlayedPos: {fileID: 791786134}
+  - dealPos: {fileID: 44449458}
+    coinPos: {fileID: 438552771}
+    cardPlayedPos: {fileID: 57008363}
+  - dealPos: {fileID: 846550454}
+    coinPos: {fileID: 1370261136}
+    cardPlayedPos: {fileID: 1370261136}
+  - dealPos: {fileID: 1023258105}
+    coinPos: {fileID: 4384299}
+    cardPlayedPos: {fileID: 1990525948}
   playArea: {fileID: 438552774}
+  dealerCoin: {fileID: 38298932}
+  _currentSelected: {fileID: 0}
   playerArea: {fileID: 846550455}
 --- !u!4 &1266580979
 Transform:
@@ -1022,6 +1198,68 @@ MonoBehaviour:
   - {fileID: 1434157612, guid: 8d3bf2665a9d2e749bfafc08a5156d10, type: 3}
   - {fileID: 1213503504, guid: 8d3bf2665a9d2e749bfafc08a5156d10, type: 3}
   - {fileID: 463297781, guid: 8d3bf2665a9d2e749bfafc08a5156d10, type: 3}
+--- !u!1 &1298699840
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1298699841}
+  m_Layer: 0
+  m_Name: TokenSpot_CPU - E
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1298699841
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298699840}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6, y: -1.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 959622404}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1370261135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1370261136}
+  m_Layer: 0
+  m_Name: TokenSpot_Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1370261136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370261135}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.15, y: -3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 959622404}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1688345287
 GameObject:
   m_ObjectHideFlags: 0
@@ -1268,7 +1506,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1990525948}
   m_Layer: 0
-  m_Name: Capsule (2)
+  m_Name: Capsule (2) - W
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

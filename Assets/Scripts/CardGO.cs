@@ -16,7 +16,7 @@ public class CardGO : MonoBehaviour
 
 
     void OnMouseDown() {
-        if(!_currentCard.CURRENTOWNER.isPlayer) return;
+        if(!_currentCard.CURRENTOWNER.isPlayer || !Dealer.instance.IsPlayerTurn()) return;
 
         _startingPosition = transform.position;
         Dealer.instance.StartDrag(this);
@@ -25,7 +25,8 @@ public class CardGO : MonoBehaviour
 
     void OnMouseDrag()
     {
-        if(!_currentCard.CURRENTOWNER.isPlayer) return;
+        
+        if(!_currentCard.CURRENTOWNER.isPlayer || !Dealer.instance.IsPlayerTurn()) return;
 
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0;
@@ -36,6 +37,8 @@ public class CardGO : MonoBehaviour
 
     void OnMouseUp()
     {
+        if(!_currentCard.CURRENTOWNER.isPlayer || !Dealer.instance.IsPlayerTurn()) return;
+
         mousePos.z = 0;
         transform.position = Dealer.instance.EndDrag(mousePos);
         // transform.position = _startingPosition;

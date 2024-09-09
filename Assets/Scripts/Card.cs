@@ -10,6 +10,7 @@ public class Card
     public CardInfo cardInfo;
     public Sprite cardSprite; // Is this needed?
     private Player _currentOwner;
+    public int cardPlayed, handPlayed;
     
     public Player CURRENTOWNER {
         get { return _currentOwner; }
