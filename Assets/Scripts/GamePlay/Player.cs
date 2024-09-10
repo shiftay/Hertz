@@ -11,8 +11,15 @@ public class Player
     public List<WonHand> wonHands;
     
     public bool isPlayer;
+    public Difficulty.DIFFICULITIES difficulty;
+
+    public float Health;
+    public Scoring scoring;
+    public List<Unlockable> unlocks;
+    
 
     public Player(bool player) {
+        if(player) unlocks = new List<Unlockable>();
         isPlayer = player;
         wonHands = new List<WonHand>();
         _currentHand = new Hand();

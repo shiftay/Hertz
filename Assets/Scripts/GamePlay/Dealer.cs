@@ -88,9 +88,9 @@ public class Dealer : MonoBehaviour
     }
 
     private void SetupPlayers() {
-
         foreach(HandPositions handPos in dealPositions) {
             Player temp = new Player(handPos.dealPos.currentAXIS == CONSTS.PLAYERAXIS);
+            temp.difficulty = (Difficulty.DIFFICULITIES)UnityEngine.Random.Range(0, 3);
             handPos.dealPos.player = temp;
             players.Add(temp);
         }
@@ -110,7 +110,6 @@ public class Dealer : MonoBehaviour
 
         if(calculatingScore) return;
 
-
         _turnTimer += Time.deltaTime;
         if(_turnTimer > playTime) {
             _turnTimer = 0.0f;
@@ -119,7 +118,6 @@ public class Dealer : MonoBehaviour
 
             EndTurn(dealPositions.Find(n => n.dealPos.player == currentTurn).dealPos.PlayCard());
         }
-
     }
 
     private void EndTurn(CardGO playedCard) {
@@ -146,7 +144,6 @@ public class Dealer : MonoBehaviour
     }
 
     private IEnumerator DetermineHandWinner() {
-
         yield return new WaitForSeconds(1.0f);
 
         CardGO highCard = playedCards[currentHand * 4];
@@ -176,7 +173,8 @@ public class Dealer : MonoBehaviour
         currentHand++;
         currentCard = 0;
 
-        if(winnerOfHand._currentHand.cards.Count == 0)  {
+        if(winnerOfHand._currentHand.cards.Count == 0)  { // No more cards for the winner to play.
+            Debug.Log("Score teh round.");
             /* 
                 "Scoring"
                 > Each Heart is worth 1 point

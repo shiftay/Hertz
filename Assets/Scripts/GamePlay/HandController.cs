@@ -154,6 +154,11 @@ public class HandController : MonoBehaviour
         shootForTheMoon = temp / 12.0f > 8;
     }
 
+    public Difficulty.DIFFICULITIES difficulty;
+    [Button("Difficulty Check")]
+    public void DifficultyCheck() {
+        Difficulty.ScaleValue(difficulty);
+    }
 
     public CardGO PlayCard() {
         /*
@@ -326,7 +331,7 @@ public class HandController : MonoBehaviour
                 Debug.Log("Card To Be Played: " + toPlay._currentCard.cardInfo.cardSuit + ", " + toPlay._currentCard.cardInfo.cardValue);
 
                 checkedVals.Add(currentLow);
-                checkAmt = toPlay._currentCard.cardInfo.cardValue > 8;
+                checkAmt = toPlay._currentCard.cardInfo.cardValue > Difficulty.ScaleValue(player.difficulty);
             }
 
         } while(checkAmt);

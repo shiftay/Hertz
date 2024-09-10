@@ -65,15 +65,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\UI\CardHolderUI.cs" />
+    <Compile Include="Assets\Scripts\GamePlay\RoguelikeElements\Enhancements.cs" />
     <Compile Include="Assets\Scripts\GamePlay\GameManager.cs" />
     <Compile Include="Assets\Scripts\GamePlay\Dealer.cs" />
+    <Compile Include="Assets\Scripts\GamePlay\RoguelikeElements\Trinkets.cs" />
     <Compile Include="Assets\Scripts\GamePlay\CardGO.cs" />
     <Compile Include="Assets\Scripts\UI\WonHandUI.cs" />
+    <Compile Include="Assets\Scripts\GamePlay\RoguelikeElements\Requirement.cs" />
     <Compile Include="Assets\Scripts\GamePlay\CPU_Player.cs" />
+    <Compile Include="Assets\Scripts\GamePlay\RoguelikeElements\Milestones.cs" />
     <Compile Include="Assets\Scripts\UI\UIHandler.cs" />
     <Compile Include="Assets\Scripts\GamePlay\PlayArea.cs" />
+    <Compile Include="Assets\Scripts\GamePlay\RoguelikeElements\Scoring.cs" />
     <Compile Include="Assets\Scripts\Utils\Difficulty.cs" />
     <Compile Include="Assets\Scripts\GamePlay\Player.cs" />
+    <Compile Include="Assets\Scripts\GamePlay\RoguelikeElements\Unlockable.cs" />
     <Compile Include="Assets\Scripts\GamePlay\Deck.cs" />
     <Compile Include="Assets\Scripts\GamePlay\Card.cs" />
     <Compile Include="Assets\Scripts\GamePlay\CardInfo.cs" />

@@ -6,13 +6,15 @@ using UnityEngine.Android;
 [System.Serializable]
 public class Card 
 {
-
     public CardInfo cardInfo;
     public Sprite cardSprite; // Is this needed?
     private Player _currentOwner;
     public int cardPlayed, handPlayed;
     public bool winningCard;
     
+    public List<Enhancements> enhancements;
+
+
     public Player CURRENTOWNER {
         get { return _currentOwner; }
         set { _currentOwner = value; }
@@ -20,6 +22,7 @@ public class Card
 
     public Card(CardInfo cI) { cardInfo = cI; Reset(); }
 
-    public void Reset() { winningCard = false; handPlayed = cardPlayed = -1; }
+    public Card(CardInfo cI, List<Enhancements> enhancements) { cardInfo = cI; Reset(); this.enhancements = new List<Enhancements>(enhancements); }
 
+    public void Reset() { winningCard = false; handPlayed = cardPlayed = -1; }
 }
