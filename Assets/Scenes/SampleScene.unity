@@ -283,11 +283,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player:
     isPlayer: 0
+    difficulty: 0
+    Health: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
   boxCollider2D: {fileID: 0}
   currentAXIS: 1
+  difficulty: 0
 --- !u!1 &57008362
 GameObject:
   m_ObjectHideFlags: 0
@@ -1215,11 +1218,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player:
     isPlayer: 0
+    difficulty: 0
+    Health: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
   boxCollider2D: {fileID: 0}
   currentAXIS: 0
+  difficulty: 0
 --- !u!1 &846550452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1267,11 +1273,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player:
     isPlayer: 0
+    difficulty: 0
+    Health: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
   boxCollider2D: {fileID: 0}
   currentAXIS: 2
+  difficulty: 0
 --- !u!61 &846550455
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1518,11 +1527,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player:
     isPlayer: 0
+    difficulty: 0
+    Health: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
   boxCollider2D: {fileID: 0}
   currentAXIS: 3
+  difficulty: 2
 --- !u!1 &1227552082
 GameObject:
   m_ObjectHideFlags: 0
