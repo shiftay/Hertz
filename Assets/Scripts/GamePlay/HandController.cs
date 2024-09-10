@@ -222,7 +222,7 @@ public class HandController : MonoBehaviour
             /*
                 Are we shooting the moon?
                     > Can we win hand? Win it.
-                    > If not? Dump lowest.
+                    > If not? Dump lowest
             */
             if(shootForTheMoon) {
                 if(playableCards.FindAll(n => n._currentCard.cardInfo.cardValue > Dealer.instance.CurrentHighCardInSuit()).Count > 0) { // Attempt to win // TODO: Make sure it's our highest.
@@ -243,6 +243,10 @@ public class HandController : MonoBehaviour
                         return ReturnHighCardSUITINCLUSIVE(Dealer.instance.CurrentSUIT());
                     }
                 }
+
+
+                // TODO: Make sure to look at the current highest card and look for under that.
+
 
                 if(playableCards.FindAll(x => x._currentCard.cardInfo.cardValue < Dealer.instance.CurrentHighCardInSuit()).Count > 0)
                     return playableCards.FindAll(x => x._currentCard.cardInfo.cardValue < Dealer.instance.CurrentHighCardInSuit()).OrderByDescending(n => n._currentCard.cardInfo.cardValue).ToList()[0];
