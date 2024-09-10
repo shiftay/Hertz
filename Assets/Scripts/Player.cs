@@ -23,7 +23,8 @@ public class Player
 public class WonHand {
     public List<Card> cards = new List<Card>();
 
-    public WonHand(List<Card> hand) { cards = hand; }
+    public WonHand(List<Card> hand, Player p) { cards = hand; isPlayer = p.isPlayer; }
+    public bool isPlayer;
 }
 
 

@@ -385,6 +385,7 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 -analyzer:"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
+"Assets/CardHolderUI.cs"
 "Assets/HandController.cs"
 "Assets/PlayArea.cs"
 "Assets/Scripts/Card.cs"
@@ -398,6 +399,8 @@
 "Assets/Scripts/Hand.cs"
 "Assets/Scripts/Player.cs"
 "Assets/Scripts/SpriteHandler.cs"
+"Assets/UIHandler.cs"
+"Assets/WonHandUI.cs"
 -langversion:9.0
 /deterministic
 /optimize+

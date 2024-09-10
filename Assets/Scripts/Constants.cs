@@ -6,6 +6,7 @@ public class CONSTS
 {
     public enum CARDSUIT { HEART, SPADE, DIAMOND, CLUB, NULL }
     public enum AXIS { NORTH, EAST, SOUTH, WEST }
+    public enum ICON { CPU, PLAYER }
     public const int ACE = 14;
     public const int CARDVALUEMODIFIER = 2;
     public const float HANDLINEVALUEX = 3.0f;
@@ -14,4 +15,5 @@ public class CONSTS
     public const float HANDSIZE = 13.0f;
     public const float MAXZ = -14.0f;
     public const AXIS PLAYERAXIS = AXIS.SOUTH;
+    public const float WONHANDUIMODIFIER = 35.0f;
 }

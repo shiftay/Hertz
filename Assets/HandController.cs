@@ -157,25 +157,16 @@ public class HandController : MonoBehaviour
 
     public CardGO PlayCard() {
         /*
-        "Rules"
-            > Players must follow the suit of the card played if at all possible.
-                > If player picks up a card that is not playable, snap it back to starting spot in hand and play animation on playable cards.
-            > High card wins the round.
-                > Eventually will have to put more logic forth
-                > The goal isn't necessarily to always win the round
-            > Collection of Hearts are inherently bad.
-                > Hearts are points against you. 
-                > Queen of Spades is a significant amount against you.
-            > Hearts can not be the starting suit played
-                > Only after a heart has been dumped in a non heart started suit, can a heart be the starting suit.
-            > IF a player is able to collect all of the hearts and the Queen of Spades they are rewarded.
-         */
-
-        /* 
             Current suit of the hand?
                 If I dont have any > Play highcard unless I'm considering "Shooting the moon"
 
             Has a heart been played?
+
+
+            TODO:
+                Add Value to High Spades
+                As Dealer do not play cards with value > 10, Unless you have to.
+
 
         
         */

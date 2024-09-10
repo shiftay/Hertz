@@ -7,7 +7,10 @@ public class SpriteHandler : MonoBehaviour
 {
     
     public List<BaseCardSprites> baseSprites;
+    public List<BaseCardSprites> wonHandSprites;
     public List<Sprite> cardBacks;
+
+    public List<Sprite> playerIcons;
 
     private int _currentBack;
     private void Awake() {
@@ -16,9 +19,14 @@ public class SpriteHandler : MonoBehaviour
 
     public Sprite CardBack() { return cardBacks[_currentBack]; }
 
+    public Sprite Icon(bool isPlayer) { return playerIcons[isPlayer ? (int)CONSTS.ICON.PLAYER : (int)CONSTS.ICON.CPU]; }
 
     public Sprite FindCard(CONSTS.CARDSUIT suit, int cardValue) {
         return baseSprites.Find(n => n.suit == suit).cardSprites[cardValue - CONSTS.CARDVALUEMODIFIER];
+    }
+
+    public Sprite WonHandCard(CONSTS.CARDSUIT suit, int cardValue) {
+        return wonHandSprites.Find(n => n.suit == suit).cardSprites[cardValue - CONSTS.CARDVALUEMODIFIER];
     }
 }
 

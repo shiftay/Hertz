@@ -123,7 +123,6 @@ public class Dealer : MonoBehaviour
     }
 
     private void EndTurn(CardGO playedCard) {
-        Debug.Log(playedCard._currentCard.cardInfo.cardValue + " of " + playedCard._currentCard.cardInfo.cardSuit);
         playedCard.transform.SetParent(dealPositions.Find(n => n.dealPos.player == currentTurn).cardPlayedPos);
         playedCard.transform.localPosition = Vector3.zero;
         playedCard._currentSprite.sprite = spriteHandler.FindCard(playedCard._currentCard.cardInfo.cardSuit, playedCard._currentCard.cardInfo.cardValue);
@@ -159,13 +158,18 @@ public class Dealer : MonoBehaviour
             }
         }
 
+        hand.Find(n => n.cardInfo.cardSuit == highCard._currentCard.cardInfo.cardSuit && n.cardInfo.cardValue == highCard._currentCard.cardInfo.cardValue).winningCard = true;
+
         Player winnerOfHand = highCard._currentCard.CURRENTOWNER;
-        winnerOfHand.wonHands.Add(new WonHand(hand));
+        WonHand temp = new WonHand(hand, winnerOfHand);
+        winnerOfHand.wonHands.Add(temp);
         
 
         for(int i = 0; i < playedCards.Count; i++) 
             playedCards[i].gameObject.SetActive(false); // TODO: Change playedCards into a temporary thing "Current Played Hand" So we can destroy them.
 
+
+        UIHandler.instance.CreateWonHand(temp);
 
         currentTurn = winnerOfHand;
         dealerCoin.transform.position = dealPositions[players.FindIndex(n => n == currentTurn)].coinPos.position;
