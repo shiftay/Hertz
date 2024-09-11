@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\GamePlay\RoguelikeElements\Enhancements.cs" />
     <Compile Include="Assets\Scripts\GamePlay\GameManager.cs" />
     <Compile Include="Assets\Scripts\GamePlay\Dealer.cs" />
+    <Compile Include="Assets\RoundEnd.cs" />
     <Compile Include="Assets\Scripts\GamePlay\RoguelikeElements\Trinkets.cs" />
     <Compile Include="Assets\Scripts\GamePlay\CardGO.cs" />
     <Compile Include="Assets\Scripts\UI\WonHandUI.cs" />

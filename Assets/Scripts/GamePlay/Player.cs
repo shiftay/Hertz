@@ -14,6 +14,7 @@ public class Player
     public Difficulty.DIFFICULITIES difficulty;
 
     public float Health;
+    
     public Scoring scoring;
     public List<Unlockable> unlocks;
     

@@ -74,7 +74,6 @@ public class Dealer : MonoBehaviour
 
     */
 
-    // Start is called before the first frame update
 #region Initialization
     void Start()
     {
