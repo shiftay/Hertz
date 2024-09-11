@@ -16,4 +16,5 @@ public class CONSTS
     public const float MAXZ = -14.0f;
     public const AXIS PLAYERAXIS = AXIS.SOUTH;
     public const float WONHANDUIMODIFIER = 35.0f;
+    public const float HANDALIGNMENTMOD = 0.5f;
 }

@@ -55,10 +55,15 @@ MonoBehaviour:
     cardSprite: {fileID: 0}
     cardPlayed: 0
     handPlayed: 0
+    winningCard: 0
+    enhancements: []
   _currentSprite: {fileID: 4651268842439888105}
   _glow: {fileID: 2998232480257952390}
   _animator: {fileID: 7447243739533340432}
   _startingPosition: {x: 0, y: 0, z: 0}
+  bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
 --- !u!61 &6553413337307692583
 BoxCollider2D:
   m_ObjectHideFlags: 0

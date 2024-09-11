@@ -7,12 +7,12 @@ using UnityEngine.Android;
 public class Card 
 {
     public CardInfo cardInfo;
-    public Sprite cardSprite; // Is this needed?
     private Player _currentOwner;
     public int cardPlayed, handPlayed;
     public bool winningCard;
-    
     public List<Enhancements> enhancements;
+
+
 
 
     public Player CURRENTOWNER {

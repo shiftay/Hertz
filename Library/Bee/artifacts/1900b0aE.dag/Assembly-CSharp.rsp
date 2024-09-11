@@ -394,7 +394,6 @@
 "Assets/Scripts/GamePlay/GameManager.cs"
 "Assets/Scripts/GamePlay/Hand.cs"
 "Assets/Scripts/GamePlay/HandController.cs"
-"Assets/Scripts/GamePlay/PlayArea.cs"
 "Assets/Scripts/GamePlay/Player.cs"
 "Assets/Scripts/GamePlay/RoguelikeElements/Enhancements.cs"
 "Assets/Scripts/GamePlay/RoguelikeElements/Milestones.cs"

@@ -18,6 +18,10 @@ public class CardInfo
     public CardBehaviour cardBehaviour;
     public int cardValue;
     public CONSTS.CARDSUIT cardSuit;
+
+    public string DebugInfo() {
+        return cardSuit.ToString() + ", " + cardValue;
+    }
     
     public CardInfo(int cV, CONSTS.CARDSUIT cs, CardBehaviour behaviour = null) {
         cardValue = cV; cardSuit = cs; cardBehaviour = behaviour;

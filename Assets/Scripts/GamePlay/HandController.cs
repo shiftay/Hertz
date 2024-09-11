@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using Sirenix.OdinInspector;
+using Unity.VisualScripting;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -28,14 +29,12 @@ public class HandController : MonoBehaviour
 
     private bool shootForTheMoon;
 
-
+    public List<CardGO> children = new List<CardGO>();
 
 
     private void Awake() {
         lastUpdateChildAmount = currentChildAmount = 0;
     }
-
-
 #region Organize Hand
      // Update is called once per frame
     void Update()
@@ -52,10 +51,12 @@ public class HandController : MonoBehaviour
         UpdateAxis();
         Sort();
 
+        children = transform.GetComponentsInChildren<CardGO>().ToList();
+
         for(int i = 0; i < transform.childCount; i++) {
             _currentChild = transform.GetChild(i);
             _currentChild.position = ReturnPosition(i);
-            _currentChild.rotation = Quaternion.Euler(new Vector3(0, 0, _signOfMiddle * GetVectorInternalAngle(_rotatePointA, _currentChild.position,  _rotatePointB) - _rotationMod));
+            _currentChild.rotation = Quaternion.Euler(new Vector3(0, 0, _rotationMod));
             _currentChild.position = new Vector3(_currentChild.position.x, _currentChild.position.y, (i * -1) - 1);
         }
     }
@@ -73,10 +74,10 @@ public class HandController : MonoBehaviour
         switch(currentAXIS) {
             case CONSTS.AXIS.SOUTH:
             case CONSTS.AXIS.NORTH:
-                return new Vector3(Mathf.Lerp(_startingPointX, _endPointX, (float)i / ((float)transform.childCount - 1)), Mathf.Lerp(_startingPointY, _endPointY, distanceFromMid / midVal));
+                return new Vector3(Mathf.Lerp(_startingPointX, _endPointX, (float)i / ((float)transform.childCount - 1)), transform.position.y);
             case CONSTS.AXIS.WEST:
             case CONSTS.AXIS.EAST:
-                return new Vector3(Mathf.Lerp(_startingPointX, _endPointX, distanceFromMid / midVal), Mathf.Lerp(_startingPointY, _endPointY, (float)i / ((float)transform.childCount - 1)));
+                return new Vector3(transform.position.x, Mathf.Lerp(_startingPointY, _endPointY, (float)i / ((float)transform.childCount - 1)));
             default:
                 return Vector3.zero;
         }
@@ -144,6 +145,33 @@ public class HandController : MonoBehaviour
                 break;
         }
     }
+
+    Vector3 mousePos;
+
+    public void CardMouseOver(CardGO selected) {
+        SetTransforms(children.IndexOf(selected));
+    }
+
+    public void CardMouseExit() {
+        SetTransforms();
+    }
+
+    public void HighLightCard(CardGO card) {
+        // TODO: Make sure player nows which card they've selected, maybe flash highlight or something?
+    }
+
+
+    private void SetTransforms(int selected = -999) {
+        for(int i = 0; i < transform.childCount; i++) {
+            children[i].transform.position = new Vector3(children[i].transform.position.x,                                       
+                                                        (selected - 1 == i || selected == i || selected + 1 == i) ? 
+                                                        transform.position.y + CONSTS.HANDALIGNMENTMOD : transform.position.y,
+                                                        children[i].transform.position.z);
+        }
+    }
+
+
+
 #endregion
 
 #region Gameplay Logic
@@ -171,9 +199,6 @@ public class HandController : MonoBehaviour
             TODO:
                 Add Value to High Spades
                 As Dealer do not play cards with value > 10, Unless you have to.
-
-
-        
         */
         List<CardGO> playableCards = new List<CardGO>();
 
@@ -350,9 +375,14 @@ public class HandController : MonoBehaviour
 
 #endregion
 
+#region Utility
     public bool CoinFlip() {
         return UnityEngine.Random.Range(0, 2) >= 1;
     }
 
-
+    public Vector3 FixZ(Vector3 position) {
+        position.z = 0;
+        return position;
+    }
+#endregion
 }
