@@ -17,4 +17,10 @@ public class CONSTS
     public const AXIS PLAYERAXIS = AXIS.SOUTH;
     public const float WONHANDUIMODIFIER = 35.0f;
     public const float HANDALIGNMENTMOD = 0.5f;
+
+
+#region UI ELEMENTS
+    public const string ROUNDCOMPLETED = "Round Completed";
+    public const string CARDSWON = "Cards Won";
+#endregion
 }

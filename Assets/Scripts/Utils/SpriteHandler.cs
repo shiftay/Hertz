@@ -12,6 +12,8 @@ public class SpriteHandler : MonoBehaviour
 
     public List<Sprite> playerIcons;
 
+    public List<Sprite> HandsBTN;
+
     private int _currentBack;
     private void Awake() {
         _currentBack = Random.Range(0, cardBacks.Count);

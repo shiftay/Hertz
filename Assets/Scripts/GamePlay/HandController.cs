@@ -21,7 +21,6 @@ public class HandController : MonoBehaviour
     private float _startingPointY, _endPointY;
     public float _currentXVal, _currentYVal;
     public float _signOfMiddle;
-    private Vector3 _rotatePointA, _rotatePointB;
     private int currentChildAmount, lastUpdateChildAmount;
     private float _rotationMod;
     public BoxCollider2D boxCollider2D; 
@@ -42,7 +41,6 @@ public class HandController : MonoBehaviour
         currentChildAmount = transform.childCount;
         if(currentChildAmount != lastUpdateChildAmount) OrganizeHand();
     }
-
 
     private Transform _currentChild;
 
@@ -110,8 +108,6 @@ public class HandController : MonoBehaviour
                 _endPointY = transform.position.y + _currentYVal;
                 _startingPointX = transform.position.x - _currentXVal;
                 _endPointX = transform.position.x + _currentXVal;
-                _rotatePointA = new Vector3(transform.position.x, transform.position.y - CONSTS.ROTATEVALY, transform.position.z);
-                _rotatePointB = new Vector3(transform.position.x, transform.position.y + CONSTS.HANDLINEVALUEY, transform.position.z);
                 break;
 
             case CONSTS.AXIS.EAST:
@@ -120,8 +116,6 @@ public class HandController : MonoBehaviour
                 _endPointY = transform.position.y + _currentXVal;
                 _startingPointX = transform.position.x;
                 _endPointX = transform.position.x - _currentYVal;
-                _rotatePointA = new Vector3(transform.position.x + CONSTS.ROTATEVALY, transform.position.y , transform.position.z);
-                _rotatePointB = new Vector3(transform.position.x - CONSTS.HANDLINEVALUEY, transform.position.y, transform.position.z);
                 break;
 
             case CONSTS.AXIS.NORTH:
@@ -130,8 +124,6 @@ public class HandController : MonoBehaviour
                 _endPointY = transform.position.y - _currentYVal;
                 _startingPointX = transform.position.x + _currentXVal;
                 _endPointX = transform.position.x - _currentXVal;
-                _rotatePointA = new Vector3(transform.position.x, transform.position.y + CONSTS.ROTATEVALY, transform.position.z);
-                _rotatePointB = new Vector3(transform.position.x, transform.position.y - CONSTS.HANDLINEVALUEY, transform.position.z);
                 break;
 
             case CONSTS.AXIS.WEST:
@@ -140,8 +132,6 @@ public class HandController : MonoBehaviour
                 _endPointY = transform.position.y - _currentXVal;
                 _startingPointX = transform.position.x;
                 _endPointX = transform.position.x  + _currentYVal;
-                _rotatePointA = new Vector3(transform.position.x - CONSTS.ROTATEVALY, transform.position.y , transform.position.z);
-                _rotatePointB = new Vector3(transform.position.x + CONSTS.HANDLINEVALUEY, transform.position.y, transform.position.z);
                 break;
         }
     }
@@ -165,7 +155,7 @@ public class HandController : MonoBehaviour
         for(int i = 0; i < transform.childCount; i++) {
             children[i].transform.position = new Vector3(children[i].transform.position.x,                                       
                                                         (selected - 1 == i || selected == i || selected + 1 == i) ? 
-                                                        transform.position.y + CONSTS.HANDALIGNMENTMOD : transform.position.y,
+                                                        transform.position.y + CONSTS.HANDALIGNMENTMOD / ((selected - 1 == i || selected + 1 == i) ? 2.0f : 1.0f) : transform.position.y,
                                                         children[i].transform.position.z);
         }
     }
@@ -352,12 +342,10 @@ public class HandController : MonoBehaviour
                 }
             }
 
-            Debug.Log(currentLow + " | " + currentAmt + " | " + checkedVals.Count);
            
             
             if(currentLow != CONSTS.CARDSUIT.NULL) {
                 toPlay = player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == currentLow).OrderBy(n => n._currentCard.cardInfo.cardValue).ToList()[0];
-                Debug.Log("Card To Be Played: " + toPlay._currentCard.cardInfo.cardSuit + ", " + toPlay._currentCard.cardInfo.cardValue);
 
                 checkedVals.Add(currentLow);
                 checkAmt = toPlay._currentCard.cardInfo.cardValue > Difficulty.ScaleValue(player.difficulty);

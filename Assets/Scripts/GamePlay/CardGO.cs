@@ -13,7 +13,7 @@ public class CardGO : MonoBehaviour
     public Vector3 _startingPosition;
 
     void OnMouseOver(){
-        if(!_currentCard.CURRENTOWNER.isPlayer || Dealer.instance._currentSelected == this ) return;
+        if(!_currentCard.CURRENTOWNER.isPlayer || (Dealer.instance._currentSelected == this && !Dealer.instance.IsPlayerTurn())) return;
 
         Dealer.instance.playerController.CardMouseOver(this);
     }

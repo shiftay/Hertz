@@ -477,9 +477,9 @@ RectTransform:
   - {fileID: 1043097732}
   m_Father: {fileID: 1262578545}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 206.32501, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &105792222
@@ -808,9 +808,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1064142564}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -25}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &194738776
@@ -1442,13 +1442,14 @@ GameObject:
   m_Component:
   - component: {fileID: 734739925}
   - component: {fileID: 734739926}
+  - component: {fileID: 734739927}
   m_Layer: 5
   m_Name: RoundEnd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &734739925
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1491,7 +1492,22 @@ MonoBehaviour:
   coinsCurrent: {fileID: 1043097733}
   coinChange: {fileID: 759416540}
   scoreAmount: {fileID: 1846114066}
+  mainTitle: {fileID: 1633543976}
+  cardsWonTitle: {fileID: 307699251}
   popUp: {fileID: 0}
+  canvasGroup: {fileID: 734739927}
+--- !u!225 &734739927
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 734739924}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &743351454
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,6 +1518,7 @@ GameObject:
   m_Component:
   - component: {fileID: 743351455}
   - component: {fileID: 743351456}
+  - component: {fileID: 743351457}
   m_Layer: 5
   m_Name: BottomBar
   m_TagString: Untagged
@@ -1543,6 +1560,24 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &743351457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 743351454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a71908ea27a1f754097aea4aeb3c2b1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  completedHandsAnim: {fileID: 818691064}
+  healthAmt: {fileID: 1227552084}
+  goldAmt: {fileID: 142760583}
+  prefab: {fileID: 2286099822808883293, guid: 00b4dd63d72e85241bd5a14b9cc23fee, type: 3}
+  ScrollViewContent: {fileID: 937128100}
+  completedBTN: {fileID: 1298233147}
 --- !u!1 &759416538
 GameObject:
   m_ObjectHideFlags: 0
@@ -1744,9 +1779,9 @@ RectTransform:
   - {fileID: 1701289001}
   m_Father: {fileID: 743351455}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -309.6, y: -32.69998}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -309.6, y: 17.361404}
   m_SizeDelta: {x: 158.0448, y: 34.72281}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &818691061
@@ -2405,9 +2440,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1838758643}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 37.5, y: -37.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1041295695
@@ -2480,9 +2515,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 105792221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -75}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1043097733
@@ -2615,9 +2650,9 @@ RectTransform:
   - {fileID: 1445881953}
   m_Father: {fileID: 1262578545}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 68.775, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1064142565
@@ -3137,6 +3172,9 @@ MonoBehaviour:
   playerIcons:
   - {fileID: 21300000, guid: 65841999c356b084ab84698d16b635f7, type: 3}
   - {fileID: 21300000, guid: 6be70f69205e0b042943144c6aac990c, type: 3}
+  HandsBTN:
+  - {fileID: 21300000, guid: 91f12451f92098446a4945d5dd4de3c0, type: 3}
+  - {fileID: 21300000, guid: 52249ac4a3cae974099a9da3788abad6, type: 3}
 --- !u!1 &1292671378
 GameObject:
   m_ObjectHideFlags: 0
@@ -3445,9 +3483,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1064142564}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -75}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1445881954
@@ -3579,9 +3617,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 105792221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -25}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1610442731
@@ -4070,8 +4108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 081b37780c71cba499ae60c2d7fb7c3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2286099822808883293, guid: 00b4dd63d72e85241bd5a14b9cc23fee, type: 3}
-  ScrollViewContent: {fileID: 937128100}
+  bottomBar: {fileID: 743351457}
+  roundEnd: {fileID: 734739926}
 --- !u!1 &1701289000
 GameObject:
   m_ObjectHideFlags: 0
@@ -4157,10 +4195,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 818691064}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: SetTrigger
-        m_Mode: 5
+      - m_Target: {fileID: 743351457}
+        m_TargetAssemblyTypeName: BottomBar, Assembly-CSharp
+        m_MethodName: ToggleCompletedHands
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4393,9 +4431,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1838758643}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -37.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1846114066

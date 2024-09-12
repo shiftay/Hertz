@@ -18,6 +18,13 @@ public class HandPositions {
 
 public class Dealer : MonoBehaviour
 {
+#region DEBUG
+    public bool shortGame;
+
+#endregion
+
+
+
 #region Setup Vars
     public SpriteHandler spriteHandler;
     public List<CardGO> Deck = new List<CardGO>();
@@ -95,15 +102,17 @@ public class Dealer : MonoBehaviour
             players.Add(temp);
         }
 
+        
+
         int x = UnityEngine.Random.Range(0, dealPositions.Count);
 
-        currentTurn = players[x];
+        currentTurn = shortGame ? players.Find(n=> n.isPlayer) : players[x];
         dealerCoin.transform.position = dealPositions[x].coinPos.position;
     }
 
 
     public void Deal() {
-        for(int i = 0; i < Deck.Count; i++) {
+        for(int i = 0; i < (shortGame ? 8 : Deck.Count); i++) {
             // I % 4 to make sure we deal to 4 different players.
             Player curPlayer = players[i % 4];
             Deck[i].transform.position = dealPositions[i % 4].dealPos.transform.position;
@@ -119,6 +128,7 @@ public class Dealer : MonoBehaviour
     }
 
     private void CreateCards() {
+
         CardGO current = null;
 
         for(int i = 0; i <= (int)CONSTS.CARDSUIT.CLUB; i++) {
@@ -201,7 +211,7 @@ public class Dealer : MonoBehaviour
         cardsScheduledForDeletion.Clear();
 
 
-        UIHandler.instance.CreateWonHand(temp);
+        UIHandler.instance.bottomBar.CreateWonHand(temp);
 
         currentTurn = winnerOfHand;
         dealerCoin.transform.position = dealPositions[players.FindIndex(n => n == currentTurn)].coinPos.position;
@@ -210,6 +220,9 @@ public class Dealer : MonoBehaviour
 
         if(winnerOfHand._currentHand.cards.Count == 0)  { // No more cards for the winner to play.
             Debug.Log("Score teh round.");
+
+            UIHandler.instance.roundEnd.Setup(players.Find(n => n.isPlayer));
+
             /* 
                 "Scoring"
                 > Each Heart is worth 1 point
@@ -220,9 +233,6 @@ public class Dealer : MonoBehaviour
                     > 26 points are given to the other players.
                     > Score to 100
                     > Attempt to be lowest score.
-
-            
-            
             */
         } else {
 

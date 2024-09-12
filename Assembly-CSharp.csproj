@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\GamePlay\Player.cs" />
     <Compile Include="Assets\Scripts\GamePlay\RoguelikeElements\Unlockable.cs" />
     <Compile Include="Assets\Scripts\GamePlay\Deck.cs" />
+    <Compile Include="Assets\BottomBar.cs" />
     <Compile Include="Assets\Scripts\GamePlay\Card.cs" />
     <Compile Include="Assets\Scripts\GamePlay\CardInfo.cs" />
     <Compile Include="Assets\Scripts\Utils\Constants.cs" />
