@@ -13,7 +13,7 @@ public class BottomBar : MonoBehaviour
     public Image completedBTN;
     private bool _switch = false;
 
-    public void CreateWonHand(WonHand hand) {
+    public void CreateWonHand(List<Card> hand) {
         WonHandUI temp = Instantiate(prefab);
 
         temp.SetupWonHand(hand);

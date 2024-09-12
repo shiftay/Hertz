@@ -23,12 +23,11 @@ public class Dealer : MonoBehaviour
 
 #endregion
 
-
-
 #region Setup Vars
     public SpriteHandler spriteHandler;
     public List<CardGO> Deck = new List<CardGO>();
     List<Player> players = new List<Player>();
+    public Player MAINPLAYER { get { return players.Find(n => n.isPlayer); }}
     public CardGO cardPrefab;
     public List<HandPositions> dealPositions;
     public static Dealer instance;
@@ -38,15 +37,11 @@ public class Dealer : MonoBehaviour
 
 #region Gameplay Vars
     public CardGO _currentSelected;
-
     private Player currentTurn;
-
     private bool _gameStarted;
     private float _turnTimer;
-
     private List<CardGO> cardsScheduledForDeletion = new List<CardGO>();
     private List<Card> playedCards = new List<Card>();
-
     private int currentHand;
     private int currentCard;
     private bool calculatingScore;
@@ -102,8 +97,6 @@ public class Dealer : MonoBehaviour
             players.Add(temp);
         }
 
-        
-
         int x = UnityEngine.Random.Range(0, dealPositions.Count);
 
         currentTurn = shortGame ? players.Find(n=> n.isPlayer) : players[x];
@@ -120,7 +113,7 @@ public class Dealer : MonoBehaviour
             Deck[i]._currentCard.CURRENTOWNER = curPlayer;
             curPlayer._currentHand.cards.Add(Deck[i]);
             
-            if(!curPlayer.isPlayer) Deck[i]._currentSprite.sprite = spriteHandler.CardBack();
+            if(!curPlayer.isPlayer && !Deck[i]._currentCard.ContainsXRAY()) Deck[i]._currentSprite.sprite = spriteHandler.CardBack();
         }
 
         _gameStarted = true;
@@ -186,6 +179,15 @@ public class Dealer : MonoBehaviour
         }
     }
 
+
+    public List<Card> WonHand(int id) {
+        return playedCards.FindAll(n=> n.handPlayed == id);
+    }
+
+    public List<Card> PlayerCards() {
+        return playedCards.FindAll(n => n.CURRENTOWNER.isPlayer);
+    }
+
     private IEnumerator DetermineHandWinner() {
         yield return new WaitForSeconds(1.0f);
 
@@ -201,8 +203,8 @@ public class Dealer : MonoBehaviour
         hand.Find(n => n.cardInfo.cardSuit == highCard.cardInfo.cardSuit && n.cardInfo.cardValue == highCard.cardInfo.cardValue).winningCard = true;
 
         Player winnerOfHand = highCard.CURRENTOWNER;
-        WonHand temp = new WonHand(hand, winnerOfHand);
-        winnerOfHand.wonHands.Add(temp);
+        // WonHand temp = new WonHand(hand, winnerOfHand);
+        // winnerOfHand.wonHands.Add(temp);
         
 
         for(int i = cardsScheduledForDeletion.Count - 1; i >= 0; i--) {
@@ -211,19 +213,19 @@ public class Dealer : MonoBehaviour
         cardsScheduledForDeletion.Clear();
 
 
-        UIHandler.instance.bottomBar.CreateWonHand(temp);
+        UIHandler.instance.bottomBar.CreateWonHand(WonHand(currentHand));
 
         currentTurn = winnerOfHand;
         dealerCoin.transform.position = dealPositions[players.FindIndex(n => n == currentTurn)].coinPos.position;
+        playedCards.FindAll(n => n.handPlayed == currentHand).ForEach(n => n.CURRENTOWNER = winnerOfHand);
+
         currentHand++;
         currentCard = 0;
 
         if(winnerOfHand._currentHand.cards.Count == 0)  { // No more cards for the winner to play.
             Debug.Log("Score teh round.");
-
-            UIHandler.instance.roundEnd.Setup(players.Find(n => n.isPlayer));
-
             /* 
+                IDEA
                 "Scoring"
                 > Each Heart is worth 1 point
                 > Queen of Spade is worth 13
@@ -233,7 +235,33 @@ public class Dealer : MonoBehaviour
                     > 26 points are given to the other players.
                     > Score to 100
                     > Attempt to be lowest score.
+                
+                IMPLEMENT
+                > Gather all enhanced cards 
+                    > Scoring Enhanced Card based on who owns the card.
+                        
+
+                > Gather all hearts
+                    > Determine score based on who owns it. (Ignore Enhanced cards, as they've been scored already)
+                        > Score the card
+
             */
+            List<Card> enhancedCards = playedCards.FindAll(n => n.enhancements.Count > 0);
+
+            enhancedCards.ForEach(n => n.enhancements.ForEach(x => x.currentEffect(n.CURRENTOWNER)));
+            
+
+            // List<WonHand> wonHands = players.Find(n => n.isPlayer).wonHands;
+
+
+            // if(wonHands.Count > 0) {
+            //     List<Card>
+
+
+            // }
+            UIHandler.instance.roundEnd.Setup(players.Find(n => n.isPlayer));
+
+
         } else {
 
             calculatingScore = false;
@@ -314,8 +342,6 @@ public class Dealer : MonoBehaviour
     }
 
 #endregion
-
-    public Transform playerArea;
 
     public void Clicked(CardGO clicked) {
         if(_currentSelected == null) {

@@ -7,13 +7,9 @@ public class Player
 {
     public Deck _currentDeck;
     public Hand _currentHand;
-
-    public List<WonHand> wonHands;
-    
     public bool isPlayer;
     public Difficulty.DIFFICULITIES difficulty;
-
-    public float Health;
+    public Health health;
     
     public Scoring scoring;
     public List<Unlockable> unlocks;
@@ -21,8 +17,8 @@ public class Player
 
     public Player(bool player) {
         if(player) unlocks = new List<Unlockable>();
+        health = new Health();
         isPlayer = player;
-        wonHands = new List<WonHand>();
         _currentHand = new Hand();
     }
 }
@@ -32,9 +28,26 @@ public class WonHand {
     public List<Card> cards = new List<Card>();
 
     public WonHand(List<Card> hand, Player p) { cards = hand; isPlayer = p.isPlayer; }
+
+    public bool ContainsHeart() {
+        return cards.FindAll(n => n.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART).Count > 0;
+    }
+
     public bool isPlayer;
 }
 
+public class Health {
+    public int currentHealth;
+    public const int MAXHEALTH = 100;
+    public int damageQueue;
+    public int healingQueue;   
+
+    public Health() {
+        currentHealth = MAXHEALTH;
+        damageQueue = healingQueue = 0;
+    }
+
+}
 
 /* 
     Roguelike additions:

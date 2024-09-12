@@ -7,6 +7,7 @@ public enum UNLOCKTYPE { CARDENHANCEMENT, TRINKET, TRINKETSLOT }
 
 
 /* 
+    IDEA
     Goal: (6)
 
     CARD ENHANCEMENT DESCRIPTIONS:
@@ -19,8 +20,8 @@ public enum UNLOCKTYPE { CARDENHANCEMENT, TRINKET, TRINKETSLOT }
 public enum CARDENHANCEMENT { DAMAGE, HEAL, GOLD, XRAY }
 
 /*
+    IDEA
     Goal: (20)
-    
     Trinket Descriptions:
         Full Moon - When player shoots the moon they double their total score.
         Eclipse - Allows the player to not have to get the Queen of Spades to shoot the moon.

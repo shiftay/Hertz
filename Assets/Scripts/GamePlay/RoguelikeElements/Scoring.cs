@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class Scoring 
 {
-    public float money;
+    public int currentGold;
+    public int goldQueue;
     public float currentScore;
 
+    public float scoreQueue;
+    public float multiplierQueue;
+
+
+
     public bool Buy(int amount) {
-        if(amount > money) return false;
+        if(amount > currentGold) return false;
 
         // TODO: Call UI to animate money loss.
-        money -= amount;
+        currentGold -= amount;
 
         return true;
     }

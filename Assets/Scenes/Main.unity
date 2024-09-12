@@ -405,7 +405,6 @@ MonoBehaviour:
   player:
     isPlayer: 0
     difficulty: 0
-    Health: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
@@ -1920,7 +1919,6 @@ MonoBehaviour:
   player:
     isPlayer: 0
     difficulty: 0
-    Health: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
@@ -2025,7 +2023,6 @@ MonoBehaviour:
   player:
     isPlayer: 0
     difficulty: 0
-    Health: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
@@ -2400,7 +2397,6 @@ MonoBehaviour:
   player:
     isPlayer: 0
     difficulty: 0
-    Health: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
@@ -2984,7 +2980,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 599b165a69bc66746a2259fb08e52fea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shortGame: 1
+  shortGame: 0
   spriteHandler: {fileID: 1266580980}
   Deck: []
   cardPrefab: {fileID: 1773448044835626266, guid: 858791a15949c4249afe38dc05b6765f, type: 3}

@@ -38,7 +38,7 @@ public class RoundEnd : MonoBehaviour
     }
 
 
-    IEnumerator GhostWrite(string toBeWritten, TextMeshProUGUI element, CallBack callBack = null) {
+    private IEnumerator GhostWrite(string toBeWritten, TextMeshProUGUI element, CallBack callBack = null) {
         string write = "";
         for(int i = 0; i < toBeWritten.Length; i++) {
             write += toBeWritten[i];
@@ -52,20 +52,30 @@ public class RoundEnd : MonoBehaviour
         }
     }
 
+
+    // IEnumerator LoadIn(CanvasGroup group) {
+
+    // }
+
+    // IEnumerator CountUp(int startingVal, int additons, TextMeshProUGUI element) {
+
+    // }
+
     public void CardsWon() {
         StartCoroutine(ShowCards());
     }
 
-    IEnumerator ShowCards(CallBack callBack = null) {
+    private IEnumerator ShowCards(CallBack callBack = null) {
         yield return StartCoroutine(GhostWrite(CONSTS.CARDSWON, cardsWonTitle));
 
-        for(int i = 0; i < currentPlayer.wonHands.Count; i++) {
-            for(int j = 0; j < currentPlayer.wonHands[i].cards.Count; j++) {
+        List<Card> playerCards = Dealer.instance.PlayerCards();
+
+
+        for(int i = 0; i < playerCards.Count; i++) {
                 yield return new WaitForSeconds(0.2f);  // TODO: Turn into constant
                 CardHolderUI temp = Instantiate(wonCardPrefab);
-                temp.playingCard.sprite = Dealer.instance.spriteHandler.WonHandCard(currentPlayer.wonHands[i].cards[j].cardInfo.cardSuit, currentPlayer.wonHands[i].cards[j].cardInfo.cardValue);
+                temp.playingCard.sprite = Dealer.instance.spriteHandler.WonHandCard(playerCards[i].cardInfo.cardSuit, playerCards[i].cardInfo.cardValue);
                 temp.transform.SetParent(cardWonParent);
-            }
         }
 
         if(callBack != null) callBack();  // FIXME: Check don't think this is needed at all. 
