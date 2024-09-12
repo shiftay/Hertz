@@ -24,13 +24,14 @@ public class BottomBar : MonoBehaviour
         ScrollViewContent.sizeDelta = new Vector2(0, ScrollViewContent.childCount * 46.1475f + CONSTS.WONHANDUIMODIFIER);
     }
 
-    public void Setup(float health, float money) {
-        
+    public void Setup(Player p) {
+        healthAmt.text = p.health.currentHealth.ToString();
+        goldAmt.text = p.scoring.currentGold.ToString();
     }
 
     public void ToggleCompletedHands() {
         
-        completedBTN.sprite = Dealer.instance.spriteHandler.HandsBTN[_switch ? 0 : 1];
+        completedBTN.sprite =  GameManager.instance.dealer.spriteHandler.HandsBTN[_switch ? 0 : 1];
         _switch = !_switch;
         completedHandsAnim.SetTrigger("Trigger");
     }

@@ -12,28 +12,32 @@ public class CardGO : MonoBehaviour
     public Animator _animator;
     public Vector3 _startingPosition;
 
-    void OnMouseOver(){
-        if(!_currentCard.CURRENTOWNER.isPlayer || (Dealer.instance._currentSelected == this && !Dealer.instance.IsPlayerTurn())) return;
 
-        Dealer.instance.playerController.CardMouseOver(this);
+    // BUG  Player sometimes drops card infront of their cards 
+    //      Occurs because Dealer is trying to organize card when it shouldn't be.
+
+    void OnMouseOver(){
+        if(!_currentCard.CURRENTOWNER.isPlayer || ( GameManager.instance.dealer._currentSelected == this && ! GameManager.instance.dealer.IsPlayerTurn())) return;
+
+        GameManager.instance.dealer.playerController.CardMouseOver(this);
     }
 
     void OnMouseDown() {
-        if(!_currentCard.CURRENTOWNER.isPlayer || !Dealer.instance.IsPlayerTurn()) return;
+        if(!_currentCard.CURRENTOWNER.isPlayer || ! GameManager.instance.dealer.IsPlayerTurn()) return;
 
-        if(!Dealer.instance.IsCardPlayable(_currentCard)) {
+        if(! GameManager.instance.dealer.IsCardPlayable(_currentCard)) {
             // TODO: Play SFX / Show VFX
             return;
         } else {
-            Dealer.instance.Clicked(this);
+             GameManager.instance.dealer.Clicked(this);
         }   
     }
 
     private void OnMouseExit()
     {
-        Dealer.instance.playerController.CardMouseExit();
+         GameManager.instance.dealer.playerController.CardMouseExit();
     }
     
-    public bool IsQueenOfSpades() { return _currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.SPADE && _currentCard.cardInfo.cardValue == 12; }
+    
 
 }

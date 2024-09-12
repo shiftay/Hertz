@@ -6,13 +6,6 @@ using UnityEngine.UI;
 
 public class UIHandler : MonoBehaviour
 {
-#region Instance Creation / Awake
-    public static UIHandler instance;
-    private void Awake() {
-        instance = this;
-    }
-#endregion
-
     public BottomBar bottomBar;
     public RoundEnd roundEnd;
 }

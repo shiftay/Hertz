@@ -30,7 +30,7 @@ public sealed class Enhancements {
 #region Delegates
     public static void Heal(Player target) { target.health.healingQueue++; }
     public static void Damage(Player target) {  if(target.isPlayer) target.health.damageQueue++;
-                                                else Dealer.instance.MAINPLAYER.scoring.scoreQueue++;
+                                                else  GameManager.instance.dealer.MAINPLAYER.scoring.scoreQueue++;
                                                      }
     public static void Gold(Player target) { target.scoring.goldQueue++; }
     public static void XRay(Player target) { return; }

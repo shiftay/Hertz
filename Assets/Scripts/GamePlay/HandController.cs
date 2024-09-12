@@ -81,9 +81,10 @@ public class HandController : MonoBehaviour
         }
     }
 
-    private float GetVectorInternalAngle(Vector3 a, Vector3 b, Vector3 c) {
-        return Vector3.Angle(b-a, c-a);
-    }
+    // TODO Delete if un needed
+    // private float GetVectorInternalAngle(Vector3 a, Vector3 b, Vector3 c) {
+    //     return Vector3.Angle(b-a, c-a);
+    // }
     
     [Button("Sort")]
     public void Sort() {
@@ -192,7 +193,7 @@ public class HandController : MonoBehaviour
         */
         List<CardGO> playableCards = new List<CardGO>();
 
-        CONSTS.CARDSUIT CurrentSuit = Dealer.instance.CurrentSUIT();
+        CONSTS.CARDSUIT CurrentSuit =  GameManager.instance.dealer.CurrentSUIT();
         if (CurrentSuit == CONSTS.CARDSUIT.NULL) // WE ARE THE CURRENT DEALER
         {          
             if(shootForTheMoon) {           
@@ -201,7 +202,7 @@ public class HandController : MonoBehaviour
                         > Play highest card for w/e suit.
                 */
                 playableCards = player._currentHand.cards.OrderByDescending(x => x._currentCard.cardInfo.cardValue).ToList();
-                if(!Dealer.instance.HaveHeartsBeenPlayed() && playableCards[0]._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART) {
+                if(! GameManager.instance.dealer.HaveHeartsBeenPlayed() && playableCards[0]._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART) {
                     throw new Exception();
                 } else {
                     return playableCards[0];
@@ -214,7 +215,7 @@ public class HandController : MonoBehaviour
                     TODO: Doesn't work if current amount = 0.
                 */
 
-                if(Dealer.instance.HaveHeartsBeenPlayed()) {
+                if( GameManager.instance.dealer.HaveHeartsBeenPlayed()) {
                     if(CoinFlip()) {
                         if(player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART).Count > 0) {
                             if(player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART)[0]._currentCard.cardInfo.cardValue < 7) return player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART)[0];
@@ -240,8 +241,8 @@ public class HandController : MonoBehaviour
                     > If not? Dump lowest
             */
             if(shootForTheMoon) {
-                if(playableCards.FindAll(n => n._currentCard.cardInfo.cardValue > Dealer.instance.CurrentHighCardInSuit()).Count > 0) { // Attempt to win // TODO: Make sure it's our highest.
-                    return playableCards.FindAll(n => n._currentCard.cardInfo.cardValue > Dealer.instance.CurrentHighCardInSuit())[0];
+                if(playableCards.FindAll(n => n._currentCard.cardInfo.cardValue >  GameManager.instance.dealer.CurrentHighCardInSuit()).Count > 0) { // Attempt to win // TODO: Make sure it's our highest.
+                    return playableCards.FindAll(n => n._currentCard.cardInfo.cardValue >  GameManager.instance.dealer.CurrentHighCardInSuit())[0];
                 } else {
                     return playableCards[0]; // Play lowest of the suit.
                 }
@@ -251,11 +252,11 @@ public class HandController : MonoBehaviour
                 Try to play under the current highest.
             */
 
-                if(Dealer.instance.CurrentPlayed() > 2 && !Dealer.instance.HeartInActiveHand()) {
-                    return ReturnHighCardSUITINCLUSIVE(Dealer.instance.CurrentSUIT());
-                } else if (Dealer.instance.CurrentPlayed() > 2 && Dealer.instance.HeartInActiveHand()) {
-                    if(playableCards[0]._currentCard.cardInfo.cardValue > Dealer.instance.CurrentHighCardInSuit()) {
-                        return ReturnHighCardSUITINCLUSIVE(Dealer.instance.CurrentSUIT());
+                if( GameManager.instance.dealer.CurrentPlayed() > 2 && ! GameManager.instance.dealer.HeartInActiveHand()) {
+                    return ReturnHighCardSUITINCLUSIVE( GameManager.instance.dealer.CurrentSUIT());
+                } else if ( GameManager.instance.dealer.CurrentPlayed() > 2 &&  GameManager.instance.dealer.HeartInActiveHand()) {
+                    if(playableCards[0]._currentCard.cardInfo.cardValue >  GameManager.instance.dealer.CurrentHighCardInSuit()) {
+                        return ReturnHighCardSUITINCLUSIVE( GameManager.instance.dealer.CurrentSUIT());
                     }
                 }
 
@@ -263,8 +264,8 @@ public class HandController : MonoBehaviour
                 // TODO: Make sure to look at the current highest card and look for under that.
 
 
-                if(playableCards.FindAll(x => x._currentCard.cardInfo.cardValue < Dealer.instance.CurrentHighCardInSuit()).Count > 0)
-                    return playableCards.FindAll(x => x._currentCard.cardInfo.cardValue < Dealer.instance.CurrentHighCardInSuit()).OrderByDescending(n => n._currentCard.cardInfo.cardValue).ToList()[0];
+                if(playableCards.FindAll(x => x._currentCard.cardInfo.cardValue <  GameManager.instance.dealer.CurrentHighCardInSuit()).Count > 0)
+                    return playableCards.FindAll(x => x._currentCard.cardInfo.cardValue <  GameManager.instance.dealer.CurrentHighCardInSuit()).OrderByDescending(n => n._currentCard.cardInfo.cardValue).ToList()[0];
                 else
                     return playableCards[0]; // Our lowest of Suit
             }
@@ -286,8 +287,8 @@ public class HandController : MonoBehaviour
                 if(CoinFlip()) {
                     if(player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART).Count > 0)
                         return ReturnHighCardSUITINCLUSIVE(CONSTS.CARDSUIT.HEART);
-                    else if (player._currentHand.cards.Find(n => n.IsQueenOfSpades())) // This might fail.
-                        return player._currentHand.cards.Find(n => n.IsQueenOfSpades());
+                    else if (player._currentHand.cards.Find(n => n._currentCard.IsQueenOfSpades())) // This might fail.
+                        return player._currentHand.cards.Find(n => n._currentCard.IsQueenOfSpades());
                     else
                         return ReturnHighCardSUITEXCLUSIVE(); 
                 } else {
@@ -305,7 +306,7 @@ public class HandController : MonoBehaviour
     private CardGO ReturnHighCardSUITINCLUSIVE(CONSTS.CARDSUIT suit) {
         List<CardGO> temp = player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == suit).OrderByDescending(n => n._currentCard.cardInfo.cardValue).ToList();
         for(int i = 0; i < temp.Count; i++) {
-            if(temp[i].IsQueenOfSpades()) continue;
+            if(temp[i]._currentCard.IsQueenOfSpades()) continue;
 
             return temp[i];
         }
@@ -335,7 +336,7 @@ public class HandController : MonoBehaviour
 
                 if(tempAmt < currentAmt) {
                     
-                    if((CONSTS.CARDSUIT)i == CONSTS.CARDSUIT.HEART && !Dealer.instance.HaveHeartsBeenPlayed()) continue;
+                    if((CONSTS.CARDSUIT)i == CONSTS.CARDSUIT.HEART && ! GameManager.instance.dealer.HaveHeartsBeenPlayed()) continue;
 
                     currentAmt = tempAmt;
                     currentLow = (CONSTS.CARDSUIT)i;
@@ -357,10 +358,7 @@ public class HandController : MonoBehaviour
         if(currentLow == CONSTS.CARDSUIT.NULL) toPlay = player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == checkedVals[0]).OrderBy(n => n._currentCard.cardInfo.cardValue).ToList()[0];
 
         return toPlay;
-
     }
-
-
 #endregion
 
 #region Utility

@@ -68,13 +68,13 @@ public class RoundEnd : MonoBehaviour
     private IEnumerator ShowCards(CallBack callBack = null) {
         yield return StartCoroutine(GhostWrite(CONSTS.CARDSWON, cardsWonTitle));
 
-        List<Card> playerCards = Dealer.instance.PlayerCards();
+        List<Card> playerCards =  GameManager.instance.dealer.PlayerCards();
 
 
         for(int i = 0; i < playerCards.Count; i++) {
                 yield return new WaitForSeconds(0.2f);  // TODO: Turn into constant
                 CardHolderUI temp = Instantiate(wonCardPrefab);
-                temp.playingCard.sprite = Dealer.instance.spriteHandler.WonHandCard(playerCards[i].cardInfo.cardSuit, playerCards[i].cardInfo.cardValue);
+                temp.playingCard.sprite =  GameManager.instance.dealer.spriteHandler.WonHandCard(playerCards[i].cardInfo.cardSuit, playerCards[i].cardInfo.cardValue);
                 temp.transform.SetParent(cardWonParent);
         }
 

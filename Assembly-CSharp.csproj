@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\GamePlay\CPU_Player.cs" />
     <Compile Include="Assets\Scripts\GamePlay\RoguelikeElements\Milestones.cs" />
     <Compile Include="Assets\Scripts\UI\UIHandler.cs" />
+    <Compile Include="Assets\Scripts\GamePlay\RoguelikeElements\Health.cs" />
     <Compile Include="Assets\Scripts\GamePlay\RoguelikeElements\Scoring.cs" />
     <Compile Include="Assets\Scripts\Utils\Difficulty.cs" />
     <Compile Include="Assets\Scripts\GamePlay\Player.cs" />

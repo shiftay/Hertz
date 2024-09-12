@@ -18,36 +18,13 @@ public class Player
     public Player(bool player) {
         if(player) unlocks = new List<Unlockable>();
         health = new Health();
+        scoring = new Scoring();
         isPlayer = player;
         _currentHand = new Hand();
     }
 }
 
 
-public class WonHand {
-    public List<Card> cards = new List<Card>();
-
-    public WonHand(List<Card> hand, Player p) { cards = hand; isPlayer = p.isPlayer; }
-
-    public bool ContainsHeart() {
-        return cards.FindAll(n => n.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART).Count > 0;
-    }
-
-    public bool isPlayer;
-}
-
-public class Health {
-    public int currentHealth;
-    public const int MAXHEALTH = 100;
-    public int damageQueue;
-    public int healingQueue;   
-
-    public Health() {
-        currentHealth = MAXHEALTH;
-        damageQueue = healingQueue = 0;
-    }
-
-}
 
 /* 
     Roguelike additions:

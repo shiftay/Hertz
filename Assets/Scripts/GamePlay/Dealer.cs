@@ -30,7 +30,6 @@ public class Dealer : MonoBehaviour
     public Player MAINPLAYER { get { return players.Find(n => n.isPlayer); }}
     public CardGO cardPrefab;
     public List<HandPositions> dealPositions;
-    public static Dealer instance;
     public GameObject dealerCoin;
     public HandController playerController;
 #endregion
@@ -77,15 +76,19 @@ public class Dealer : MonoBehaviour
     */
 
 #region Initialization
-    void Start()
+    void Awake()
     {
-        instance = this;
+        Init(); // TODO Move this into another portion of the game. Doesn't need to be in Awake.
+    }
+
+    private void Init() { 
         calculatingScore = false;
 
         CreateCards();
         SetupPlayers();
         Shuffle(Deck);
         Deal();
+        GameManager.instance.handlerUI.bottomBar.Setup(MAINPLAYER);
         currentCard = currentHand = 0;
     }
 
@@ -213,7 +216,7 @@ public class Dealer : MonoBehaviour
         cardsScheduledForDeletion.Clear();
 
 
-        UIHandler.instance.bottomBar.CreateWonHand(WonHand(currentHand));
+        GameManager.instance.handlerUI.bottomBar.CreateWonHand(WonHand(currentHand));
 
         currentTurn = winnerOfHand;
         dealerCoin.transform.position = dealPositions[players.FindIndex(n => n == currentTurn)].coinPos.position;
@@ -224,7 +227,8 @@ public class Dealer : MonoBehaviour
 
         if(winnerOfHand._currentHand.cards.Count == 0)  { // No more cards for the winner to play.
             Debug.Log("Score teh round.");
-            /* 
+#region Scoring  
+          /* 
                 IDEA
                 "Scoring"
                 > Each Heart is worth 1 point
@@ -245,23 +249,31 @@ public class Dealer : MonoBehaviour
                     > Determine score based on who owns it. (Ignore Enhanced cards, as they've been scored already)
                         > Score the card
 
+           TODO > Look through trinkets.
+                    > Find Scoring / Healing trinkets
+                        > Add the values.
             */
             List<Card> enhancedCards = playedCards.FindAll(n => n.enhancements.Count > 0);
 
             enhancedCards.ForEach(n => n.enhancements.ForEach(x => x.currentEffect(n.CURRENTOWNER)));
+
+            List<Card> hearts = playedCards.FindAll(n => n.isHeart());
+
             
+            foreach(Card card in hearts) {
+                if(card.CURRENTOWNER.isPlayer) {
+                    MAINPLAYER.health.damageQueue++;
+                } else {
+                    MAINPLAYER.scoring.scoreQueue++;
+                }
+            }
 
-            // List<WonHand> wonHands = players.Find(n => n.isPlayer).wonHands;
+            int handsWon = playedCards.FindAll(n => n.CURRENTOWNER.isPlayer).Count / 4;
+            MAINPLAYER.scoring.goldQueue += Mathf.FloorToInt(MAINPLAYER.scoring.scoreQueue / handsWon);
 
+            GameManager.instance.handlerUI.roundEnd.Setup(players.Find(n => n.isPlayer));
 
-            // if(wonHands.Count > 0) {
-            //     List<Card>
-
-
-            // }
-            UIHandler.instance.roundEnd.Setup(players.Find(n => n.isPlayer));
-
-
+#endregion Scoring
         } else {
 
             calculatingScore = false;
