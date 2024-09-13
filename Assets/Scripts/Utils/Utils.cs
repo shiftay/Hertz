@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UTILS
+public class Utils
 {
     public enum CARDSUIT { HEART, SPADE, DIAMOND, CLUB, NULL }
     public enum AXIS { NORTH, EAST, SOUTH, WEST }
     public enum DIFFICULITIES { EASY, NORMAL, HARD }
     public const int ACE = 14;
     public const int CARDVALUEMODIFIER = 2;
+    public const int DEFAULTMAXDAMAGE = 23;
     public const float HANDLINEVALUEX = 3.0f;
     public const float HANDLINEVALUEY = 0.75f;
     public const float ROTATEVALY = 10.0f;
@@ -25,8 +26,6 @@ public class UTILS
     public enum CARDENHANCEMENT { DAMAGE, HEAL, GOLD, XRAY }
 #endregion
 
-
-
 #region UI ELEMENTS
     public enum GAMEPLAYSTATES { MainMenu, Gameplay, RoundEnd, Store, Settings } // IMPLEMENT Figure out more gamestates that are applicable.
     public const string ROUNDCOMPLETED = "Round Completed";
@@ -39,8 +38,8 @@ public class UTILS
     public const int HIGH = 11;
 
     // FIXME Can probably not scale with the Difficulty enum, instead use just reglar constants.
-    public static int ScaleValue(UTILS.DIFFICULITIES difficulty) {
-        return Random.Range(LOW, ConvertRange((int)UTILS.DIFFICULITIES.HARD, (int)UTILS.DIFFICULITIES.EASY, LOW,  HIGH, (int)difficulty) + 1);
+    public static int ScaleValue(Utils.DIFFICULITIES difficulty) {
+        return Random.Range(LOW, ConvertRange((int)Utils.DIFFICULITIES.HARD, (int)Utils.DIFFICULITIES.EASY, LOW,  HIGH, (int)difficulty) + 1);
     }
 
     public static int ConvertRange(

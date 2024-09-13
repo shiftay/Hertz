@@ -41,6 +41,6 @@ public enum TRINKET {   FULL_MOON, TRIAGE, ECLIPSE, CALCULATOR, JACKS_WILD_HEART
 
 public sealed class Unlockable
 {
-    public UTILS.UNLOCKTYPE type;
+    public Utils.UNLOCKTYPE type;
     public int id;
 }

@@ -9,6 +9,7 @@ public class WonHandUI : MonoBehaviour
     public List<CardHolderUI> cardHolders;
 
     public void SetupWonHand(List<Card> wonHand) {
+        Debug.LogWarning("won hand is player? " + wonHand[0].CURRENTOWNER.isPlayer);
         handWinner.sprite =  GameManager.instance.dealer.spriteHandler.Icon(wonHand[0].CURRENTOWNER.isPlayer);
 
         for(int i = 0; i < wonHand.Count; i++) {

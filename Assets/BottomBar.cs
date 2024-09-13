@@ -21,7 +21,7 @@ public class BottomBar : MonoBehaviour
         temp.transform.SetParent(ScrollViewContent);
         temp.transform.SetAsLastSibling();
 
-        ScrollViewContent.sizeDelta = new Vector2(0, ScrollViewContent.childCount * 46.1475f + UTILS.WONHANDUIMODIFIER);
+        ScrollViewContent.sizeDelta = new Vector2(0, ScrollViewContent.childCount * 46.1475f + Utils.WONHANDUIMODIFIER);
     }
 
     public void Setup(Player p) {

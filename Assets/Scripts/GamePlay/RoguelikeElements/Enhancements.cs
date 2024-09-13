@@ -5,19 +5,19 @@ using UnityEngine;
 // public enum CARDENHANCEMENT { DAMAGE, HEAL, GOLD, XRAY }
 
 public sealed class Enhancements {
-    public UTILS.CARDENHANCEMENT type;
+    public Utils.CARDENHANCEMENT type;
     public delegate void Effect(Player target); 
     public Effect currentEffect;
 
-    private Enhancements(UTILS.CARDENHANCEMENT t, Effect effct) {
+    private Enhancements(Utils.CARDENHANCEMENT t, Effect effct) {
         type = t;
         currentEffect = effct;
     }
 
-    public Enhancements DAMAGE = new Enhancements(UTILS.CARDENHANCEMENT.DAMAGE, Damage);
-    public Enhancements HEAL = new Enhancements(UTILS.CARDENHANCEMENT.HEAL, Heal);
-    public Enhancements GOLD = new Enhancements(UTILS.CARDENHANCEMENT.GOLD, Gold);
-    public Enhancements XRAY = new Enhancements(UTILS.CARDENHANCEMENT.XRAY, XRay);
+    public Enhancements DAMAGE = new Enhancements(Utils.CARDENHANCEMENT.DAMAGE, Damage);
+    public Enhancements HEAL = new Enhancements(Utils.CARDENHANCEMENT.HEAL, Heal);
+    public Enhancements GOLD = new Enhancements(Utils.CARDENHANCEMENT.GOLD, Gold);
+    public Enhancements XRAY = new Enhancements(Utils.CARDENHANCEMENT.XRAY, XRay);
 
     /*
         IMPLEMENT

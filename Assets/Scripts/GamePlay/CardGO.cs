@@ -17,25 +17,26 @@ public class CardGO : MonoBehaviour
     //      Occurs because Dealer is trying to organize card when it shouldn't be.
 
     void OnMouseOver(){
-        if(!_currentCard.CURRENTOWNER.isPlayer || ( GameManager.instance.dealer._currentSelected == this && ! GameManager.instance.dealer.IsPlayerTurn())) return;
-
+        if(!_currentCard.CURRENTOWNER.isPlayer) return;
+        if(GameManager.instance.dealer._currentSelected == this) return;
+        
         GameManager.instance.dealer.playerController.CardMouseOver(this);
     }
 
     void OnMouseDown() {
-        if(!_currentCard.CURRENTOWNER.isPlayer || ! GameManager.instance.dealer.IsPlayerTurn()) return;
+        if(!_currentCard.CURRENTOWNER.isPlayer || !GameManager.instance.dealer.IsPlayerTurn()) return;
 
         if(! GameManager.instance.dealer.IsCardPlayable(_currentCard)) {
             // TODO: Play SFX / Show VFX
             return;
         } else {
-             GameManager.instance.dealer.Clicked(this);
+            GameManager.instance.dealer.Clicked(this);
         }   
     }
 
     private void OnMouseExit()
     {
-         GameManager.instance.dealer.playerController.CardMouseExit();
+        //  GameManager.instance.dealer.playerController.CardMouseExit();
     }
     
     

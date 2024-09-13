@@ -13,5 +13,9 @@ public class UIHandler : MonoBehaviour
     public BottomBar bottomBar;
     public RoundEnd roundEnd;
 
+
+    public void SetState(Utils.GAMEPLAYSTATES state) {
+        stateAnimator.SetTrigger(state.ToString());
+    }
     
 }
