@@ -1074,7 +1074,7 @@ GameObject:
   - component: {fileID: 331357803}
   - component: {fileID: 331357802}
   m_Layer: 0
-  m_Name: Volume
+  m_Name: PostProcessingVolume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1755,6 +1755,7 @@ MonoBehaviour:
   goldAmt: {fileID: 142760583}
   prefab: {fileID: 2286099822808883293, guid: 00b4dd63d72e85241bd5a14b9cc23fee, type: 3}
   ScrollViewContent: {fileID: 937128100}
+  Viewport: {fileID: 818691060}
   completedBTN: {fileID: 1298233147}
 --- !u!1 &759416538
 GameObject:
@@ -1994,7 +1995,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -409.2, y: 17.361404}
+  m_AnchoredPosition: {x: -339, y: 17.361404}
   m_SizeDelta: {x: 158.0448, y: 34.72281}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &818691061
@@ -3483,7 +3484,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -112.85623, y: 17.360504}
+  m_AnchoredPosition: {x: -112.856445, y: 17.360504}
   m_SizeDelta: {x: 225.7125, y: 34.721}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1292671380
@@ -4530,12 +4531,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -4659,7 +4660,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 79.02241, y: -17.27406}
+  m_AnchoredPosition: {x: 79.02241, y: -19}
   m_SizeDelta: {x: 158.0448, y: 34.54812}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1701289002
