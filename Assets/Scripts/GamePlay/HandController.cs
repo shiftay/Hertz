@@ -136,7 +136,6 @@ public class HandController : MonoBehaviour
     }
 
     public void CardMouseExit(CardGO selected) {
-        // TODO: Make sure to clear selected
         if(selected == GameManager.instance.dealer._currentSelected)  GameManager.instance.dealer._currentSelected = null;
         SetTransforms();
     }
@@ -233,6 +232,7 @@ public class HandController : MonoBehaviour
             } else {   
             /*    
                 Try to play under the current highest.
+                FIXME CPU Still will drop Queen of Spade in a way that they would always win it back.
             */
                 if(GameManager.instance.dealer.CurrentPlayed() > 2 && !GameManager.instance.dealer.HeartInActiveHand()) { // If we're last card to be played && no heart
                     return ReturnHighCardSUITINCLUSIVE( GameManager.instance.dealer.CurrentSUIT());

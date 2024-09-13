@@ -27,7 +27,7 @@ public class CardGO : MonoBehaviour
     }
 
     void OnMouseDown() {
-        if(!_currentCard.CURRENTOWNER.isPlayer || !GameManager.instance.dealer.IsPlayerTurn()) return;
+        if(!_currentCard.CURRENTOWNER.isPlayer || !GameManager.instance.dealer.IsPlayerTurn) return;
 
         if(!GameManager.instance.dealer.IsCardPlayable(_currentCard)) {   
             return;

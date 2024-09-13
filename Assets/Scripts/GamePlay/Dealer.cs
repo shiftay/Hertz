@@ -313,38 +313,25 @@ public class Dealer : MonoBehaviour
         }
     }
 
-#endregion
+    #endregion
 
-#region Utility Callbacks
+    #region Utility Callbacks
 
-    public bool CardAttached(Transform t) {
-        Debug.Log(t.IsChildOf(playerController.transform));
+    public bool CardAttached(Transform t) => t.IsChildOf(playerController.transform);
 
-        return t.IsChildOf(playerController.transform);
-    }
-
-    public bool IsPlayerTurn() {
-        return currentTurn.isPlayer;
-    }
+    public bool IsPlayerTurn => currentTurn.isPlayer;
     public Utils.CARDSUIT CurrentSUIT() {
         Card temp = playedCards.FindAll(n => n.handPlayed == currentHand).Find(x => x.cardPlayed == 0);
         return temp == null ? Utils.CARDSUIT.NULL : temp.cardInfo.cardSuit;
     }
 
-    public bool HaveHeartsBeenPlayed() {
-        return playedCards.FindAll(n => n.cardInfo.cardSuit == Utils.CARDSUIT.HEART 
+    public bool HaveHeartsBeenPlayed() => playedCards.FindAll(n => n.cardInfo.cardSuit == Utils.CARDSUIT.HEART
         || (n.cardInfo.cardSuit == Utils.CARDSUIT.SPADE && n.cardInfo.cardValue == 12)).Count > 0 || HeartInActiveHand();
-    }
 
-    public bool HeartInActiveHand() {
-        return playedCards.FindAll(n => (n.isHeart() && n.handPlayed == currentHand) 
+    public bool HeartInActiveHand() => playedCards.FindAll(n => (n.isHeart() && n.handPlayed == currentHand)
         || (n.IsQueenOfSpades() && n.handPlayed == currentHand)).Count > 0;
-    }
 
-    [Button("Is There a heart?")]
-    public void Heart() {
-        Debug.Log(HeartInActiveHand());
-    }
+
 
     // This should never be called if it can possibly be null.
     public int CurrentHighCardInSuit() {
