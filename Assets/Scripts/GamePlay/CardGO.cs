@@ -13,13 +13,15 @@ public class CardGO : MonoBehaviour
     public Vector3 _startingPosition;
 
 
-    // BUG  Player sometimes drops card infront of their cards 
-    //      Occurs because Dealer is trying to organize card when it shouldn't be.
+    // BUG      Player sometimes drops card infront of their cards 
+    //          Occurs because Dealer is trying to organize card when it shouldn't be.
+    // ISSUE    Doesn't seem to occur anymore, However the fix in MouseOver causes an  
+    
 
     void OnMouseOver(){
         if(!_currentCard.CURRENTOWNER.isPlayer) return;
         if(GameManager.instance.dealer._currentSelected == this) return;
-        
+
         GameManager.instance.dealer.playerController.CardMouseOver(this);
     }
 
