@@ -94,8 +94,8 @@ public class Dealer : MonoBehaviour
 
     private void SetupPlayers() {
         foreach(HandPositions handPos in dealPositions) {
-            Player temp = new Player(handPos.dealPos.currentAXIS == CONSTS.PLAYERAXIS);
-            temp.difficulty = (Difficulty.DIFFICULITIES)UnityEngine.Random.Range(0, 3);
+            Player temp = new Player(handPos.dealPos.currentAXIS == UTILS.PLAYERAXIS);
+            temp.difficulty = (UTILS.DIFFICULITIES)UnityEngine.Random.Range(0, 3);
             handPos.dealPos.player = temp;
             players.Add(temp);
         }
@@ -127,12 +127,12 @@ public class Dealer : MonoBehaviour
 
         CardGO current = null;
 
-        for(int i = 0; i <= (int)CONSTS.CARDSUIT.CLUB; i++) {
-            for(int j = 2; j <= CONSTS.ACE; j++) {
+        for(int i = 0; i <= (int)UTILS.CARDSUIT.CLUB; i++) {
+            for(int j = 2; j <= UTILS.ACE; j++) {
                 current = Instantiate(cardPrefab);
-                current._currentCard = new Card(new CardInfo(j, (CONSTS.CARDSUIT)i));
-                current._currentSprite.sprite = spriteHandler.FindCard((CONSTS.CARDSUIT)i, j);
-                current.name = ((CONSTS.CARDSUIT)i).ToString("D") + " " + j.ToString();
+                current._currentCard = new Card(new CardInfo(j, (UTILS.CARDSUIT)i));
+                current._currentSprite.sprite = spriteHandler.FindCard((UTILS.CARDSUIT)i, j);
+                current.name = ((UTILS.CARDSUIT)i).ToString("D") + " " + j.ToString();
                 // current.transform.position = new Vector3(-7.5f + (j - CONSTS.CARDVALUEMODIFIER) * 1.5f, -3.5f + i * 2, 0);
                 Deck.Add(current);
             }
@@ -252,6 +252,10 @@ public class Dealer : MonoBehaviour
            TODO > Look through trinkets.
                     > Find Scoring / Healing trinkets
                         > Add the values.
+
+
+                TODO Start defining "Shoot the moon"
+
             */
             List<Card> enhancedCards = playedCards.FindAll(n => n.enhancements.Count > 0);
 
@@ -268,8 +272,21 @@ public class Dealer : MonoBehaviour
                 }
             }
 
-            int handsWon = playedCards.FindAll(n => n.CURRENTOWNER.isPlayer).Count / 4;
-            MAINPLAYER.scoring.goldQueue += Mathf.FloorToInt(MAINPLAYER.scoring.scoreQueue / handsWon);
+            /* 
+                IDEA 
+                    Gold should be based off of the players ability to not gain hearts.
+                    The less damage they take the more gold they should get.
+                
+                Max Default damage is 23
+
+                enhancedCards.FindAll(n => n.enhancements.FindAll(x => x.))
+
+                MAINPLAYER.health.damageQueue 
+                Gold = 
+            */
+            
+
+
 
             GameManager.instance.handlerUI.roundEnd.Setup(players.Find(n => n.isPlayer));
 
@@ -289,19 +306,19 @@ public class Dealer : MonoBehaviour
     }
 
 
-    public CONSTS.CARDSUIT CurrentSUIT() {
+    public UTILS.CARDSUIT CurrentSUIT() {
         Card temp = playedCards.FindAll(n => n.handPlayed == currentHand).Find(x => x.cardPlayed == 0);
-        return temp == null ? CONSTS.CARDSUIT.NULL : temp.cardInfo.cardSuit;
+        return temp == null ? UTILS.CARDSUIT.NULL : temp.cardInfo.cardSuit;
     }
 
     public bool HaveHeartsBeenPlayed() {
-        return playedCards.FindAll(n => n.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART 
-        || (n.cardInfo.cardSuit == CONSTS.CARDSUIT.SPADE && n.cardInfo.cardValue == 12)).Count > 0 || HeartInActiveHand();
+        return playedCards.FindAll(n => n.cardInfo.cardSuit == UTILS.CARDSUIT.HEART 
+        || (n.cardInfo.cardSuit == UTILS.CARDSUIT.SPADE && n.cardInfo.cardValue == 12)).Count > 0 || HeartInActiveHand();
     }
 
     public bool HeartInActiveHand() {
-        return playedCards.FindAll(n => (n.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART && n.handPlayed == currentHand) 
-        || (n.cardInfo.cardSuit == CONSTS.CARDSUIT.SPADE && n.cardInfo.cardValue == 12 && n.handPlayed == currentHand)).Count > 0;
+        return playedCards.FindAll(n => (n.cardInfo.cardSuit == UTILS.CARDSUIT.HEART && n.handPlayed == currentHand) 
+        || (n.cardInfo.cardSuit == UTILS.CARDSUIT.SPADE && n.cardInfo.cardValue == 12 && n.handPlayed == currentHand)).Count > 0;
     }
 
     // This should never be called if it can possibly be null.
@@ -331,15 +348,15 @@ public class Dealer : MonoBehaviour
     public bool IsCardPlayable(Card card)
     {
         if(currentCard == 0) {
-            if(card.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART && !HaveHeartsBeenPlayed()) {
-                currentTurn._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit != CONSTS.CARDSUIT.HEART).ForEach(n => n._animator.SetTrigger("Glow"));
+            if(card.cardInfo.cardSuit == UTILS.CARDSUIT.HEART && !HaveHeartsBeenPlayed()) {
+                currentTurn._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit != UTILS.CARDSUIT.HEART).ForEach(n => n._animator.SetTrigger("Glow"));
                 return false;
             } 
 
             return true;
         }
 
-        if((card.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART && !HaveHeartsBeenPlayed()) || card.cardInfo.cardSuit != CurrentSUIT())  {
+        if((card.cardInfo.cardSuit == UTILS.CARDSUIT.HEART && !HaveHeartsBeenPlayed()) || card.cardInfo.cardSuit != CurrentSUIT())  {
 
             if(currentTurn._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit ==  CurrentSUIT()).Count == 0) {
                 return true;

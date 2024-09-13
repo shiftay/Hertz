@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // public enum CARDENHANCEMENT { DAMAGE, HEAL, GOLD, XRAY }
-public enum EFFECT { PRE, DURING, POST }
+
 public sealed class Enhancements {
-    public CARDENHANCEMENT type;
+    public UTILS.CARDENHANCEMENT type;
     public delegate void Effect(Player target); 
     public Effect currentEffect;
 
-    private Enhancements(CARDENHANCEMENT t, Effect effct) {
+    private Enhancements(UTILS.CARDENHANCEMENT t, Effect effct) {
         type = t;
         currentEffect = effct;
     }
 
-    public Enhancements DAMAGE = new Enhancements(CARDENHANCEMENT.DAMAGE, Damage);
-    public Enhancements HEAL = new Enhancements(CARDENHANCEMENT.HEAL, Heal);
-    public Enhancements GOLD = new Enhancements(CARDENHANCEMENT.GOLD, Gold);
-    public Enhancements XRAY = new Enhancements(CARDENHANCEMENT.XRAY, XRay);
+    public Enhancements DAMAGE = new Enhancements(UTILS.CARDENHANCEMENT.DAMAGE, Damage);
+    public Enhancements HEAL = new Enhancements(UTILS.CARDENHANCEMENT.HEAL, Heal);
+    public Enhancements GOLD = new Enhancements(UTILS.CARDENHANCEMENT.GOLD, Gold);
+    public Enhancements XRAY = new Enhancements(UTILS.CARDENHANCEMENT.XRAY, XRay);
 
     /*
         IMPLEMENT

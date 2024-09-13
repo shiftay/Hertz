@@ -21,19 +21,19 @@ public class SpriteHandler : MonoBehaviour
 
     public Sprite CardBack() { return cardBacks[_currentBack]; }
 
-    public Sprite Icon(bool isPlayer) { return playerIcons[isPlayer ? (int)CONSTS.ICON.PLAYER : (int)CONSTS.ICON.CPU]; }
+    public Sprite Icon(bool isPlayer) { return playerIcons[isPlayer ? (int)UTILS.ICON.PLAYER : (int)UTILS.ICON.CPU]; }
 
-    public Sprite FindCard(CONSTS.CARDSUIT suit, int cardValue) {
-        return baseSprites.Find(n => n.suit == suit).cardSprites[cardValue - CONSTS.CARDVALUEMODIFIER];
+    public Sprite FindCard(UTILS.CARDSUIT suit, int cardValue) {
+        return baseSprites.Find(n => n.suit == suit).cardSprites[cardValue - UTILS.CARDVALUEMODIFIER];
     }
 
-    public Sprite WonHandCard(CONSTS.CARDSUIT suit, int cardValue) {
-        return wonHandSprites.Find(n => n.suit == suit).cardSprites[cardValue - CONSTS.CARDVALUEMODIFIER];
+    public Sprite WonHandCard(UTILS.CARDSUIT suit, int cardValue) {
+        return wonHandSprites.Find(n => n.suit == suit).cardSprites[cardValue - UTILS.CARDVALUEMODIFIER];
     }
 }
 
 [System.Serializable]
 public class BaseCardSprites {
-    public CONSTS.CARDSUIT suit;
+    public UTILS.CARDSUIT suit;
     public List<Sprite> cardSprites;
 }

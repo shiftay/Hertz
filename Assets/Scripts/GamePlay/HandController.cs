@@ -24,7 +24,7 @@ public class HandController : MonoBehaviour
     private int currentChildAmount, lastUpdateChildAmount;
     private float _rotationMod;
     public BoxCollider2D boxCollider2D; 
-    public CONSTS.AXIS currentAXIS;
+    public UTILS.AXIS currentAXIS;
 
     private bool shootForTheMoon;
 
@@ -70,11 +70,11 @@ public class HandController : MonoBehaviour
         if(distanceFromMid == midVal) distanceFromMid--;
 
         switch(currentAXIS) {
-            case CONSTS.AXIS.SOUTH:
-            case CONSTS.AXIS.NORTH:
+            case UTILS.AXIS.SOUTH:
+            case UTILS.AXIS.NORTH:
                 return new Vector3(Mathf.Lerp(_startingPointX, _endPointX, (float)i / ((float)transform.childCount - 1)), transform.position.y);
-            case CONSTS.AXIS.WEST:
-            case CONSTS.AXIS.EAST:
+            case UTILS.AXIS.WEST:
+            case UTILS.AXIS.EAST:
                 return new Vector3(transform.position.x, Mathf.Lerp(_startingPointY, _endPointY, (float)i / ((float)transform.childCount - 1)));
             default:
                 return Vector3.zero;
@@ -99,11 +99,11 @@ public class HandController : MonoBehaviour
     }
 
     public void UpdateAxis() {
-        _currentXVal = Mathf.Lerp(0, CONSTS.HANDLINEVALUEX, transform.childCount / CONSTS.HANDSIZE);
-        _currentYVal = Mathf.Lerp(0, CONSTS.HANDLINEVALUEY, transform.childCount / CONSTS.HANDSIZE);
+        _currentXVal = Mathf.Lerp(0, UTILS.HANDLINEVALUEX, transform.childCount / UTILS.HANDSIZE);
+        _currentYVal = Mathf.Lerp(0, UTILS.HANDLINEVALUEY, transform.childCount / UTILS.HANDSIZE);
 
         switch(currentAXIS) {
-            case CONSTS.AXIS.SOUTH: // Player
+            case UTILS.AXIS.SOUTH: // Player
                 _rotationMod = 0;
                 _startingPointY = transform.position.y;
                 _endPointY = transform.position.y + _currentYVal;
@@ -111,7 +111,7 @@ public class HandController : MonoBehaviour
                 _endPointX = transform.position.x + _currentXVal;
                 break;
 
-            case CONSTS.AXIS.EAST:
+            case UTILS.AXIS.EAST:
                 _rotationMod = 90;
                 _startingPointY = transform.position.y - _currentXVal;
                 _endPointY = transform.position.y + _currentXVal;
@@ -119,7 +119,7 @@ public class HandController : MonoBehaviour
                 _endPointX = transform.position.x - _currentYVal;
                 break;
 
-            case CONSTS.AXIS.NORTH:
+            case UTILS.AXIS.NORTH:
                 _rotationMod = 0;
                 _startingPointY = transform.position.y;
                 _endPointY = transform.position.y - _currentYVal;
@@ -127,7 +127,7 @@ public class HandController : MonoBehaviour
                 _endPointX = transform.position.x - _currentXVal;
                 break;
 
-            case CONSTS.AXIS.WEST:
+            case UTILS.AXIS.WEST:
                 _rotationMod = 90;
                 _startingPointY = transform.position.y + _currentXVal;
                 _endPointY = transform.position.y - _currentXVal;
@@ -156,7 +156,7 @@ public class HandController : MonoBehaviour
         for(int i = 0; i < transform.childCount; i++) {
             children[i].transform.position = new Vector3(children[i].transform.position.x,                                       
                                                         (selected - 1 == i || selected == i || selected + 1 == i) ? 
-                                                        transform.position.y + CONSTS.HANDALIGNMENTMOD / ((selected - 1 == i || selected + 1 == i) ? 2.0f : 1.0f) : transform.position.y,
+                                                        transform.position.y + UTILS.HANDALIGNMENTMOD / ((selected - 1 == i || selected + 1 == i) ? 2.0f : 1.0f) : transform.position.y,
                                                         children[i].transform.position.z);
         }
     }
@@ -173,12 +173,6 @@ public class HandController : MonoBehaviour
         shootForTheMoon = temp / 12.0f > 8;
     }
 
-    public Difficulty.DIFFICULITIES difficulty;
-    [Button("Difficulty Check")]
-    public void DifficultyCheck() {
-        Difficulty.ScaleValue(difficulty);
-    }
-
     public CardGO PlayCard() {
         /*
             Current suit of the hand?
@@ -193,8 +187,8 @@ public class HandController : MonoBehaviour
         */
         List<CardGO> playableCards = new List<CardGO>();
 
-        CONSTS.CARDSUIT CurrentSuit =  GameManager.instance.dealer.CurrentSUIT();
-        if (CurrentSuit == CONSTS.CARDSUIT.NULL) // WE ARE THE CURRENT DEALER
+        UTILS.CARDSUIT CurrentSuit =  GameManager.instance.dealer.CurrentSUIT();
+        if (CurrentSuit == UTILS.CARDSUIT.NULL) // WE ARE THE CURRENT DEALER
         {          
             if(shootForTheMoon) {           
                 /*
@@ -202,7 +196,7 @@ public class HandController : MonoBehaviour
                         > Play highest card for w/e suit.
                 */
                 playableCards = player._currentHand.cards.OrderByDescending(x => x._currentCard.cardInfo.cardValue).ToList();
-                if(! GameManager.instance.dealer.HaveHeartsBeenPlayed() && playableCards[0]._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART) {
+                if(! GameManager.instance.dealer.HaveHeartsBeenPlayed() && playableCards[0]._currentCard.cardInfo.cardSuit == UTILS.CARDSUIT.HEART) {
                     throw new Exception();
                 } else {
                     return playableCards[0];
@@ -217,8 +211,8 @@ public class HandController : MonoBehaviour
 
                 if( GameManager.instance.dealer.HaveHeartsBeenPlayed()) {
                     if(CoinFlip()) {
-                        if(player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART).Count > 0) {
-                            if(player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART)[0]._currentCard.cardInfo.cardValue < 7) return player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART)[0];
+                        if(player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == UTILS.CARDSUIT.HEART).Count > 0) {
+                            if(player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == UTILS.CARDSUIT.HEART)[0]._currentCard.cardInfo.cardValue < 7) return player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == UTILS.CARDSUIT.HEART)[0];
                             else return DealerLowCard();
                         } else {
                             return DealerLowCard();
@@ -279,14 +273,14 @@ public class HandController : MonoBehaviour
             */
             if(shootForTheMoon) {
                 playableCards = player._currentHand.cards.OrderBy(x => x._currentCard.cardInfo.cardValue).ToList();
-                int index = playableCards.FindIndex(n => n._currentCard.cardInfo.cardSuit != CONSTS.CARDSUIT.HEART);
+                int index = playableCards.FindIndex(n => n._currentCard.cardInfo.cardSuit != UTILS.CARDSUIT.HEART);
                 return playableCards[index];
             } else {
 
 
                 if(CoinFlip()) {
-                    if(player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == CONSTS.CARDSUIT.HEART).Count > 0)
-                        return ReturnHighCardSUITINCLUSIVE(CONSTS.CARDSUIT.HEART);
+                    if(player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == UTILS.CARDSUIT.HEART).Count > 0)
+                        return ReturnHighCardSUITINCLUSIVE(UTILS.CARDSUIT.HEART);
                     else if (player._currentHand.cards.Find(n => n._currentCard.IsQueenOfSpades())) // This might fail.
                         return player._currentHand.cards.Find(n => n._currentCard.IsQueenOfSpades());
                     else
@@ -303,7 +297,7 @@ public class HandController : MonoBehaviour
         return player._currentHand.cards.OrderByDescending(x => x._currentCard.cardInfo.cardValue).ToList()[0];
     }
 
-    private CardGO ReturnHighCardSUITINCLUSIVE(CONSTS.CARDSUIT suit) {
+    private CardGO ReturnHighCardSUITINCLUSIVE(UTILS.CARDSUIT suit) {
         List<CardGO> temp = player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == suit).OrderByDescending(n => n._currentCard.cardInfo.cardValue).ToList();
         for(int i = 0; i < temp.Count; i++) {
             if(temp[i]._currentCard.IsQueenOfSpades()) continue;
@@ -317,45 +311,43 @@ public class HandController : MonoBehaviour
 
     private CardGO DealerLowCard() {
         int currentAmt = 13;
-        CONSTS.CARDSUIT currentLow = CONSTS.CARDSUIT.NULL;
+        UTILS.CARDSUIT currentLow = UTILS.CARDSUIT.NULL;
         // TODO: We look through all of our cards for our "lowest" card. 
         //    
         CardGO toPlay = null;
-        List<CONSTS.CARDSUIT> checkedVals = new List<CONSTS.CARDSUIT>();
+        List<UTILS.CARDSUIT> checkedVals = new List<UTILS.CARDSUIT>();
         bool checkAmt = false;
         do 
         {
             checkAmt = false;
             currentAmt = 13;
             toPlay = null;
-            currentLow = CONSTS.CARDSUIT.NULL;
+            currentLow = UTILS.CARDSUIT.NULL;
             for(int i = 0; i < 4; i++) {
-                int tempAmt = player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == (CONSTS.CARDSUIT)i).Count;
+                int tempAmt = player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == (UTILS.CARDSUIT)i).Count;
                 if(tempAmt == 0) continue;
-                if(checkedVals.Contains((CONSTS.CARDSUIT)i)) continue;
+                if(checkedVals.Contains((UTILS.CARDSUIT)i)) continue;
 
                 if(tempAmt < currentAmt) {
                     
-                    if((CONSTS.CARDSUIT)i == CONSTS.CARDSUIT.HEART && ! GameManager.instance.dealer.HaveHeartsBeenPlayed()) continue;
+                    if((UTILS.CARDSUIT)i == UTILS.CARDSUIT.HEART && ! GameManager.instance.dealer.HaveHeartsBeenPlayed()) continue;
 
                     currentAmt = tempAmt;
-                    currentLow = (CONSTS.CARDSUIT)i;
+                    currentLow = (UTILS.CARDSUIT)i;
                 }
             }
 
-           
-            
-            if(currentLow != CONSTS.CARDSUIT.NULL) {
+            if(currentLow != UTILS.CARDSUIT.NULL) {
                 toPlay = player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == currentLow).OrderBy(n => n._currentCard.cardInfo.cardValue).ToList()[0];
 
                 checkedVals.Add(currentLow);
-                checkAmt = toPlay._currentCard.cardInfo.cardValue > Difficulty.ScaleValue(player.difficulty);
+                checkAmt = toPlay._currentCard.cardInfo.cardValue > UTILS.ScaleValue(player.difficulty);
             }
 
         } while(checkAmt);
 
         // Look into the following statement.
-        if(currentLow == CONSTS.CARDSUIT.NULL) toPlay = player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == checkedVals[0]).OrderBy(n => n._currentCard.cardInfo.cardValue).ToList()[0];
+        if(currentLow == UTILS.CARDSUIT.NULL) toPlay = player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == checkedVals[0]).OrderBy(n => n._currentCard.cardInfo.cardValue).ToList()[0];
 
         return toPlay;
     }

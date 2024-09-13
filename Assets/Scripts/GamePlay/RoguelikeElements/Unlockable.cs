@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum UNLOCKTYPE { CARDENHANCEMENT, TRINKET, TRINKETSLOT }
+
 
 
 /* 
@@ -17,7 +17,7 @@ public enum UNLOCKTYPE { CARDENHANCEMENT, TRINKET, TRINKETSLOT }
         Xray - Allows the player to always see this card, even if in the hand of CPU
 */
 
-public enum CARDENHANCEMENT { DAMAGE, HEAL, GOLD, XRAY }
+// public enum CARDENHANCEMENT { DAMAGE, HEAL, GOLD, XRAY }
 
 /*
     IDEA
@@ -41,6 +41,6 @@ public enum TRINKET {   FULL_MOON, TRIAGE, ECLIPSE, CALCULATOR, JACKS_WILD_HEART
 
 public sealed class Unlockable
 {
-    public UNLOCKTYPE type;
+    public UTILS.UNLOCKTYPE type;
     public int id;
 }

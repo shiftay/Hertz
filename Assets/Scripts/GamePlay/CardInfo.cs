@@ -17,13 +17,13 @@ public class CardInfo
     public delegate void CardBehaviour();
     public CardBehaviour cardBehaviour;
     public int cardValue;
-    public CONSTS.CARDSUIT cardSuit;
+    public UTILS.CARDSUIT cardSuit;
 
     public string DebugInfo() {
         return cardSuit.ToString() + ", " + cardValue;
     }
     
-    public CardInfo(int cV, CONSTS.CARDSUIT cs, CardBehaviour behaviour = null) {
+    public CardInfo(int cV, UTILS.CARDSUIT cs, CardBehaviour behaviour = null) {
         cardValue = cV; cardSuit = cs; cardBehaviour = behaviour;
     }
 }

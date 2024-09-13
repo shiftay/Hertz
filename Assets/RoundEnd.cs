@@ -13,7 +13,7 @@ public class RoundEnd : MonoBehaviour
     public CardHolderUI wonCardPrefab;
 
     public TextMeshProUGUI healthCurrent, healthChange;
-    public TextMeshProUGUI coinsCurrent, coinChange;
+    public TextMeshProUGUI goldCurrent, goldChange;
     public TextMeshProUGUI scoreAmount;
 
     public TextMeshProUGUI mainTitle, cardsWonTitle;
@@ -32,9 +32,9 @@ public class RoundEnd : MonoBehaviour
 
         cardsWonTitle.text = mainTitle.text = "";
 
-        StartCoroutine(GhostWrite(CONSTS.ROUNDCOMPLETED, mainTitle, CardsWon));
-        // healthCurrent.text = p.Health.ToString();
-        // coinsCurrent.text = p.scoring.money.ToString();
+        StartCoroutine(GhostWrite(UTILS.ROUNDCOMPLETED, mainTitle, CardsWon));
+        healthCurrent.text = "";
+        goldCurrent.text = "";
     }
 
 
@@ -52,6 +52,8 @@ public class RoundEnd : MonoBehaviour
         }
     }
 
+    private bool animPlaying;
+    public void AnimationComplete() => animPlaying = false;
 
     // IEnumerator LoadIn(CanvasGroup group) {
 
@@ -66,7 +68,7 @@ public class RoundEnd : MonoBehaviour
     }
 
     private IEnumerator ShowCards(CallBack callBack = null) {
-        yield return StartCoroutine(GhostWrite(CONSTS.CARDSWON, cardsWonTitle));
+        yield return StartCoroutine(GhostWrite(UTILS.CARDSWON, cardsWonTitle));
 
         List<Card> playerCards =  GameManager.instance.dealer.PlayerCards();
 

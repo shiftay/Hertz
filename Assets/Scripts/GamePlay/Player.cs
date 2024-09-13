@@ -8,7 +8,7 @@ public class Player
     public Deck _currentDeck;
     public Hand _currentHand;
     public bool isPlayer;
-    public Difficulty.DIFFICULITIES difficulty;
+    public UTILS.DIFFICULITIES difficulty;
     public Health health;
     
     public Scoring scoring;

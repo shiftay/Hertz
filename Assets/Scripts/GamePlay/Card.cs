@@ -23,6 +23,6 @@ public class Card
     public Card(CardInfo cI) { cardInfo = cI; Reset(); enhancements = new List<Enhancements>(); }
     public Card(CardInfo cI, List<Enhancements> enhancements) { cardInfo = cI; Reset(); this.enhancements = new List<Enhancements>(enhancements); }
     public void Reset() { winningCard = false; handPlayed = cardPlayed = -1; }
-    public bool isHeart() { return cardInfo.cardSuit == CONSTS.CARDSUIT.HEART; }
-    public bool IsQueenOfSpades() { return cardInfo.cardSuit == CONSTS.CARDSUIT.SPADE && cardInfo.cardValue == 12; }
+    public bool isHeart() { return cardInfo.cardSuit == UTILS.CARDSUIT.HEART; }
+    public bool IsQueenOfSpades() { return cardInfo.cardSuit == UTILS.CARDSUIT.SPADE && cardInfo.cardValue == 12; }
 }
