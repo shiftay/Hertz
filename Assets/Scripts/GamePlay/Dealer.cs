@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -261,16 +262,29 @@ public class Dealer : MonoBehaviour
 
             enhancedCards.ForEach(n => n.enhancements.ForEach(x => x.currentEffect(n.CURRENTOWNER)));
 
-            List<Card> hearts = playedCards.FindAll(n => n.isHeart());
+            List<Card> hearts = playedCards.FindAll(n => n.isHeart() || n.IsQueenOfSpades());
 
-            
+            int damage = 1;
             foreach(Card card in hearts) {
+                damage = card.IsQueenOfSpades() ? 10 : 1;
                 if(card.CURRENTOWNER.isPlayer) {
-                    MAINPLAYER.health.damageQueue++;
+                    MAINPLAYER.health.damageQueue += damage;
                 } else {
-                    MAINPLAYER.scoring.scoreQueue++;
+                    MAINPLAYER.scoring.scoreQueue += damage;
                 }
             }
+
+            int count = 0;
+            bool shotTheMoon = false;
+            for(int i = 0; i < players.Count; i++) {
+                count = 0;
+                hearts.ForEach(n => {
+                    if(n.CURRENTOWNER == players[i]) count++;
+                });
+                if(count == 14) shotTheMoon = true;
+            }
+
+            Debug.Log("Did someone shoot the moon? " + shotTheMoon);
 
             /* 
                 IDEA 
@@ -303,11 +317,15 @@ public class Dealer : MonoBehaviour
 
 #region Utility Callbacks
 
+    public bool CardAttached(Transform t) {
+        Debug.Log(t.IsChildOf(playerController.transform));
+
+        return t.IsChildOf(playerController.transform);
+    }
+
     public bool IsPlayerTurn() {
         return currentTurn.isPlayer;
     }
-
-
     public Utils.CARDSUIT CurrentSUIT() {
         Card temp = playedCards.FindAll(n => n.handPlayed == currentHand).Find(x => x.cardPlayed == 0);
         return temp == null ? Utils.CARDSUIT.NULL : temp.cardInfo.cardSuit;
@@ -319,8 +337,13 @@ public class Dealer : MonoBehaviour
     }
 
     public bool HeartInActiveHand() {
-        return playedCards.FindAll(n => (n.cardInfo.cardSuit == Utils.CARDSUIT.HEART && n.handPlayed == currentHand) 
-        || (n.cardInfo.cardSuit == Utils.CARDSUIT.SPADE && n.cardInfo.cardValue == 12 && n.handPlayed == currentHand)).Count > 0;
+        return playedCards.FindAll(n => (n.isHeart() && n.handPlayed == currentHand) 
+        || (n.IsQueenOfSpades() && n.handPlayed == currentHand)).Count > 0;
+    }
+
+    [Button("Is There a heart?")]
+    public void Heart() {
+        Debug.Log(HeartInActiveHand());
     }
 
     // This should never be called if it can possibly be null.

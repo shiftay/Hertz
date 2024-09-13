@@ -80,13 +80,7 @@ public class HandController : MonoBehaviour
                 return Vector3.zero;
         }
     }
-
-    // TODO Delete if un needed
-    // private float GetVectorInternalAngle(Vector3 a, Vector3 b, Vector3 c) {
-    //     return Vector3.Angle(b-a, c-a);
-    // }
     
-    [Button("Sort")]
     public void Sort() {
         List<CardGO> children = transform.GetComponentsInChildren<CardGO>().ToList<CardGO>();
 
@@ -141,7 +135,9 @@ public class HandController : MonoBehaviour
         SetTransforms(children.IndexOf(selected));
     }
 
-    public void CardMouseExit() {
+    public void CardMouseExit(CardGO selected) {
+        // TODO: Make sure to clear selected
+        if(selected == GameManager.instance.dealer._currentSelected)  GameManager.instance.dealer._currentSelected = null;
         SetTransforms();
     }
 
@@ -177,14 +173,13 @@ public class HandController : MonoBehaviour
 
             Has a heart been played?
 
-
             TODO:
                 Add Value to High Spades
-                As Dealer do not play cards with value > 10, Unless you have to.
         */
         List<CardGO> playableCards = new List<CardGO>();
 
         Utils.CARDSUIT CurrentSuit =  GameManager.instance.dealer.CurrentSUIT();
+
         if (CurrentSuit == Utils.CARDSUIT.NULL) // WE ARE THE CURRENT DEALER
         {          
             if(shootForTheMoon) {           
@@ -202,10 +197,7 @@ public class HandController : MonoBehaviour
             } else {
                 /*
                     Play out a card in the suit we don't have a lot of.
-
-                    TODO: Doesn't work if current amount = 0.
                 */
-
                 if( GameManager.instance.dealer.HaveHeartsBeenPlayed()) {
                     if(CoinFlip()) {
                         if(player._currentHand.cards.FindAll(n => n._currentCard.cardInfo.cardSuit == Utils.CARDSUIT.HEART).Count > 0) {
@@ -242,21 +234,13 @@ public class HandController : MonoBehaviour
             /*    
                 Try to play under the current highest.
             */
-
-                if( GameManager.instance.dealer.CurrentPlayed() > 2 && ! GameManager.instance.dealer.HeartInActiveHand()) {
+                if(GameManager.instance.dealer.CurrentPlayed() > 2 && !GameManager.instance.dealer.HeartInActiveHand()) { // If we're last card to be played && no heart
                     return ReturnHighCardSUITINCLUSIVE( GameManager.instance.dealer.CurrentSUIT());
-                } else if ( GameManager.instance.dealer.CurrentPlayed() > 2 &&  GameManager.instance.dealer.HeartInActiveHand()) {
-                    if(playableCards[0]._currentCard.cardInfo.cardValue >  GameManager.instance.dealer.CurrentHighCardInSuit()) {
-                        return ReturnHighCardSUITINCLUSIVE( GameManager.instance.dealer.CurrentSUIT());
-                    }
-                }
-
-
+                } 
+                
                 // TODO: Make sure to look at the current highest card and look for under that.
-
-
                 if(playableCards.FindAll(x => x._currentCard.cardInfo.cardValue <  GameManager.instance.dealer.CurrentHighCardInSuit()).Count > 0)
-                    return playableCards.FindAll(x => x._currentCard.cardInfo.cardValue <  GameManager.instance.dealer.CurrentHighCardInSuit()).OrderByDescending(n => n._currentCard.cardInfo.cardValue).ToList()[0];
+                    return playableCards.FindAll(x => x._currentCard.cardInfo.cardValue < GameManager.instance.dealer.CurrentHighCardInSuit()).OrderByDescending(n => n._currentCard.cardInfo.cardValue).ToList()[0];
                 else
                     return playableCards[0]; // Our lowest of Suit
             }

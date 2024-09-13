@@ -20,7 +20,8 @@ public class CardGO : MonoBehaviour
 
     void OnMouseOver(){
         if(!_currentCard.CURRENTOWNER.isPlayer) return;
-        if(GameManager.instance.dealer._currentSelected == this) return;
+        
+        if(!GameManager.instance.dealer.CardAttached(this.transform)) return;
 
         GameManager.instance.dealer.playerController.CardMouseOver(this);
     }
@@ -28,8 +29,7 @@ public class CardGO : MonoBehaviour
     void OnMouseDown() {
         if(!_currentCard.CURRENTOWNER.isPlayer || !GameManager.instance.dealer.IsPlayerTurn()) return;
 
-        if(! GameManager.instance.dealer.IsCardPlayable(_currentCard)) {
-            // TODO: Play SFX / Show VFX
+        if(!GameManager.instance.dealer.IsCardPlayable(_currentCard)) {   
             return;
         } else {
             GameManager.instance.dealer.Clicked(this);
@@ -38,7 +38,7 @@ public class CardGO : MonoBehaviour
 
     private void OnMouseExit()
     {
-        //  GameManager.instance.dealer.playerController.CardMouseExit();
+         GameManager.instance.dealer.playerController.CardMouseExit(this);
     }
     
     

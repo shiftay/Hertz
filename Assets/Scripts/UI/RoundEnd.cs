@@ -157,6 +157,7 @@ public class RoundEnd : MonoBehaviour
                 CardHolderUI temp = Instantiate(wonCardPrefab);
                 temp.playingCard.sprite =  GameManager.instance.dealer.spriteHandler.WonHandCard(playerCards[i].cardInfo.cardSuit, playerCards[i].cardInfo.cardValue);
                 temp.transform.SetParent(cardWonParent);
+                temp.transform.localScale = Vector3.one;
         }
 
         if(callBack != null) callBack();  
