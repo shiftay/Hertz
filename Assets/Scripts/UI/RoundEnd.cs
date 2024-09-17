@@ -9,10 +9,8 @@ using System.Runtime.Serialization.Formatters;
 
 public class RoundEnd : MonoBehaviour
 {
-
-    public Transform cardWonParent; 
+    public Transform scoreCardParent, damageCardParent;
     public CardHolderUI wonCardPrefab;
-
     public TextMeshProUGUI healthCurrent, healingValue, damageValue;
     public TextMeshProUGUI goldCurrent, goldChange;
     public TextMeshProUGUI scoreAmount;
@@ -29,11 +27,10 @@ public class RoundEnd : MonoBehaviour
 
         currentPlayer = p;
 
-        cardsWonTitle.text = mainTitle.text = "";
+        healingValue.text = damageValue.text = mainTitle.text = "";
 
-        StartCoroutine(GhostWrite(Utils.ROUNDCOMPLETED, mainTitle, CardsWon));
-        healthCurrent.text = "";
-        goldCurrent.text = "";
+        StartCoroutine(GhostWrite(Utils.ROUNDCOMPLETED, mainTitle, ShowDamage));
+
     }
 
 
@@ -58,87 +55,117 @@ public class RoundEnd : MonoBehaviour
     public Animator health, gold, score;
 
     public Animator heal, damage, goldDiff;
+    private delegate IEnumerator extraElements();
 
-    private delegate IEnumerator extraElements(int FinalValue);
+    /* 
+        IDEA 
 
+        When Showing Cards:
 
-    // IEnumerator LoadIn(CanvasGroup group) {
+        IMPLEMENT Decide Order of Healing / Damage
 
-    // }
+        Show Damaging Cards > Total Damage > [ Flash Trinket > Total Damage ] > Show Damage Happen to Play
 
-    // IEnumerator CountUp(int startingVal, int additons, TextMeshProUGUI element) {
-
-    // }
-
-    public void CardsWon() {
-        StartCoroutine(ShowCards(ShowHealth));
-    }
-
-    private IEnumerator ShowVals(Animator anim, string toBeWritten, TextMeshProUGUI element, int FinalValue, CallBack callBack = null, extraElements extraElements = null) {
-
-        animPlaying = true;
-
-        anim.SetTrigger("TurnOn");
+        Show Healing Cards > Total Healing > [ Flash Trinket > Total Healing ] > Heal Player
         
+        Show Scoring Cards > Total Score > [ Flash Trinket > Total Score ] > Add it to Current Score
+        
+        Gold  > Pop Up
+            Round Score     +6 gold
+            Trinket Source  +X gold
+            Trinket Source  +x gold
+            Interest        +x gold
+
+            Gold thing will be down here
+            Will Get update with a pop anim
+            Slide back into position, and Shop button will load in.
+
+        IF Trinkets exist that effect the current tally, loop through the trinkets that do affect the one that is currently tallying
+            Either flashing the trinket, having it slide down and add it's value, etc..
+
+        FIXME Change the WonCardPrefab to full size card to fill more space. Test with base amount of damage cards = 14 Scale up from there. Test sizing.
+
+    */
+
+    private IEnumerator Task(Animator transistion, string Trigger, List<Card> cardsToBeShown, Transform cardParent, bool moveAway, extraElements extraElements = null, CallBack callBack = null) {
+
+        // Play Anim on Moving piece. 
+        ResetAnim();
+        transistion.SetTrigger("Update" + Trigger);
+        // Wait till that's complete.
         yield return new WaitUntil(() => !animPlaying);
+        
+        // Show Cards + Wait till that's complete
+        yield return StartCoroutine(ShowCards(cardsToBeShown, cardParent));
 
-        yield return StartCoroutine(GhostWrite(toBeWritten, element));
+        // Show Value of change (Score/Healing/Damage)
+        if(extraElements != null) yield return StartCoroutine(extraElements());
+        // Update Value
+        // Pop Anim
+        // wait for pop Anim
 
-        if(extraElements != null) yield return StartCoroutine(extraElements(FinalValue));
+        
+        if(moveAway) {
+        // Play Anim to move away
+            ResetAnim();
+            transistion.SetTrigger("Hide" + Trigger); 
+            yield return new WaitUntil(() => !animPlaying);
+            // Play Fade on cards
+            // Wait on Fade.
+        }
 
+        // Do next Task
         if(callBack != null) callBack();
+
+        yield return new WaitForSeconds(0.2f);
     }
 
-
-    private IEnumerator HealthChanges(int FinalValue) {
-        if(currentPlayer.health.healingQueue > 0) {
-            ResetAnim();
-            healingValue.text = currentPlayer.health.healingQueue.ToString();
-            heal.SetTrigger("Pop");
-            yield return new WaitUntil(() => !animPlaying);
-        }
-        
-        if(currentPlayer.health.damageQueue > 0) {
-            ResetAnim();
-            damageValue.text = currentPlayer.health.damageQueue.ToString();
-            damage.SetTrigger("Pop");
-            yield return new WaitUntil(() => !animPlaying);
-        }
-        
+    private IEnumerator Damage() {
         ResetAnim();
-        healthCurrent.text = FinalValue.ToString();
-        health.SetTrigger("TextSplash");
+        damageValue.text = "-" + currentPlayer.health.damageQueue.ToString();
+        damage.SetTrigger("Pop");
+        yield return new WaitUntil(() => !animPlaying);
+
+        currentPlayer.health.currentHealth -= currentPlayer.health.damageQueue;
+
+        ResetAnim();
+        healthCurrent.text = currentPlayer.health.currentHealth.ToString();
+        health.SetTrigger("Pop");
         yield return new WaitUntil(() => !animPlaying);
     }
 
-    private IEnumerator GoldChanges(int FinalValue) {
+
+    private IEnumerator Heal() {
         ResetAnim();
-        goldChange.text = currentPlayer.scoring.goldQueue.ToString();
-        goldDiff.SetTrigger("Pop");
+        healingValue.text = currentPlayer.health.healingQueue.ToString();
+        heal.SetTrigger("Pop");
         yield return new WaitUntil(() => !animPlaying);
 
+        currentPlayer.health.currentHealth += currentPlayer.health.healingQueue;
+
         ResetAnim();
-        goldCurrent.text = FinalValue.ToString();
-        gold.SetTrigger("TextSplash");
+        healthCurrent.text = currentPlayer.health.currentHealth.ToString();
+        health.SetTrigger("Pop");
         yield return new WaitUntil(() => !animPlaying);
     }
+
 
     private void ResetAnim() { animPlaying = true; }
 
     public void ShowHealth() {
-        int finalVal = currentPlayer.health.currentHealth - currentPlayer.health.damageQueue + currentPlayer.health.healingQueue;
 
-        StartCoroutine(ShowVals(health, currentPlayer.health.currentHealth.ToString(), healthCurrent, finalVal, ShowCoins, HealthChanges));
+
     }
 
-    public void ShowCoins(){
-        int finalVal = currentPlayer.scoring.currentGold + currentPlayer.scoring.goldQueue;
-
-        StartCoroutine(ShowVals(gold, currentPlayer.scoring.currentGold.ToString(), goldCurrent, finalVal, ShowScore, GoldChanges));
+    [Header("Transistions")]
+    public Animator healthTransistion, goldTransistion, scoringTransistion;
+    public void ShowDamage() {                                                  // TODO Constant
+        if(currentPlayer.health.damageQueue > 0) StartCoroutine(Task(healthTransistion, "Health", GameManager.instance.dealer.DamageCards(), damageCardParent, true, Damage, ShowScore));
+        else ShowScore(); 
     }
 
     public void ShowScore() {
-        int finalVal = currentPlayer.health.currentHealth - currentPlayer.health.damageQueue + currentPlayer.health.healingQueue;
+ 
 
     }
 
@@ -146,21 +173,18 @@ public class RoundEnd : MonoBehaviour
         // TODO: Show buttons for going to the shop.
     }
 
-    private IEnumerator ShowCards(CallBack callBack = null) {
-        yield return StartCoroutine(GhostWrite(Utils.CARDSWON, cardsWonTitle));
+    private IEnumerator ShowCards(List<Card> cards, Transform parent) {
+        // yield return StartCoroutine(GhostWrite(Utils.CARDSWON, cardsWonTitle));
 
-        List<Card> playerCards =  GameManager.instance.dealer.PlayerCards();
+        Debug.Log("Show Cards: " + cards.Count);
 
-
-        for(int i = 0; i < playerCards.Count; i++) {
+        for(int i = 0; i < cards.Count; i++) {
                 yield return new WaitForSeconds(0.2f);  // TODO: Turn into constant
                 CardHolderUI temp = Instantiate(wonCardPrefab);
-                temp.playingCard.sprite =  GameManager.instance.dealer.spriteHandler.WonHandCard(playerCards[i].cardInfo.cardSuit, playerCards[i].cardInfo.cardValue);
-                temp.transform.SetParent(cardWonParent);
+                temp.playingCard.sprite =  GameManager.instance.dealer.spriteHandler.WonHandCard(cards[i].cardInfo.cardSuit, cards[i].cardInfo.cardValue);
+                temp.transform.SetParent(parent);
                 temp.transform.localScale = Vector3.one;
         }
-
-        if(callBack != null) callBack();  
     }
 
 }

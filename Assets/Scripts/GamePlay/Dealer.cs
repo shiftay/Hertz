@@ -118,7 +118,7 @@ public class Dealer : MonoBehaviour
             Deck[i]._currentCard.CURRENTOWNER = curPlayer;
             curPlayer._currentHand.cards.Add(Deck[i]);
             
-            if(!curPlayer.isPlayer && !Deck[i]._currentCard.ContainsXRAY()) Deck[i]._currentSprite.sprite = spriteHandler.CardBack();
+            if(!curPlayer.isPlayer && !Deck[i]._currentCard.ContainsXRAY) Deck[i]._currentSprite.sprite = spriteHandler.CardBack();
         }
 
         _gameStarted = true;
@@ -185,13 +185,7 @@ public class Dealer : MonoBehaviour
     }
 
 
-    public List<Card> WonHand(int id) {
-        return playedCards.FindAll(n=> n.handPlayed == id);
-    }
 
-    public List<Card> PlayerCards() {
-        return playedCards.FindAll(n => n.CURRENTOWNER.isPlayer);
-    }
 
     private IEnumerator DetermineHandWinner() {
         yield return new WaitForSeconds(1.0f);
@@ -227,6 +221,7 @@ public class Dealer : MonoBehaviour
         currentCard = 0;
 
         if(winnerOfHand._currentHand.cards.Count == 0)  { // No more cards for the winner to play.
+            dealerCoin.SetActive(false);
             Debug.Log("Score teh round.");
 #region Scoring  
           /* 
@@ -302,7 +297,7 @@ public class Dealer : MonoBehaviour
             int MAXDAMAGE = enhancedCards.FindAll(n => n.enhancements.FindAll(x => x.type == Utils.CARDENHANCEMENT.DAMAGE).Count > 0).Count + Utils.DEFAULTMAXDAMAGE;
             MAINPLAYER.scoring.goldQueue += Utils.ConvertRange(0, MAXDAMAGE, 10, 1, MAINPLAYER.health.damageQueue) + Mathf.FloorToInt(1.25f * (MAXDAMAGE - Utils.DEFAULTMAXDAMAGE)); 
 
-
+            
 
             GameManager.instance.handlerUI.roundEnd.Setup(players.Find(n => n.isPlayer));
 
@@ -332,6 +327,13 @@ public class Dealer : MonoBehaviour
         || (n.IsQueenOfSpades() && n.handPlayed == currentHand)).Count > 0;
 
 
+    public List<Card> WonHand(int id) {
+        return playedCards.FindAll(n=> n.handPlayed == id);
+    }
+
+    public List<Card> PlayerCards() {
+        return playedCards.FindAll(n => n.CURRENTOWNER.isPlayer);
+    }
 
     // This should never be called if it can possibly be null.
     public int CurrentHighCardInSuit() {
@@ -346,6 +348,21 @@ public class Dealer : MonoBehaviour
         return currentCard;
     }
 
+    public List<Card> ScoringCards() {
+        return playedCards.FindAll(n => (n.isHeart() || n.ContainsDamage) && !n.CURRENTOWNER.isPlayer).ToList();
+    }
+
+    public List<Card> DamageCards() {
+        return playedCards.FindAll(n => (n.isHeart() || n.ContainsDamage) && n.CURRENTOWNER.isPlayer).ToList();
+    }
+
+    public List<Card> HealingCards() {
+        return playedCards.FindAll(n => n.ContainsHealing && n.CURRENTOWNER.isPlayer).ToList();
+    }
+
+    public int GoldCards() {
+        return playedCards.FindAll(n => n.ContainsGold && n.CURRENTOWNER.isPlayer).Count;
+    }
     
     private static System.Random random = new System.Random();
     private static void Shuffle<T>(List<T> array) 

@@ -32,7 +32,7 @@ using UnityEngine;
         Stocks - You gain interest on your gold between rounds ( 10 % ) 
         Coupon - Each shop will have one random free item.
         Calculator - Player gains score at the end of the round equal to their trinkets sell value.
-        LotteryTicket - Chance to get double gold earned at the end of each round.
+        Lottery Ticket - Chance to get double gold earned at the end of each round.
 
 */
 public enum TRINKET {   FULL_MOON, TRIAGE, ECLIPSE, CALCULATOR, JACKS_WILD_HEARTS, JACKS_WILD_DIAMOND, JACKS_WILD_SPADE, JACKS_WILD_CLUB, ACES_LOW,

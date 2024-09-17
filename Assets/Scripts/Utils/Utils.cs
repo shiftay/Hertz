@@ -28,7 +28,7 @@ public class Utils
 
 #region UI ELEMENTS
     public enum GAMEPLAYSTATES { MainMenu, Gameplay, RoundEnd, Store, Settings } // IMPLEMENT Figure out more gamestates that are applicable.
-    public const string ROUNDCOMPLETED = "Round Completed";
+    public const string ROUNDCOMPLETED = "Round Over!";
     public const string CARDSWON = "Cards Won";
     public enum ICON { CPU, PLAYER }
 #endregion

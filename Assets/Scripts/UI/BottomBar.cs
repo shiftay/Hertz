@@ -7,6 +7,7 @@ using TMPro;
 public class BottomBar : MonoBehaviour
 {
     public Animator completedHandsAnim;
+    public Animator roundEndAnim;
     public TextMeshProUGUI healthAmt, goldAmt;
     public WonHandUI prefab;
     public RectTransform ScrollViewContent;
