@@ -14,10 +14,10 @@ public sealed class Enhancements {
         currentEffect = effct;
     }
 
-    public Enhancements DAMAGE = new Enhancements(Utils.CARDENHANCEMENT.DAMAGE, Damage);
-    public Enhancements HEAL = new Enhancements(Utils.CARDENHANCEMENT.HEAL, Heal);
-    public Enhancements GOLD = new Enhancements(Utils.CARDENHANCEMENT.GOLD, Gold);
-    public Enhancements XRAY = new Enhancements(Utils.CARDENHANCEMENT.XRAY, XRay);
+    public Enhancements DAMAGE = new Enhancements(Utils.CARDENHANCEMENT.DAMAGE, null);
+    public Enhancements HEAL = new Enhancements(Utils.CARDENHANCEMENT.HEAL, null);
+    public Enhancements GOLD = new Enhancements(Utils.CARDENHANCEMENT.GOLD, null);
+    public Enhancements XRAY = new Enhancements(Utils.CARDENHANCEMENT.XRAY, null);
 
     /*
         IMPLEMENT
@@ -28,11 +28,6 @@ public sealed class Enhancements {
     */
 
 #region Delegates
-    public static void Heal(Player target) { target.health.healingQueue++; }
-    public static void Damage(Player target) {  if(target.isPlayer) target.health.damageQueue++;
-                                                else  GameManager.instance.dealer.MAINPLAYER.scoring.scoreQueue++;
-                                                     }
-    public static void Gold(Player target) { target.scoring.goldQueue++; }
-    public static void XRay(Player target) { return; }
+
 #endregion
 }

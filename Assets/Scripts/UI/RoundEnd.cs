@@ -9,17 +9,16 @@ using System.Runtime.Serialization.Formatters;
 
 public class RoundEnd : MonoBehaviour
 {
-    public Transform scoreCardParent, damageCardParent;
-    public CardHolderUI wonCardPrefab;
+    public Transform scoreCardParent, damageCardParent, goldParent;
+    public CardUI wonCardPrefab;
+    public GoldIncome incomePrefab;
     public TextMeshProUGUI healthCurrent, healingValue, damageValue;
     public TextMeshProUGUI goldCurrent, goldChange;
     public TextMeshProUGUI scoreAmount;
-
-    public TextMeshProUGUI mainTitle, cardsWonTitle;
-
+    public TextMeshProUGUI mainTitle;
+    public TextMeshProUGUI incomeTitle;
     public Animator popUp;
     public delegate void CallBack();
-
     private Player currentPlayer;
 
     public void Setup(Player p) {
@@ -27,30 +26,20 @@ public class RoundEnd : MonoBehaviour
 
         currentPlayer = p;
 
-        healingValue.text = damageValue.text = mainTitle.text = "";
+        incomeTitle.text = healingValue.text = damageValue.text = mainTitle.text = "";
 
         StartCoroutine(GhostWrite(Utils.ROUNDCOMPLETED, mainTitle, ShowDamage));
 
     }
 
 
-    private IEnumerator GhostWrite(string toBeWritten, TextMeshProUGUI element, CallBack callBack = null) {
-        string write = "";
-        for(int i = 0; i < toBeWritten.Length; i++) {
-            write += toBeWritten[i];
-            element.text = write;
-            yield return new WaitForSeconds(0.1f); // TODO: Turn into constant
-        }
-
-
-        if(callBack != null) {
-            callBack(); 
-        }
-    }
 
     private bool animPlaying;
     public bool ANIMPLAYING() { return animPlaying; }
-    public void AnimationComplete() => animPlaying = false;
+    public void AnimationComplete() {
+        Debug.LogWarning("Anim Complete");
+        animPlaying = false;
+    }
 
     public Animator health, gold, score;
 
@@ -83,12 +72,11 @@ public class RoundEnd : MonoBehaviour
         IF Trinkets exist that effect the current tally, loop through the trinkets that do affect the one that is currently tallying
             Either flashing the trinket, having it slide down and add it's value, etc..
 
-        FIXME Change the WonCardPrefab to full size card to fill more space. Test with base amount of damage cards = 14 Scale up from there. Test sizing.
+        TODO Implement Trinkets into scoring, damage, healing behvaiour      
 
     */
 
     private IEnumerator Task(Animator transistion, string Trigger, List<Card> cardsToBeShown, Transform cardParent, bool moveAway, extraElements extraElements = null, CallBack callBack = null) {
-
         // Play Anim on Moving piece. 
         ResetAnim();
         transistion.SetTrigger("Update" + Trigger);
@@ -114,19 +102,32 @@ public class RoundEnd : MonoBehaviour
             // Wait on Fade.
         }
 
+        yield return new WaitForSeconds(0.2f);
+        ScheduleCardsForDeletion(cardParent);
         // Do next Task
         if(callBack != null) callBack();
-
-        yield return new WaitForSeconds(0.2f);
     }
 
+#region extraElements
     private IEnumerator Damage() {
+        // FIXME:
+        // Currently a bastardize version of damage queue
+        // Allows for showing of different types of damage.
+        // Can change extraElements to take a TextElement + Value
+        // So that we can update it multiple times.
+        int value = 0;
+        currentPlayer.health.damageQueue.ForEach(n => {
+            value += n.VALUE;
+        });
+
         ResetAnim();
-        damageValue.text = "-" + currentPlayer.health.damageQueue.ToString();
+        damageValue.text = "-" + value.ToString();
         damage.SetTrigger("Pop");
         yield return new WaitUntil(() => !animPlaying);
+        damage.SetTrigger("FadeOut");
+        
 
-        currentPlayer.health.currentHealth -= currentPlayer.health.damageQueue;
+        currentPlayer.health.currentHealth -= value;
 
         ResetAnim();
         healthCurrent.text = currentPlayer.health.currentHealth.ToString();
@@ -149,29 +150,102 @@ public class RoundEnd : MonoBehaviour
         yield return new WaitUntil(() => !animPlaying);
     }
 
+    private IEnumerator Score() {
+        currentPlayer.scoring.currentScore += currentPlayer.scoring.scoreQueue;
+
+        ResetAnim();
+        scoreAmount.text = currentPlayer.scoring.currentScore.ToString();
+        score.SetTrigger("Pop");
+        yield return new WaitUntil(() => !animPlaying);
+    }
+
+#endregion
 
     private void ResetAnim() { animPlaying = true; }
 
     public void ShowHealth() {
-
-
+        ShowScore();
     }
 
     [Header("Transistions")]
-    public Animator healthTransistion, goldTransistion, scoringTransistion;
+    public Animator healthTransition;
+    public Animator goldTransition, scoringTransition;
+
+    public Animator incomeScreen;
     public void ShowDamage() {                                                  // TODO Constant
-        if(currentPlayer.health.damageQueue > 0) StartCoroutine(Task(healthTransistion, "Health", GameManager.instance.dealer.DamageCards(), damageCardParent, true, Damage, ShowScore));
+        if(currentPlayer.health.damageQueue.Count > 0) StartCoroutine(Task(healthTransition, "Health", GameManager.instance.dealer.DamageCards(), damageCardParent, true, Damage, ShowHealth));
         else ShowScore(); 
     }
 
     public void ShowScore() {
- 
+        StartCoroutine(Task(scoringTransition, "Score", GameManager.instance.dealer.ScoringCards(), scoreCardParent, true, Score, ShowGold));
+    }
+
+    public IEnumerator Gold() {
+
+        // Reset Anim
+        ResetAnim();
+        // Show Pop Up
+        incomeScreen.SetTrigger("Display");
+        // Wait for Anim
+        yield return new WaitUntil(() => !animPlaying);
+
+
+        //Reset Anim
+        ResetAnim();
+        // Slide Gold ontop of pop up
+        goldTransition.SetTrigger("UpdateMoney");
+        // Wait for Anim
+        yield return new WaitUntil(() => !animPlaying);
+
+        yield return StartCoroutine(GhostWrite("Income", incomeTitle));
+        // Load in each individual scoring reason
+        int value = 0;
+        for(int i = 0; i < currentPlayer.scoring.goldQueue.Count; i++) {
+            yield return new WaitForSeconds(0.3f);  // TODO: Turn into constant
+            GoldIncome temp = Instantiate(incomePrefab);
+            temp.SetValues(SourceLabels.FindLabel(currentPlayer.scoring.goldQueue[i].type).Label, currentPlayer.scoring.goldQueue[i].VALUE);
+            temp.transform.SetParent(goldParent);
+            temp.transform.localScale = Vector3.one;
+            value += currentPlayer.scoring.goldQueue[i].VALUE;
+        }
+
+        // ResetAnim
+        ResetAnim();
+        //Pop Gold Value to new Gold Value
+        currentPlayer.scoring.currentGold += value;
+        gold.SetTrigger("Pop");
+        //wait for anim
+        yield return new WaitUntil(() => !animPlaying);
+
+        ResetAnim();
+        goldTransition.SetTrigger("HideMoney"); 
+        yield return new WaitUntil(() => !animPlaying);
+        
+        // Load in button for Go to Shop
+        yield return null;
+    }
+
+    private void ShowGold() {
+        StartCoroutine(Gold());
+    }
+
+
+    // TODO
+    // Clean up Cards
+    private List<GameObject> objects = new List<GameObject>();
+    private void ScheduleCardsForDeletion(Transform parent) {
+        for(int i = 0; i < parent.childCount; i++) {
+            objects.Add(parent.GetChild(i).gameObject);
+        }
+
+        objects.ForEach(n => n.SetActive(false));
+    }
+
+    private void CleanUp() {
 
     }
 
-    public void ShowButtons() {
-        // TODO: Show buttons for going to the shop.
-    }
 
     private IEnumerator ShowCards(List<Card> cards, Transform parent) {
         // yield return StartCoroutine(GhostWrite(Utils.CARDSWON, cardsWonTitle));
@@ -179,11 +253,25 @@ public class RoundEnd : MonoBehaviour
         Debug.Log("Show Cards: " + cards.Count);
 
         for(int i = 0; i < cards.Count; i++) {
-                yield return new WaitForSeconds(0.2f);  // TODO: Turn into constant
-                CardHolderUI temp = Instantiate(wonCardPrefab);
-                temp.playingCard.sprite =  GameManager.instance.dealer.spriteHandler.WonHandCard(cards[i].cardInfo.cardSuit, cards[i].cardInfo.cardValue);
+                yield return new WaitForSeconds(0.3f);  // TODO: Turn into constant
+                CardUI temp = Instantiate(wonCardPrefab);
+                temp.SetImage(GameManager.instance.dealer.spriteHandler.FindCard(cards[i].cardInfo.cardSuit, cards[i].cardInfo.cardValue));
                 temp.transform.SetParent(parent);
                 temp.transform.localScale = Vector3.one;
+        }
+    }
+
+    private IEnumerator GhostWrite(string toBeWritten, TextMeshProUGUI element, CallBack callBack = null) {
+        string write = "";
+        for(int i = 0; i < toBeWritten.Length; i++) {
+            write += toBeWritten[i];
+            element.text = write;
+            yield return new WaitForSeconds(0.1f); // TODO: Turn into constant
+        }
+
+
+        if(callBack != null) {
+            callBack(); 
         }
     }
 

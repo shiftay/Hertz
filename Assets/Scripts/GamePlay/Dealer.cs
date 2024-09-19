@@ -22,6 +22,7 @@ public class Dealer : MonoBehaviour
 {
 #region DEBUG
     public bool shortGame;
+    public int startingGold;
 
 #endregion
 
@@ -101,6 +102,8 @@ public class Dealer : MonoBehaviour
             handPos.dealPos.player = temp;
             players.Add(temp);
         }
+
+        MAINPLAYER.scoring.currentGold = startingGold;
 
         int x = UnityEngine.Random.Range(0, dealPositions.Count);
 
@@ -253,33 +256,39 @@ public class Dealer : MonoBehaviour
                 TODO Start defining "Shoot the moon"
 
             */
-            List<Card> enhancedCards = playedCards.FindAll(n => n.enhancements.Count > 0);
+            List<Card> damageCards = DamageCards();
 
-            enhancedCards.ForEach(n => n.enhancements.ForEach(x => x.currentEffect(n.CURRENTOWNER)));
+            int damageFromBase = 0;
+            int damageFromEnhancements = 0; 
+            foreach(Card card in damageCards) {
+                
+                if(card.isHeart()) damageFromBase += 1;
 
-            List<Card> hearts = playedCards.FindAll(n => n.isHeart() || n.IsQueenOfSpades());
+                if(card.IsQueenOfSpades()) damageFromBase += 10;
 
-            int damage = 1;
-            foreach(Card card in hearts) {
-                damage = card.IsQueenOfSpades() ? 10 : 1;
-                if(card.CURRENTOWNER.isPlayer) {
-                    MAINPLAYER.health.damageQueue += damage;
-                } else {
-                    MAINPLAYER.scoring.scoreQueue += damage;
-                }
+                if(card.ContainsDamage) damageFromEnhancements += 1;
             }
 
-            int count = 0;
-            bool shotTheMoon = false;
-            for(int i = 0; i < players.Count; i++) {
-                count = 0;
-                hearts.ForEach(n => {
-                    if(n.CURRENTOWNER == players[i]) count++;
-                });
-                if(count == 14) shotTheMoon = true;
-            }
+            //TODO If player shot the moon, clear the damage queue
+            MAINPLAYER.health.damageQueue.Add(new Source(SourceType.ENDOFROUND, damageFromBase));
+            MAINPLAYER.health.damageQueue.Add(new Source(SourceType.ENHANCEMENT, damageFromEnhancements));
 
-            Debug.Log("Did someone shoot the moon? " + shotTheMoon);
+            
+
+            Debug.LogWarning("Base " + damageFromBase + " | Enhancements: " + damageFromEnhancements);
+
+            // FIXME Make this under utilities as a quick and easy call back.
+            // int count = 0;
+            // bool shotTheMoon = false;
+            // for(int i = 0; i < players.Count; i++) {
+            //     count = 0;
+            //     damageCards.ForEach(n => {
+            //         if(n.CURRENTOWNER == players[i]) count++;
+            //     });
+            //     if(count == 14) shotTheMoon = true;
+            // }
+
+            // Debug.Log("Did someone shoot the moon? " + shotTheMoon);
 
             /* 
                 IDEA 
@@ -294,16 +303,18 @@ public class Dealer : MonoBehaviour
 
                 + MODIFIER [  MAXDAMAGE - DEFAULTDAM ]
             */
-            int MAXDAMAGE = enhancedCards.FindAll(n => n.enhancements.FindAll(x => x.type == Utils.CARDENHANCEMENT.DAMAGE).Count > 0).Count + Utils.DEFAULTMAXDAMAGE;
-            MAINPLAYER.scoring.goldQueue += Utils.ConvertRange(0, MAXDAMAGE, 10, 1, MAINPLAYER.health.damageQueue) + Mathf.FloorToInt(1.25f * (MAXDAMAGE - Utils.DEFAULTMAXDAMAGE)); 
+            int MAXDAMAGE = DamageEnhancements + Utils.DEFAULTMAXDAMAGE;
+            if(MAINPLAYER.scoring.currentGold / 5 > 5) {
+                MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.INTEREST, 5));
+            } else {
+                MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.INTEREST, MAINPLAYER.scoring.currentGold / 5));
+            }
 
-            
-
-            GameManager.instance.handlerUI.roundEnd.Setup(players.Find(n => n.isPlayer));
+            MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.ENDOFROUND, Utils.ConvertRange(0, MAXDAMAGE, 10, 1, (damageFromBase + damageFromEnhancements)) + Mathf.FloorToInt(1.25f * (MAXDAMAGE - Utils.DEFAULTMAXDAMAGE))));  
+            GameManager.instance.handlerUI.roundEnd.Setup(MAINPLAYER);
 
 #endregion Scoring
         } else {
-
             calculatingScore = false;
         }
     }
@@ -353,9 +364,10 @@ public class Dealer : MonoBehaviour
     }
 
     public List<Card> DamageCards() {
-        return playedCards.FindAll(n => (n.isHeart() || n.ContainsDamage) && n.CURRENTOWNER.isPlayer).ToList();
+        return playedCards.FindAll(n => (n.isHeart() || n.ContainsDamage || n.IsQueenOfSpades()) && n.CURRENTOWNER.isPlayer).ToList();
     }
 
+    public int DamageEnhancements => playedCards.FindAll(n => n.ContainsDamage).Count;
     public List<Card> HealingCards() {
         return playedCards.FindAll(n => n.ContainsHealing && n.CURRENTOWNER.isPlayer).ToList();
     }

@@ -6,27 +6,28 @@ using UnityEngine;
 public class Scoring 
 {
     public int currentGold;
-    public int goldQueue;
+    // public int goldQueue;
+    public List<Source> goldQueue;
     public float currentScore;
-
     public float scoreQueue;
     public float multiplierQueue;
 
     public Scoring() {
-        currentGold = goldQueue = 0;
-
+        currentGold =  0;
         scoreQueue = multiplierQueue = 0;
-
         currentScore = 0;
+
+        goldQueue = new List<Source>();
     }
 
     public bool Buy(int amount) {
         if(amount > currentGold) return false;
 
-        // TODO: Call UI to animate money loss.
+        // TODO: Call UI to animate money loss. ??
         currentGold -= amount;
 
         return true;
     }
 
 }
+
