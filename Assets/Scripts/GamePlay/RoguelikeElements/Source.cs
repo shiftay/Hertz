@@ -9,10 +9,19 @@ public class Source {
     public SourceType type;
     public int refID; // Used for Trinket ID
     public int value;
+    public List<Card> associatedCards;
 
     public int VALUE { get { return value; }}
 
+    public Source(SourceType t, int v, List<Card> cards, int id = -1) {
+        associatedCards = new List<Card>(cards);
+        type = t;
+        value = v;
+        refID = id;
+    }   
+
     public Source(SourceType t, int v, int id = -1) {
+        associatedCards = new List<Card>();
         type = t;
         value = v;
         refID = id;

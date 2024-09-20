@@ -91,7 +91,7 @@ public class Dealer : MonoBehaviour
         SetupPlayers();
         Shuffle(Deck);
         Deal();
-        GameManager.instance.handlerUI.bottomBar.Setup(MAINPLAYER);
+        GameManager.instance.handlerUI.bottomBar.SetPlayerVals(MAINPLAYER);
         currentCard = currentHand = 0;
     }
 
@@ -225,57 +225,15 @@ public class Dealer : MonoBehaviour
 
         if(winnerOfHand._currentHand.cards.Count == 0)  { // No more cards for the winner to play.
             dealerCoin.SetActive(false);
-            Debug.Log("Score teh round.");
 #region Scoring  
-          /* 
-                IDEA
-                "Scoring"
-                > Each Heart is worth 1 point
-                > Queen of Spade is worth 13
-
-                > IF a player collected all hearts and the queen of spades
-                    >"Shot the Moon"
-                    > 26 points are given to the other players.
-                    > Score to 100
-                    > Attempt to be lowest score.
-                
-                IMPLEMENT
-                > Gather all enhanced cards 
-                    > Scoring Enhanced Card based on who owns the card.
-                        
-
-                > Gather all hearts
-                    > Determine score based on who owns it. (Ignore Enhanced cards, as they've been scored already)
-                        > Score the card
-
-           TODO > Look through trinkets.
+             /* 
+                TODO > Look through trinkets.
                     > Find Scoring / Healing trinkets
                         > Add the values.
-
-
-                TODO Start defining "Shoot the moon"
-
             */
-            List<Card> damageCards = DamageCards();
 
-            int damageFromBase = 0;
-            int damageFromEnhancements = 0; 
-            foreach(Card card in damageCards) {
-                
-                if(card.isHeart()) damageFromBase += 1;
-
-                if(card.IsQueenOfSpades()) damageFromBase += 10;
-
-                if(card.ContainsDamage) damageFromEnhancements += 1;
-            }
-
-            //TODO If player shot the moon, clear the damage queue
-            MAINPLAYER.health.damageQueue.Add(new Source(SourceType.ENDOFROUND, damageFromBase));
-            MAINPLAYER.health.damageQueue.Add(new Source(SourceType.ENHANCEMENT, damageFromEnhancements));
-
-            
-
-            Debug.LogWarning("Base " + damageFromBase + " | Enhancements: " + damageFromEnhancements);
+            Score(DamageOrScoring(true), true);
+            Score(DamageOrScoring(false) , false);
 
             // FIXME Make this under utilities as a quick and easy call back.
             // int count = 0;
@@ -287,30 +245,25 @@ public class Dealer : MonoBehaviour
             //     });
             //     if(count == 14) shotTheMoon = true;
             // }
-
+            // TODO Start defining "Shoot the moon"
             // Debug.Log("Did someone shoot the moon? " + shotTheMoon);
 
-            /* 
-                IDEA 
-                    Gold should be based off of the players ability to not gain hearts.
-                    The less damage they take the more gold they should get.
-                
-                Max Default damage is 23
-
-                enhancedCards.FindAll(n => n.enhancements.FindAll(x => x.enhancement == DAMAGE).Count > 0).Count + 23 (+ TRINKETS) << New Max Damage Amt
-
-                1 - 10  |  0 - MAXDAMAGE  | Amount player is taking 
-
-                + MODIFIER [  MAXDAMAGE - DEFAULTDAM ]
-            */
             int MAXDAMAGE = DamageEnhancements + Utils.DEFAULTMAXDAMAGE;
+            MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.ENDOFROUND, 
+                                                        Utils.ConvertRange(0, MAXDAMAGE, 10, 1, (MAINPLAYER.health.CurrentDamageQueue())) + Mathf.FloorToInt(1.25f * (MAXDAMAGE - Utils.DEFAULTMAXDAMAGE))));  
             if(MAINPLAYER.scoring.currentGold / 5 > 5) {
                 MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.INTEREST, 5));
             } else {
                 MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.INTEREST, MAINPLAYER.scoring.currentGold / 5));
             }
 
-            MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.ENDOFROUND, Utils.ConvertRange(0, MAXDAMAGE, 10, 1, (damageFromBase + damageFromEnhancements)) + Mathf.FloorToInt(1.25f * (MAXDAMAGE - Utils.DEFAULTMAXDAMAGE))));  
+            if(GoldCards().Count > 0) MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.ENHANCEMENT, GoldCards().Count, GoldCards()));
+
+            // IMPLEMENT
+            // CARD TRANSITION
+            // Wave of cards swinging across to cover setup time.
+            // yield return new Wait for animation
+
             GameManager.instance.handlerUI.roundEnd.Setup(MAINPLAYER);
 
 #endregion Scoring
@@ -319,9 +272,33 @@ public class Dealer : MonoBehaviour
         }
     }
 
-    #endregion
+#endregion
 
-    #region Utility Callbacks
+#region Utility Callbacks
+
+    public void Score(List<Card> cardsToValue, bool isDamage) {
+        int scoreFromBase = 0;
+        int scoreFromEnhancements = 0;
+        foreach(Card card in cardsToValue) {
+            if(card.isHeart()) scoreFromBase += 1;
+
+            if(card.IsQueenOfSpades()) scoreFromBase += 10;
+
+            if(card.ContainsDamage) scoreFromEnhancements += 1;
+        }
+
+        UpdateVal(isDamage, scoreFromBase, scoreFromEnhancements);
+    }
+
+    public void UpdateVal(bool isDamage, int fromBase, int fromEnhancements) {
+        if(isDamage) {
+            MAINPLAYER.health.damageQueue.Add(new Source(SourceType.ENDOFROUND, fromBase * -1, GatherCards(false, true)));
+            if(fromEnhancements > 0) MAINPLAYER.health.damageQueue.Add(new Source(SourceType.ENHANCEMENT, fromEnhancements * -1, GatherCards(true, true)));
+        } else {
+            MAINPLAYER.scoring.scoreQueue.Add(new Source(SourceType.ENDOFROUND, fromBase, GatherCards(false, false)));
+            if(fromEnhancements > 0) MAINPLAYER.scoring.scoreQueue.Add(new Source(SourceType.ENHANCEMENT, fromEnhancements, GatherCards(true, false)));
+        }
+    }
 
     public bool CardAttached(Transform t) => t.IsChildOf(playerController.transform);
 
@@ -355,16 +332,27 @@ public class Dealer : MonoBehaviour
         return temp[0].cardInfo.cardValue;
     }
 
+    public List<Card> GatherCards(bool enhanced, bool isDamage) {
+        if(enhanced) 
+            return playedCards.FindAll(n => n.ContainsDamage && n.CURRENTOWNER.isPlayer == isDamage).ToList();
+        else
+            return playedCards.FindAll(n => (n.isHeart() || n.IsQueenOfSpades()) && n.CURRENTOWNER.isPlayer == isDamage).ToList();
+    }
+
+    public List<Card> DamageCards(bool enhanced) {
+        if(enhanced) 
+            return playedCards.FindAll(n => n.ContainsDamage && n.CURRENTOWNER.isPlayer).ToList();           
+        else
+            return playedCards.FindAll(n => (n.isHeart() || n.IsQueenOfSpades())  && n.CURRENTOWNER.isPlayer).ToList();
+    }
+
+
     public int CurrentPlayed() {
         return currentCard;
     }
 
-    public List<Card> ScoringCards() {
-        return playedCards.FindAll(n => (n.isHeart() || n.ContainsDamage) && !n.CURRENTOWNER.isPlayer).ToList();
-    }
-
-    public List<Card> DamageCards() {
-        return playedCards.FindAll(n => (n.isHeart() || n.ContainsDamage || n.IsQueenOfSpades()) && n.CURRENTOWNER.isPlayer).ToList();
+    public List<Card> DamageOrScoring(bool isDamage) {
+        return playedCards.FindAll(n => (n.isHeart() || n.IsQueenOfSpades() || n.ContainsDamage) && n.CURRENTOWNER.isPlayer == isDamage).ToList();
     }
 
     public int DamageEnhancements => playedCards.FindAll(n => n.ContainsDamage).Count;
@@ -372,8 +360,8 @@ public class Dealer : MonoBehaviour
         return playedCards.FindAll(n => n.ContainsHealing && n.CURRENTOWNER.isPlayer).ToList();
     }
 
-    public int GoldCards() {
-        return playedCards.FindAll(n => n.ContainsGold && n.CURRENTOWNER.isPlayer).Count;
+    public List<Card> GoldCards() {
+        return playedCards.FindAll(n => n.ContainsGold && n.CURRENTOWNER.isPlayer).ToList();
     }
     
     private static System.Random random = new System.Random();

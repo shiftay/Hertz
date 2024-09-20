@@ -10,9 +10,22 @@ public class Player
     public bool isPlayer;
     public Utils.DIFFICULITIES difficulty;
     public Health health;
-    
     public Scoring scoring;
     public List<Unlockable> unlocks;
+
+    public void AdjustValue(RoundEndTypes type, int value) {
+        switch(type) {
+            case RoundEndTypes.Health:
+                health.currentHealth += value;
+                break;
+            case RoundEndTypes.Score:
+                scoring.currentScore += value;
+                break;
+            case RoundEndTypes.Income:
+                scoring.currentGold += value;
+                break;
+        }
+    }
     
 
     public Player(bool player) {

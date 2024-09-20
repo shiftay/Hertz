@@ -4,19 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
-using System.Runtime.Serialization.Formatters;
+
 
 
 public class RoundEnd : MonoBehaviour
 {
-    public Transform scoreCardParent, damageCardParent, goldParent;
+    public List<RoundEndDescriptor> roundEndDescriptors;    
+
     public CardUI wonCardPrefab;
-    public GoldIncome incomePrefab;
-    public TextMeshProUGUI healthCurrent, healingValue, damageValue;
-    public TextMeshProUGUI goldCurrent, goldChange;
-    public TextMeshProUGUI scoreAmount;
+    public RoundEndValues incomePrefab;
+
     public TextMeshProUGUI mainTitle;
-    public TextMeshProUGUI incomeTitle;
     public Animator popUp;
     public delegate void CallBack();
     private Player currentPlayer;
@@ -26,9 +24,11 @@ public class RoundEnd : MonoBehaviour
 
         currentPlayer = p;
 
-        incomeTitle.text = healingValue.text = damageValue.text = mainTitle.text = "";
+        roundEndDescriptors.ForEach(n => n.holder.Init());
 
-        StartCoroutine(GhostWrite(Utils.ROUNDCOMPLETED, mainTitle, ShowDamage));
+        mainTitle.text = "";
+        ShowDamage();
+        // StartCoroutine(GhostWrite(Utils.ROUNDCOMPLETED, mainTitle, ShowDamage));
 
     }
 
@@ -109,55 +109,6 @@ public class RoundEnd : MonoBehaviour
     }
 
 #region extraElements
-    private IEnumerator Damage() {
-        // FIXME:
-        // Currently a bastardize version of damage queue
-        // Allows for showing of different types of damage.
-        // Can change extraElements to take a TextElement + Value
-        // So that we can update it multiple times.
-        int value = 0;
-        currentPlayer.health.damageQueue.ForEach(n => {
-            value += n.VALUE;
-        });
-
-        ResetAnim();
-        damageValue.text = "-" + value.ToString();
-        damage.SetTrigger("Pop");
-        yield return new WaitUntil(() => !animPlaying);
-        damage.SetTrigger("FadeOut");
-        
-
-        currentPlayer.health.currentHealth -= value;
-
-        ResetAnim();
-        healthCurrent.text = currentPlayer.health.currentHealth.ToString();
-        health.SetTrigger("Pop");
-        yield return new WaitUntil(() => !animPlaying);
-    }
-
-
-    private IEnumerator Heal() {
-        ResetAnim();
-        healingValue.text = currentPlayer.health.healingQueue.ToString();
-        heal.SetTrigger("Pop");
-        yield return new WaitUntil(() => !animPlaying);
-
-        currentPlayer.health.currentHealth += currentPlayer.health.healingQueue;
-
-        ResetAnim();
-        healthCurrent.text = currentPlayer.health.currentHealth.ToString();
-        health.SetTrigger("Pop");
-        yield return new WaitUntil(() => !animPlaying);
-    }
-
-    private IEnumerator Score() {
-        currentPlayer.scoring.currentScore += currentPlayer.scoring.scoreQueue;
-
-        ResetAnim();
-        scoreAmount.text = currentPlayer.scoring.currentScore.ToString();
-        score.SetTrigger("Pop");
-        yield return new WaitUntil(() => !animPlaying);
-    }
 
 #endregion
 
@@ -173,20 +124,23 @@ public class RoundEnd : MonoBehaviour
 
     public Animator incomeScreen;
     public void ShowDamage() {                                                  // TODO Constant
-        if(currentPlayer.health.damageQueue.Count > 0) StartCoroutine(Task(healthTransition, "Health", GameManager.instance.dealer.DamageCards(), damageCardParent, true, Damage, ShowHealth));
-        else ShowScore(); 
+        StartCoroutine(ShowScreen(healthTransition, currentPlayer.health.damageQueue, FindDescriptor(RoundEndTypes.Health), health, ShowScore));
     }
 
     public void ShowScore() {
-        StartCoroutine(Task(scoringTransition, "Score", GameManager.instance.dealer.ScoringCards(), scoreCardParent, true, Score, ShowGold));
+        StartCoroutine(ShowScreen(scoringTransition, currentPlayer.scoring.scoreQueue, FindDescriptor(RoundEndTypes.Score), score, ShowGold));
     }
 
-    public IEnumerator Gold() {
-
+    // public IEnumerator   Gold(   Animator screen, Animator transition, TextMeshProUGUI title, string toBeWritten, List<Source> queue, RoundEndDescriptor descriptor,
+    //                              Animator mainValue )
+    public IEnumerator ShowScreen(Animator transition, List<Source> queue, RoundEndDescriptor descriptor,
+                            Animator mainValue, CallBack callBack = null) 
+    {
+        descriptor.holder.Setup(descriptor.color);
         // Reset Anim
         ResetAnim();
         // Show Pop Up
-        incomeScreen.SetTrigger("Display");
+        descriptor.holder.animator.SetTrigger("Display");
         // Wait for Anim
         yield return new WaitUntil(() => !animPlaying);
 
@@ -194,40 +148,44 @@ public class RoundEnd : MonoBehaviour
         //Reset Anim
         ResetAnim();
         // Slide Gold ontop of pop up
-        goldTransition.SetTrigger("UpdateMoney");
+        transition.SetTrigger("Update" + descriptor.title);
         // Wait for Anim
         yield return new WaitUntil(() => !animPlaying);
 
-        yield return StartCoroutine(GhostWrite("Income", incomeTitle));
+        yield return StartCoroutine(GhostWrite(descriptor.title, descriptor.holder.title));
         // Load in each individual scoring reason
         int value = 0;
-        for(int i = 0; i < currentPlayer.scoring.goldQueue.Count; i++) {
+        for(int i = 0; i < queue.Count; i++) {
             yield return new WaitForSeconds(0.3f);  // TODO: Turn into constant
-            GoldIncome temp = Instantiate(incomePrefab);
-            temp.SetValues(SourceLabels.FindLabel(currentPlayer.scoring.goldQueue[i].type).Label, currentPlayer.scoring.goldQueue[i].VALUE);
-            temp.transform.SetParent(goldParent);
+            RoundEndValues temp = Instantiate(incomePrefab);
+            temp.SetValues(SourceLabels.FindLabel(queue[i].type).Label, queue[i].VALUE, descriptor.color);
+            temp.transform.SetParent(descriptor.holder.valuesParent);
             temp.transform.localScale = Vector3.one;
-            value += currentPlayer.scoring.goldQueue[i].VALUE;
+            value += queue[i].VALUE;
+            if(queue[i].associatedCards.Count > 0) yield return StartCoroutine(ShowCards(queue[i].associatedCards, descriptor.cardParent));
         }
 
         // ResetAnim
         ResetAnim();
         //Pop Gold Value to new Gold Value
-        currentPlayer.scoring.currentGold += value;
-        gold.SetTrigger("Pop");
+
+        currentPlayer.AdjustValue(descriptor.type, value);
+        GameManager.instance.handlerUI.UpdateValues(currentPlayer);
+        mainValue.SetTrigger("Pop");
         //wait for anim
         yield return new WaitUntil(() => !animPlaying);
 
         ResetAnim();
-        goldTransition.SetTrigger("HideMoney"); 
+        transition.SetTrigger("Hide" + descriptor.title); 
+        descriptor.holder.animator.SetTrigger("Hide");
         yield return new WaitUntil(() => !animPlaying);
         
-        // Load in button for Go to Shop
-        yield return null;
+        ScheduleCardsForDeletion(descriptor.cardParent);
+        if(callBack != null) callBack();
     }
 
     private void ShowGold() {
-        StartCoroutine(Gold());
+        StartCoroutine(ShowScreen(goldTransition, currentPlayer.scoring.goldQueue, FindDescriptor(RoundEndTypes.Income), gold));
     }
 
 
@@ -243,7 +201,11 @@ public class RoundEnd : MonoBehaviour
     }
 
     private void CleanUp() {
+        for(int i = objects.Count - 1; i >= 0; i++) {
+            Destroy(objects[i]);
+        }
 
+        objects.Clear();
     }
 
 
@@ -275,4 +237,20 @@ public class RoundEnd : MonoBehaviour
         }
     }
 
+    public RoundEndDescriptor FindDescriptor(RoundEndTypes t) {
+        return roundEndDescriptors.Find(n => n.type == t);
+    }
+
 }
+
+#region RoundDescriptor
+public enum RoundEndTypes { Health, Score, Income }
+[System.Serializable]
+public class RoundEndDescriptor {
+    public string title;
+    public Color color;
+    public RoundEndTypes type;
+    public RoundEndHolder holder;
+    public Transform cardParent;
+}
+#endregion

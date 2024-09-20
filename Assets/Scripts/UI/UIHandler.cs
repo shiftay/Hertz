@@ -11,11 +11,17 @@ public class UIHandler : MonoBehaviour
     
     public Animator stateAnimator;
     public BottomBar bottomBar;
+    public TopBar topBar;
     public RoundEnd roundEnd;
 
 
     public void SetState(Utils.GAMEPLAYSTATES state) {
         stateAnimator.SetTrigger(state.ToString());
+    }
+
+    public void UpdateValues(Player p) {
+        bottomBar.SetPlayerVals(p);
+        topBar.SetPlayerVals(p);
     }
     
 }
