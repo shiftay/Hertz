@@ -15,59 +15,27 @@ public class RoundEnd : MonoBehaviour
     public CardUI wonCardPrefab;
     public RoundEndValues incomePrefab;
 
-    public TextMeshProUGUI mainTitle;
     public Animator popUp;
     public delegate void CallBack();
     private Player currentPlayer;
 
     public void Setup(Player p) {
         GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.RoundEnd);
-
         currentPlayer = p;
-
         roundEndDescriptors.ForEach(n => n.holder.Init());
-
-        mainTitle.text = "";
         ShowDamage();
-        // StartCoroutine(GhostWrite(Utils.ROUNDCOMPLETED, mainTitle, ShowDamage));
-
     }
 
-
-
     public bool animPlaying;
-    public bool ANIMPLAYING() { return animPlaying; }
     public void AnimationComplete() {
         animPlaying = false;
     }
 
     public Animator health, gold, score;
 
-    public Animator heal, damage, goldDiff;
-    private delegate IEnumerator extraElements();
-
     /* 
-        IDEA 
-
-        When Showing Cards:
-
         IMPLEMENT Decide Order of Healing / Damage
 
-        Show Damaging Cards > Total Damage > [ Flash Trinket > Total Damage ] > Show Damage Happen to Play
-
-        Show Healing Cards > Total Healing > [ Flash Trinket > Total Healing ] > Heal Player
-        
-        Show Scoring Cards > Total Score > [ Flash Trinket > Total Score ] > Add it to Current Score
-        
-        Gold  > Pop Up
-            Round Score     +6 gold
-            Trinket Source  +X gold
-            Trinket Source  +x gold
-            Interest        +x gold
-
-            Gold thing will be down here
-            Will Get update with a pop anim
-            Slide back into position, and Shop button will load in.
 
         IF Trinkets exist that effect the current tally, loop through the trinkets that do affect the one that is currently tallying
             Either flashing the trinket, having it slide down and add it's value, etc..
@@ -76,54 +44,13 @@ public class RoundEnd : MonoBehaviour
 
     */
 
-    private IEnumerator Task(Animator transistion, string Trigger, List<Card> cardsToBeShown, Transform cardParent, bool moveAway, extraElements extraElements = null, CallBack callBack = null) {
-        // Play Anim on Moving piece. 
-        ResetAnim();
-        transistion.SetTrigger("Update" + Trigger);
-        // Wait till that's complete.
-        yield return new WaitUntil(() => !animPlaying);
-        
-        // Show Cards + Wait till that's complete
-        yield return StartCoroutine(ShowCards(cardsToBeShown, cardParent));
-
-        // Show Value of change (Score/Healing/Damage)
-        if(extraElements != null) yield return StartCoroutine(extraElements());
-        // Update Value
-        // Pop Anim
-        // wait for pop Anim
-
-        
-        if(moveAway) {
-        // Play Anim to move away
-            ResetAnim();
-            transistion.SetTrigger("Hide" + Trigger); 
-            yield return new WaitUntil(() => !animPlaying);
-            // Play Fade on cards
-            // Wait on Fade.
-        }
-
-        yield return new WaitForSeconds(0.2f);
-        ScheduleCardsForDeletion(cardParent);
-        // Do next Task
-        if(callBack != null) callBack();
-    }
-
-#region extraElements
-
-#endregion
-
     public void ResetAnim() { animPlaying = true; }
-
-    public void ShowHealth() {
-        ShowScore();
-    }
 
     [Header("Transistions")]
     public Animator healthTransition;
     public Animator goldTransition, scoringTransition;
-
     public Animator incomeScreen;
-    public void ShowDamage() {                                                  // TODO Constant
+    public void ShowDamage() {                                                 
         StartCoroutine(ShowScreen(healthTransition, currentPlayer.health.damageQueue, FindDescriptor(RoundEndTypes.Health), health, ShowScore));
     }
 
@@ -131,8 +58,6 @@ public class RoundEnd : MonoBehaviour
         StartCoroutine(ShowScreen(scoringTransition, currentPlayer.scoring.scoreQueue, FindDescriptor(RoundEndTypes.Score), score, ShowGold));
     }
 
-    // public IEnumerator   Gold(   Animator screen, Animator transition, TextMeshProUGUI title, string toBeWritten, List<Source> queue, RoundEndDescriptor descriptor,
-    //                              Animator mainValue )
     public IEnumerator ShowScreen(Animator transition, List<Source> queue, RoundEndDescriptor descriptor,
                             Animator mainValue, CallBack callBack = null) 
     {
@@ -185,11 +110,32 @@ public class RoundEnd : MonoBehaviour
     }
 
     private void ShowGold() {
-        StartCoroutine(ShowScreen(goldTransition, currentPlayer.scoring.goldQueue, FindDescriptor(RoundEndTypes.Income), gold));
+        StartCoroutine(ShowScreen(goldTransition, currentPlayer.scoring.goldQueue, FindDescriptor(RoundEndTypes.Income), gold, MoveToShop));
+    }
+
+    private void MoveToShop() {
+        StartCoroutine(Shop());
+    }
+
+    private IEnumerator Shop() {
+        ResetAnim();
+        GameManager.instance.handlerUI.cardTransition.RandomizeAndShow();
+        // Bring Card Transistion In
+        yield return new WaitUntil(() => !animPlaying);
+
+        // Clean Up Cards
+        CleanUp();
+
+        // Setup Store
+
+        yield return new WaitForSeconds(1.0f); // TODO: Remove
+        // Anim to open the store
+        GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.Store);
+        // Remove Card Transition
+        GameManager.instance.handlerUI.cardTransition.Remove();
     }
 
 
-    // TODO
     // Clean up Cards
     private List<GameObject> objects = new List<GameObject>();
     private void ScheduleCardsForDeletion(Transform parent) {

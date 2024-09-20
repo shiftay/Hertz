@@ -8,7 +8,8 @@ using UnityEngine.UI;
 
 public class UIHandler : MonoBehaviour
 {
-    
+    private Utils.GAMEPLAYSTATES _currentState;
+    private Utils.GAMEPLAYSTATES _previousState;
     public Animator stateAnimator;
     public BottomBar bottomBar;
     public TopBar topBar;
@@ -17,6 +18,8 @@ public class UIHandler : MonoBehaviour
 
 
     public void SetState(Utils.GAMEPLAYSTATES state) {
+        // TODO: Store previous state so that we can swap back if the state is Settings.
+        _currentState = state;
         stateAnimator.SetTrigger(state.ToString());
     }
 
