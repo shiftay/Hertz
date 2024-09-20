@@ -38,7 +38,6 @@ public class RoundEnd : MonoBehaviour
     public bool animPlaying;
     public bool ANIMPLAYING() { return animPlaying; }
     public void AnimationComplete() {
-        Debug.LogWarning("Anim Complete");
         animPlaying = false;
     }
 
@@ -195,7 +194,7 @@ public class RoundEnd : MonoBehaviour
     private List<GameObject> objects = new List<GameObject>();
     private void ScheduleCardsForDeletion(Transform parent) {
         if(parent == null) return;
-        
+
         for(int i = 0; i < parent.childCount; i++) {
             objects.Add(parent.GetChild(i).gameObject);
         }
@@ -213,10 +212,6 @@ public class RoundEnd : MonoBehaviour
 
 
     private IEnumerator ShowCards(List<Card> cards, Transform parent) {
-        // yield return StartCoroutine(GhostWrite(Utils.CARDSWON, cardsWonTitle));
-
-        Debug.Log("Show Cards: " + cards.Count);
-
         for(int i = 0; i < cards.Count; i++) {
                 yield return new WaitForSeconds(0.3f);  // TODO: Turn into constant
                 CardUI temp = Instantiate(wonCardPrefab);
