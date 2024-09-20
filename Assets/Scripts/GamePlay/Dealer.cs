@@ -259,10 +259,13 @@ public class Dealer : MonoBehaviour
 
             if(GoldCards().Count > 0) MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.ENHANCEMENT, GoldCards().Count, GoldCards()));
 
-            // IMPLEMENT
-            // CARD TRANSITION
-            // Wave of cards swinging across to cover setup time.
-            // yield return new Wait for animation
+
+            GameManager.instance.handlerUI.roundEnd.ResetAnim();
+            GameManager.instance.handlerUI.cardTransition.RandomizeAndShow();
+            // Wait for Anim
+            yield return new WaitUntil(() => !GameManager.instance.handlerUI.roundEnd.animPlaying);
+
+            GameManager.instance.handlerUI.cardTransition.Remove();
 
             GameManager.instance.handlerUI.roundEnd.Setup(MAINPLAYER);
 

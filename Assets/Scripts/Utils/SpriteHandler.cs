@@ -30,6 +30,11 @@ public class SpriteHandler : MonoBehaviour
     public Sprite WonHandCard(Utils.CARDSUIT suit, int cardValue) {
         return wonHandSprites.Find(n => n.suit == suit).cardSprites[cardValue - Utils.CARDVALUEMODIFIER];
     }
+    public Sprite RandomCard() {
+        return baseSprites.Find(n => n.suit == Utils.CARDSUIT.HEART).cardSprites[Random.Range(0, 13)];
+    }
+
+
 }
 
 [System.Serializable]

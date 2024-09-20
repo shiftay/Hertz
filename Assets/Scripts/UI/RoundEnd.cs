@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
+using System;
 
 
 
@@ -34,7 +35,7 @@ public class RoundEnd : MonoBehaviour
 
 
 
-    private bool animPlaying;
+    public bool animPlaying;
     public bool ANIMPLAYING() { return animPlaying; }
     public void AnimationComplete() {
         Debug.LogWarning("Anim Complete");
@@ -112,7 +113,7 @@ public class RoundEnd : MonoBehaviour
 
 #endregion
 
-    private void ResetAnim() { animPlaying = true; }
+    public void ResetAnim() { animPlaying = true; }
 
     public void ShowHealth() {
         ShowScore();
@@ -158,7 +159,7 @@ public class RoundEnd : MonoBehaviour
         for(int i = 0; i < queue.Count; i++) {
             yield return new WaitForSeconds(0.3f);  // TODO: Turn into constant
             RoundEndValues temp = Instantiate(incomePrefab);
-            temp.SetValues(SourceLabels.FindLabel(queue[i].type).Label, queue[i].VALUE, descriptor.color);
+            temp.SetValues(SourceLabels.FormatLabel(queue[i].type, descriptor.title), queue[i].VALUE, descriptor.color);
             temp.transform.SetParent(descriptor.holder.valuesParent);
             temp.transform.localScale = Vector3.one;
             value += queue[i].VALUE;
@@ -193,6 +194,8 @@ public class RoundEnd : MonoBehaviour
     // Clean up Cards
     private List<GameObject> objects = new List<GameObject>();
     private void ScheduleCardsForDeletion(Transform parent) {
+        if(parent == null) return;
+        
         for(int i = 0; i < parent.childCount; i++) {
             objects.Add(parent.GetChild(i).gameObject);
         }

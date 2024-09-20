@@ -13,6 +13,7 @@ public class UIHandler : MonoBehaviour
     public BottomBar bottomBar;
     public TopBar topBar;
     public RoundEnd roundEnd;
+    public CardTransition cardTransition; 
 
 
     public void SetState(Utils.GAMEPLAYSTATES state) {
