@@ -29,7 +29,10 @@ public class Player
     
 
     public Player(bool player) {
-        if(player) unlocks = new List<Unlockable>();
+        if(player) { 
+            unlocks = new List<Unlockable>();
+            _currentDeck = new Deck();
+        }
         health = new Health();
         scoring = new Scoring();
         isPlayer = player;

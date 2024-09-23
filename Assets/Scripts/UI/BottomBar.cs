@@ -35,7 +35,7 @@ public class BottomBar : MonoBehaviour
     public void ToggleCompletedHands() {
         if(ScrollViewContent.childCount < 1) return; 
 
-        completedBTN.sprite =  GameManager.instance.dealer.spriteHandler.HandsBTN[_switch ? 0 : 1];
+        completedBTN.sprite =  GameManager.instance.spriteHandler.HandsBTN[_switch ? 0 : 1];
         _switch = !_switch;
 
         completedHandsAnim.SetTrigger("Trigger" + (ScrollViewContent.childCount < 3 ? ScrollViewContent.childCount : 3));  

@@ -17,17 +17,14 @@ public class HandPositions {
     public Transform cardPlayedPos;
 }
 
-
 public class Dealer : MonoBehaviour
 {
 #region DEBUG
     public bool shortGame;
     public int startingGold;
-
 #endregion
 
 #region Setup Vars
-    public SpriteHandler spriteHandler;
     public List<CardGO> Deck = new List<CardGO>();
     List<Player> players = new List<Player>();
     public Player MAINPLAYER { get { return players.Find(n => n.isPlayer); }}
@@ -50,34 +47,6 @@ public class Dealer : MonoBehaviour
     private float playTime;
 
 #endregion
-
-    /* 
-        "Turns"
-            > One player at random will be labeled as the "Dealer" 
-                > This means they are the first person to play their card.
-            > Player should only really be able to interact with their cards if it is currently their turn to play.
-            > Cards will be played out in clockwise order by default
-
-            Post-Turn
-                > The High card wins the round, collecting all of the cards in the middle.
-                    > The cards will be moved towards the winning player, and a "Won Hands" UI Compartment will show up at the players area
-                > No scoring occurs until every card is played.
-
-            > "Won Hands"
-                > Will be a UI Showing the cards that the person has won
-                > Small and concise, will only show up on Hover of the Compartment itself. 
-        "AI"
-            > Multiple stages of Difficulty
-            > At no point should they "know" anything before it has been played.
-                > Focus on their ability to Attempt to swindle the player into winning Hearts
-                > Focus on the ability to use different strategies
-                > Search possible strategies through google.
-            > Possible Strategies:
-                > Attempting to dump a specific suit, so that they can start to play Hearts into the middle.
-                    > Example: "Winning all club hands, in order to lose a low club hand, allowing them to be out of clubs for any specific reason"
-
-    */
-
 #region Initialization
     void Awake()
     {
@@ -86,9 +55,8 @@ public class Dealer : MonoBehaviour
 
     private void Init() { 
         calculatingScore = false;
-
-        CreateCards();
         SetupPlayers();
+        CreateCards();
         Shuffle(Deck);
         Deal();
         GameManager.instance.handlerUI.bottomBar.SetPlayerVals(MAINPLAYER);
@@ -121,7 +89,7 @@ public class Dealer : MonoBehaviour
             Deck[i]._currentCard.CURRENTOWNER = curPlayer;
             curPlayer._currentHand.cards.Add(Deck[i]);
             
-            if(!curPlayer.isPlayer && !Deck[i]._currentCard.ContainsXRAY) Deck[i]._currentSprite.sprite = spriteHandler.CardBack();
+            if(!curPlayer.isPlayer && !Deck[i]._currentCard.ContainsXRAY) Deck[i]._currentSprite.sprite = GameManager.instance.spriteHandler.CardBack();
         }
 
         _gameStarted = true;
@@ -129,18 +97,15 @@ public class Dealer : MonoBehaviour
     }
 
     private void CreateCards() {
-
         CardGO current = null;
 
-        for(int i = 0; i <= (int)Utils.CARDSUIT.CLUB; i++) {
-            for(int j = 2; j <= Utils.ACE; j++) {
-                current = Instantiate(cardPrefab);
-                current._currentCard = new Card(new CardInfo(j, (Utils.CARDSUIT)i));
-                current._currentSprite.sprite = spriteHandler.FindCard((Utils.CARDSUIT)i, j);
-                current.name = ((Utils.CARDSUIT)i).ToString("D") + " " + j.ToString();
-                // current.transform.position = new Vector3(-7.5f + (j - CONSTS.CARDVALUEMODIFIER) * 1.5f, -3.5f + i * 2, 0);
-                Deck.Add(current);
-            }
+        for(int i = 0; i < MAINPLAYER._currentDeck.cards.Count; i++) {
+            current = Instantiate(cardPrefab);
+            current._currentCard = new Card(MAINPLAYER._currentDeck.cards[i].cardInfo);
+            current.Setup(GameManager.instance.spriteHandler.FindCard(MAINPLAYER._currentDeck.cards[i].cardInfo), new List<Enhancements>());
+            current.name = MAINPLAYER._currentDeck.cards[i].cardInfo.DebugInfo();
+            // current.transform.position = new Vector3(-7.5f + (j - CONSTS.CARDVALUEMODIFIER) * 1.5f, -3.5f + i * 2, 0);
+            Deck.Add(current);
         }
     }
 #endregion 
@@ -166,7 +131,7 @@ public class Dealer : MonoBehaviour
     private void EndTurn(CardGO playedCard) {
         playedCard.transform.SetParent(dealPositions.Find(n => n.dealPos.player == currentTurn).cardPlayedPos);
         playedCard.transform.localPosition = Vector3.zero;
-        playedCard._currentSprite.sprite = spriteHandler.FindCard(playedCard._currentCard.cardInfo.cardSuit, playedCard._currentCard.cardInfo.cardValue);
+        playedCard._currentSprite.sprite = GameManager.instance.spriteHandler.FindCard(playedCard._currentCard.cardInfo.cardSuit, playedCard._currentCard.cardInfo.cardValue);
 
         currentTurn._currentHand.cards.Remove(playedCard);
         

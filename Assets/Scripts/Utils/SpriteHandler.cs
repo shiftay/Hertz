@@ -27,6 +27,10 @@ public class SpriteHandler : MonoBehaviour
         return baseSprites.Find(n => n.suit == suit).cardSprites[cardValue - Utils.CARDVALUEMODIFIER];
     }
 
+    public Sprite FindCard(CardInfo info) {
+        return baseSprites.Find(n => n.suit == info.cardSuit).cardSprites[info.cardValue - Utils.CARDVALUEMODIFIER];
+    }
+
     public Sprite WonHandCard(Utils.CARDSUIT suit, int cardValue) {
         return wonHandSprites.Find(n => n.suit == suit).cardSprites[cardValue - Utils.CARDVALUEMODIFIER];
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class Shop : MonoBehaviour
@@ -38,4 +39,37 @@ public class Shop : MonoBehaviour
         Continue
                     > Button to take you to the next round.
     */
+
+    [Header("View Deck")]
+    public List<CardUI> cards;
+    public Animator cardViewer;
+
+    [Header("Individual Cards")]
+    public List<ShopCard> shopCards;
+
+#region Initialization
+    public void SetupShop() {
+        SetupDeck();
+    }
+#endregion
+
+
+#region View Deck
+    public void SetupDeck() {
+        for(int i = 0; i < cards.Count; i++) {
+            cards[i].Setup(GameManager.instance.spriteHandler.FindCard(GameManager.instance.dealer.MAINPLAYER._currentDeck.cards[i].cardInfo),
+                                                                       GameManager.instance.dealer.MAINPLAYER._currentDeck.cards[i].enhancements);
+        }
+    }
+
+    public void ViewDeck() {
+        cardViewer.SetTrigger("Display");
+    }
+
+    public void CloseDeckView() {
+        cardViewer.SetTrigger("Hide");
+    }
+#endregion
+
+
 }

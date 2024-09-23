@@ -11,7 +11,7 @@ public class CardTransition : MonoBehaviour
         // Randomize the Angle of the object
         transform.rotation.eulerAngles.Set(0,0,Random.Range(-25,25));
         // Randomize The cards
-        cards.ForEach(n => n.SetImage(GameManager.instance.dealer.spriteHandler.RandomCard()));
+        cards.ForEach(n => n.SetImage(GameManager.instance.spriteHandler.RandomCard()));
         // Play the animation
         animator.SetTrigger("Display");
     }

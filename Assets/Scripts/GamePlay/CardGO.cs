@@ -8,9 +8,26 @@ public class CardGO : MonoBehaviour
 {
     public Card _currentCard;
     public SpriteRenderer _currentSprite;
-    public GameObject _glow;
     public Animator _animator;
-    public Vector3 _startingPosition;
+    public List<EnhancementObjects> enhancementObjects;
+
+    public void Setup(Sprite sprite, List<Enhancements> enhancements) {
+        _currentSprite.maskInteraction = SpriteMaskInteraction.None;
+        _currentSprite.sprite = sprite;
+
+        enhancementObjects.ForEach(n => {
+            n.Object.SetActive(false);
+            n.spriteRenderer.maskInteraction = SpriteMaskInteraction.None;
+        });
+
+        enhancements.ForEach(n => {
+            enhancementObjects.Find(x => x.type == n.type).Activate();
+        });
+
+        if(enhancements.FindAll(n => n.type == Utils.CARDENHANCEMENT.DAMAGE).Count > 0) 
+            enhancementObjects.ForEach(n => n.MaskInteraction());
+    }
+
 
     void OnMouseOver(){
         if(!_currentCard.CURRENTOWNER.isPlayer) return;
@@ -33,5 +50,20 @@ public class CardGO : MonoBehaviour
     private void OnMouseExit()
     {
          GameManager.instance.dealer.playerController.CardMouseExit(this);
+    }
+}
+
+[System.Serializable]
+public class EnhancementObjects {
+    public GameObject Object;
+    public Utils.CARDENHANCEMENT type;
+    public SpriteRenderer spriteRenderer;
+
+    public void Activate() {
+        Object.SetActive(true);
+    }
+
+    public void MaskInteraction() {
+        spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
     }
 }

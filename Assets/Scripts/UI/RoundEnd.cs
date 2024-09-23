@@ -161,7 +161,7 @@ public class RoundEnd : MonoBehaviour
         for(int i = 0; i < cards.Count; i++) {
                 yield return new WaitForSeconds(0.3f);  // TODO: Turn into constant
                 CardUI temp = Instantiate(wonCardPrefab);
-                temp.SetImage(GameManager.instance.dealer.spriteHandler.FindCard(cards[i].cardInfo.cardSuit, cards[i].cardInfo.cardValue));
+                temp.SetImage(GameManager.instance.spriteHandler.FindCard(cards[i].cardInfo.cardSuit, cards[i].cardInfo.cardValue));
                 temp.transform.SetParent(parent);
                 temp.transform.localScale = Vector3.one;
         }
