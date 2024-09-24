@@ -7,11 +7,19 @@ public class Deck
     public List<Card> cards = new List<Card>();
 
 
+
     public Deck() {
         for(int i = 0; i <= (int)Utils.CARDSUIT.CLUB; i++) {
             for(int j = 2; j <= Utils.ACE; j++) {
                 cards.Add(new Card(new CardInfo(j, (Utils.CARDSUIT)i)));
             }
         }
+    }
+
+
+    public void AddCard(Card card) {
+        int index = cards.FindIndex(n => n.Compare(card));
+        cards.RemoveAt(index);
+        cards.Add(card);
     }
 }

@@ -126,11 +126,11 @@ public class RoundEnd : MonoBehaviour
         // Clean Up Cards
         CleanUp();
 
-        // Setup Store
-
         yield return new WaitForSeconds(1.0f); // TODO: Remove
+        // Setup Store
+        GameManager.instance.shop.SetupShop(currentPlayer);
         // Anim to open the store
-        GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.Store);
+        GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.Shop);
         // Remove Card Transition
         GameManager.instance.handlerUI.cardTransition.Remove();
     }
@@ -149,21 +149,21 @@ public class RoundEnd : MonoBehaviour
     }
 
     private void CleanUp() {
-        for(int i = objects.Count - 1; i >= 0; i++) {
-            Destroy(objects[i]);
-        }
+        objects.ForEach(n => Destroy(n));
+        // for(int i = objects.Count - 1; i >= 0; i++) {
+        //     Destroy(objects[i]);
+        // }
 
         objects.Clear();
     }
 
-
     private IEnumerator ShowCards(List<Card> cards, Transform parent) {
         for(int i = 0; i < cards.Count; i++) {
-                yield return new WaitForSeconds(0.3f);  // TODO: Turn into constant
-                CardUI temp = Instantiate(wonCardPrefab);
-                temp.SetImage(GameManager.instance.spriteHandler.FindCard(cards[i].cardInfo.cardSuit, cards[i].cardInfo.cardValue));
-                temp.transform.SetParent(parent);
-                temp.transform.localScale = Vector3.one;
+            yield return new WaitForSeconds(0.3f);  // TODO: Turn into constant
+            CardUI temp = Instantiate(wonCardPrefab);
+            temp.SetImage(GameManager.instance.spriteHandler.FindCard(cards[i].cardInfo.cardSuit, cards[i].cardInfo.cardValue));
+            temp.transform.SetParent(parent);
+            temp.transform.localScale = Vector3.one;
         }
     }
 
@@ -175,16 +175,12 @@ public class RoundEnd : MonoBehaviour
             yield return new WaitForSeconds(0.1f); // TODO: Turn into constant
         }
 
-
-        if(callBack != null) {
-            callBack(); 
-        }
+        if(callBack != null) callBack(); 
     }
 
     public RoundEndDescriptor FindDescriptor(RoundEndTypes t) {
         return roundEndDescriptors.Find(n => n.type == t);
     }
-
 }
 
 #region RoundDescriptor

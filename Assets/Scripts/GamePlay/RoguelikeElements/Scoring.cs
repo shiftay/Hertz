@@ -21,14 +21,13 @@ public class Scoring
         goldQueue = new List<Source>();
     }
 
-    public bool Buy(int amount) {
-        if(amount > currentGold) return false;
-
+    public void Buy(int amount) {
         // TODO: Call UI to animate money loss. ??
         currentGold -= amount;
-
-        return true;
     }
+
+
+    public bool CanBuy(int amount) { return amount >= currentGold; }
 
 }
 

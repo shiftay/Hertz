@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // public enum CARDENHANCEMENT { DAMAGE, HEAL, GOLD, XRAY }
-
+[System.Serializable]
 public sealed class Enhancements {
     public Utils.CARDENHANCEMENT type;
     public delegate void Effect(Player target); 
@@ -14,10 +14,10 @@ public sealed class Enhancements {
         currentEffect = effct;
     }
 
-    public Enhancements DAMAGE = new Enhancements(Utils.CARDENHANCEMENT.DAMAGE, null);
-    public Enhancements HEAL = new Enhancements(Utils.CARDENHANCEMENT.HEAL, null);
-    public Enhancements GOLD = new Enhancements(Utils.CARDENHANCEMENT.GOLD, null);
-    public Enhancements XRAY = new Enhancements(Utils.CARDENHANCEMENT.XRAY, null);
+    public static Enhancements DAMAGE = new Enhancements(Utils.CARDENHANCEMENT.DAMAGE, null);
+    public static Enhancements HEAL = new Enhancements(Utils.CARDENHANCEMENT.HEAL, null);
+    public static Enhancements GOLD = new Enhancements(Utils.CARDENHANCEMENT.GOLD, null);
+    public static Enhancements XRAY = new Enhancements(Utils.CARDENHANCEMENT.XRAY, null);
 
     /*
         IMPLEMENT
@@ -26,6 +26,12 @@ public sealed class Enhancements {
 
         Damage and HEal
     */
+
+    public static List<Enhancements> enhancements = new List<Enhancements>() { DAMAGE, HEAL, GOLD/*, XRAY*/ };
+
+    public static Enhancements ReturnRandom() {
+        return enhancements[Random.Range(0, enhancements.Count)];
+    }
 
 #region Delegates
 

@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public Dealer dealer;
     public UIHandler handlerUI;
     public SpriteHandler spriteHandler;
+    public Shop shop;
 
     private void Awake() {
         instance = this;

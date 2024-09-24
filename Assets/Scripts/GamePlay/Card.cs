@@ -13,6 +13,11 @@ public class Card
     public bool winningCard;
     public List<Enhancements> enhancements;
 
+    public Shop.Rarity rarity;
+
+    public bool Compare(Card card) {
+        return (card.cardInfo.cardSuit == cardInfo.cardSuit && card.cardInfo.cardValue == cardInfo.cardValue);
+    }
 
     public Player CURRENTOWNER {
         get { return _currentOwner; }
@@ -20,7 +25,10 @@ public class Card
     }
 
     public Card(CardInfo cI) { cardInfo = cI; Reset(); enhancements = new List<Enhancements>(); }
-    public Card(CardInfo cI, List<Enhancements> enhancements) { cardInfo = cI; Reset(); this.enhancements = new List<Enhancements>(enhancements); }
+    public Card(CardInfo cI, List<Enhancements> enhancements, Shop.Rarity rarity) { cardInfo = cI; Reset(); 
+                                                                                    this.enhancements = new List<Enhancements>(enhancements); 
+                                                                                    this.rarity = rarity; }
+    public Card() { Reset(); enhancements = new List<Enhancements>(); }
 #region Utils
     public void Reset() { winningCard = false; handPlayed = cardPlayed = -1; }
     public bool isHeart() { return cardInfo.cardSuit == Utils.CARDSUIT.HEART; }

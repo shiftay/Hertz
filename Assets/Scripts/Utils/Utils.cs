@@ -24,10 +24,12 @@ public class Utils
     public enum TRINKETTYPE { PLAY, SCORING, HEALING, GOLD }
     public enum UNLOCKTYPE { CARDENHANCEMENT, TRINKET, TRINKETSLOT }
     public enum CARDENHANCEMENT { DAMAGE, HEAL, GOLD, XRAY }
+
+    public const int BASEREROLL = 5;
 #endregion
 
 #region UI ELEMENTS
-    public enum GAMEPLAYSTATES { MainMenu, Gameplay, RoundEnd, Store, Settings } // IMPLEMENT Figure out more gamestates that are applicable.
+    public enum GAMEPLAYSTATES { MainMenu, Gameplay, RoundEnd, Shop, Settings } // IMPLEMENT Figure out more gamestates that are applicable.
     public const string ROUNDCOMPLETED = "Round Over!";
     public const string CARDSWON = "Cards Won";
     public enum ICON { CPU, PLAYER }

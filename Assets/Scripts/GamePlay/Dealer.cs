@@ -81,7 +81,7 @@ public class Dealer : MonoBehaviour
 
 
     public void Deal() {
-        for(int i = 0; i < (shortGame ? 8 : Deck.Count); i++) {
+        for(int i = 0; i < (shortGame ? 4 : Deck.Count); i++) {
             // I % 4 to make sure we deal to 4 different players.
             Player curPlayer = players[i % 4];
             Deck[i].transform.position = dealPositions[i % 4].dealPos.transform.position;

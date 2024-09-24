@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class UIHandler : MonoBehaviour
 {
     private Utils.GAMEPLAYSTATES _currentState;
+    public Utils.GAMEPLAYSTATES CURRENTSTATE { get { return _currentState; } }
     private Utils.GAMEPLAYSTATES _previousState;
     public Animator stateAnimator;
     public BottomBar bottomBar;

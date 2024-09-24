@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 
 public class Shop : MonoBehaviour
 {
+    private Player _currentPlayer;
     /*
         IMPLEMENT  
         View Deck   
@@ -44,12 +46,17 @@ public class Shop : MonoBehaviour
     public List<CardUI> cards;
     public Animator cardViewer;
 
-    [Header("Individual Cards")]
-    public List<ShopCard> shopCards;
+
 
 #region Initialization
-    public void SetupShop() {
+    public void SetupShop(Player player) {
+        _currentPlayer = player;
+
+        currentAmount = Utils.BASEREROLL;
+
+        SetLabel();
         SetupDeck();
+        SetupCards();
     }
 #endregion
 
@@ -57,8 +64,8 @@ public class Shop : MonoBehaviour
 #region View Deck
     public void SetupDeck() {
         for(int i = 0; i < cards.Count; i++) {
-            cards[i].Setup(GameManager.instance.spriteHandler.FindCard(GameManager.instance.dealer.MAINPLAYER._currentDeck.cards[i].cardInfo),
-                                                                       GameManager.instance.dealer.MAINPLAYER._currentDeck.cards[i].enhancements);
+            cards[i].Setup( GameManager.instance.dealer.MAINPLAYER._currentDeck.cards[i],
+                            GameManager.instance.dealer.MAINPLAYER._currentDeck.cards[i].enhancements);
         }
     }
 
@@ -71,5 +78,141 @@ public class Shop : MonoBehaviour
     }
 #endregion
 
+#region IndividualCards
+    [Header("Individual Cards")]
+    public List<ShopCard> shopCards;
+    public Comparison comparison;
+    private List<Card> currentForSale = new List<Card>();
 
+    public void BuyCard() {
+        _currentPlayer._currentDeck.AddCard(currentOpen);
+        _currentPlayer.scoring.Buy(ConvertRarityToPrice(currentOpen.rarity));
+        SetupDeck();
+    }
+
+    public void SetupCards() {
+        for(int i = 0; i < shopCards.Count; i++) {
+            Rarity t = ReturnRarity();
+            Card temp = CreateCard(t);
+            shopCards[i].Setup(temp, ConvertRarityToPrice(t));
+            currentForSale.Add(temp);
+        }
+    }
+
+    public Card CreateCard(Rarity CardRarity) {
+        CardInfo test = new CardInfo(randomValue(), RandomSuit());
+
+        int amount = ConvertRarity(CardRarity);
+
+        List<Enhancements> enhancements = new List<Enhancements>();
+
+        for(int i = 0; i < amount; i++) {
+            enhancements.Add(RandomEnhancement(enhancements));
+        }
+
+        return new Card(new CardInfo(randomValue(), RandomSuit()), enhancements, CardRarity);
+    }
+
+    public void ShowButton(CardUI card) {
+        shopCards.Find(n => n.cardUI == card).animator.SetTrigger("Display");
+    }
+
+    private Card currentOpen;
+
+    public void ShowComparison(CardUI card) {
+
+
+
+        currentOpen = card.card;
+        comparison.Setup(GameManager.instance.dealer.MAINPLAYER._currentDeck.cards.Find(n => n.Compare(card.card)), card.card);
+    }
+
+    /*
+        Pop Shows Card you plan on replacing.
+
+        Title says "Do you want to switch this card into your deck?"
+
+        Shows both cards
+            // Maybe shows tooltips
+            // [HEAL][DAMAGE][GOLD]
+        
+        Yes || No
+
+        IF Yes > Take players money, change value and play pop on the animator
+
+        IF No > Close the pop up and show store.
+    */
+
+#endregion
+
+#region ReRoll
+    [Header("Reroll")]
+    public TextMeshProUGUI rerollLabel;
+    private int currentAmount;
+
+    private void SetLabel() {
+        rerollLabel.text = "$" + currentAmount.ToString();
+    }
+
+    public void ReRoll() {
+        if(_currentPlayer.scoring.CanBuy(currentAmount))
+        {
+            //          Update Gold.
+            // TODO     Update reroll Amount
+            //          Update Label
+            SetLabel();
+        } 
+        else
+        {
+            // Shake / Pop Label for Gold.
+        } 
+    }
+#endregion
+
+#region Utilities
+
+    public int randomValue() {
+        return Random.Range(2, Utils.ACE);
+    }
+
+    public Utils.CARDSUIT RandomSuit() {
+        return (Utils.CARDSUIT)Random.Range(0, (int)Utils.CARDSUIT.CLUB);
+    }
+
+    public int ConvertRarity(Rarity rarity) {
+        if(rarity == Rarity.RARE) return 3;
+        else if(rarity == Rarity.UNCOMMON) return 2;
+        else return 1;
+    }
+
+    public int ConvertRarityToPrice(Rarity rarity) {
+        if(rarity == Rarity.RARE) return 7;
+        else if(rarity == Rarity.UNCOMMON) return 5;
+        else return 3;
+    }
+
+    public Enhancements RandomEnhancement(List<Enhancements> currentEnhancements) {
+        Enhancements retVal = Enhancements.ReturnRandom();
+
+
+        while(currentEnhancements.FindAll(n => n.type == retVal.type).Count > 0) {
+            retVal = Enhancements.ReturnRandom();
+        }
+
+        return retVal;
+    }
+
+
+    public enum Rarity { COMMON = 100, UNCOMMON = 45, RARE = 15 }
+
+    public Rarity ReturnRarity() {
+        int randomVal = Random.Range(0, (int)Rarity.COMMON);
+
+        if(randomVal < (int)Rarity.RARE) return Rarity.RARE;
+        else if(randomVal < (int)Rarity.UNCOMMON) return Rarity.UNCOMMON;
+        else return Rarity.COMMON;
+    }
+
+
+#endregion
 }
