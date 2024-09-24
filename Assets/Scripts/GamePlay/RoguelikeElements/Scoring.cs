@@ -26,8 +26,6 @@ public class Scoring
         currentGold -= amount;
     }
 
-
     public bool CanBuy(int amount) { return amount >= currentGold; }
-
 }
 

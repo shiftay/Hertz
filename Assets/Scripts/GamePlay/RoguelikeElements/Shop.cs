@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Shop : MonoBehaviour
@@ -63,6 +64,8 @@ public class Shop : MonoBehaviour
 
 #region View Deck
     public void SetupDeck() {
+        _currentPlayer._currentDeck.Sort();
+
         for(int i = 0; i < cards.Count; i++) {
             cards[i].Setup( GameManager.instance.dealer.MAINPLAYER._currentDeck.cards[i],
                             GameManager.instance.dealer.MAINPLAYER._currentDeck.cards[i].enhancements);
@@ -158,15 +161,38 @@ public class Shop : MonoBehaviour
         if(_currentPlayer.scoring.CanBuy(currentAmount))
         {
             //          Update Gold.
+            _currentPlayer.scoring.Buy(currentAmount);
             // TODO     Update reroll Amount
             //          Update Label
             SetLabel();
+            //          ReRoll / Trinkets and Individual Cards
+            // StartCoroutine(UpdateCardsAndTrinkets());
         } 
         else
         {
             // Shake / Pop Label for Gold.
         } 
     }
+
+    private IEnumerator UpdateCardsAndTrinkets() {
+        // TODO:
+        //      Show Animation Of Hiding the Current cards / Trinkets
+        yield return null;
+        // Setup Cards 
+        SetupCards();
+        // Setup Trinkets
+        // Featured does not reroll.
+    }
+#endregion
+
+#region Continue
+
+    public void Continue() {
+        // TODO:    Cleanup
+        //          Animate an exit.
+        GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.Gameplay);
+    }
+
 #endregion
 
 #region Utilities

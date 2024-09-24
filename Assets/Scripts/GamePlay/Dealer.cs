@@ -59,7 +59,8 @@ public class Dealer : MonoBehaviour
         CreateCards();
         Shuffle(Deck);
         Deal();
-        GameManager.instance.handlerUI.bottomBar.SetPlayerVals(MAINPLAYER);
+
+        GameManager.instance.handlerUI.UpdateValues(MAINPLAYER);
         currentCard = currentHand = 0;
     }
 

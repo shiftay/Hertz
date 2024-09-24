@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Deck
@@ -16,9 +17,13 @@ public class Deck
         }
     }
 
+    public void Sort() {
+        cards = cards.OrderBy(n => n.cardInfo.cardSuit).ThenBy(n => n.cardInfo.cardValue).ToList();
+    }
 
     public void AddCard(Card card) {
         int index = cards.FindIndex(n => n.Compare(card));
+        Debug.Log("index " + index + " | " + cards[index].cardInfo.DebugInfo());
         cards.RemoveAt(index);
         cards.Add(card);
     }
