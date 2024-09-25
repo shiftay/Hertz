@@ -11,21 +11,24 @@ public class CardGO : MonoBehaviour
     public Animator _animator;
     public List<EnhancementObjects> enhancementObjects;
 
-    public void Setup(Sprite sprite, List<Enhancements> enhancements) {
+    public void Setup(Card card) {
         _currentSprite.maskInteraction = SpriteMaskInteraction.None;
-        _currentSprite.sprite = sprite;
+        _currentSprite.sprite = GameManager.instance.spriteHandler.FindCard(card.cardInfo);
 
         enhancementObjects.ForEach(n => {
             n.Object.SetActive(false);
             n.spriteRenderer.maskInteraction = SpriteMaskInteraction.None;
         });
 
-        enhancements.ForEach(n => {
+        card.enhancements.ForEach(n => {
             enhancementObjects.Find(x => x.type == n.type).Activate();
         });
 
-        if(enhancements.FindAll(n => n.type == Utils.CARDENHANCEMENT.DAMAGE).Count > 0) 
+        if(card.enhancements.FindAll(n => n.type == Utils.CARDENHANCEMENT.DAMAGE).Count > 0) {
             enhancementObjects.ForEach(n => n.MaskInteraction());
+            _currentSprite.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+        }
+            
     }
 
 

@@ -153,8 +153,19 @@ public class RoundEnd : MonoBehaviour
         // for(int i = objects.Count - 1; i >= 0; i++) {
         //     Destroy(objects[i]);
         // }
-
         objects.Clear();
+
+        List<GameObject> scheduletodestroy = new List<GameObject>();
+        roundEndDescriptors.ForEach(n => {
+            for(int i = 0; i < n.holder.valuesParent.transform.childCount; i++) {
+                if(i == 0) continue;
+                scheduletodestroy.Add(n.holder.valuesParent.transform.GetChild(i).gameObject);
+            }   
+        });
+
+        scheduletodestroy.ForEach(n => Destroy(n));
+
+        currentPlayer.ClearQueues();
     }
 
     private IEnumerator ShowCards(List<Card> cards, Transform parent) {

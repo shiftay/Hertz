@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities.Editor;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -51,11 +52,20 @@ public class Dealer : MonoBehaviour
     void Awake()
     {
         Init(); // TODO Move this into another portion of the game. Doesn't need to be in Awake.
+        GameSetup();
     }
 
-    private void Init() { 
-        calculatingScore = false;
+    private void Init() {
         SetupPlayers();
+    }
+
+    public void GameSetup() { 
+        int x = UnityEngine.Random.Range(0, dealPositions.Count);
+
+        currentTurn = shortGame ? players.Find(n=> n.isPlayer) : players[x];
+        dealerCoin.transform.position = dealPositions[x].coinPos.position;
+
+        calculatingScore = false;
         CreateCards();
         Shuffle(Deck);
         Deal();
@@ -74,10 +84,7 @@ public class Dealer : MonoBehaviour
 
         MAINPLAYER.scoring.currentGold = startingGold;
 
-        int x = UnityEngine.Random.Range(0, dealPositions.Count);
 
-        currentTurn = shortGame ? players.Find(n=> n.isPlayer) : players[x];
-        dealerCoin.transform.position = dealPositions[x].coinPos.position;
     }
 
 
@@ -103,7 +110,7 @@ public class Dealer : MonoBehaviour
         for(int i = 0; i < MAINPLAYER._currentDeck.cards.Count; i++) {
             current = Instantiate(cardPrefab);
             current._currentCard = new Card(MAINPLAYER._currentDeck.cards[i].cardInfo);
-            current.Setup(GameManager.instance.spriteHandler.FindCard(MAINPLAYER._currentDeck.cards[i].cardInfo), new List<Enhancements>());
+            current.Setup(MAINPLAYER._currentDeck.cards[i]);
             current.name = MAINPLAYER._currentDeck.cards[i].cardInfo.DebugInfo();
             // current.transform.position = new Vector3(-7.5f + (j - CONSTS.CARDVALUEMODIFIER) * 1.5f, -3.5f + i * 2, 0);
             Deck.Add(current);
@@ -234,6 +241,7 @@ public class Dealer : MonoBehaviour
             GameManager.instance.handlerUI.cardTransition.Remove();
 
             GameManager.instance.handlerUI.roundEnd.Setup(MAINPLAYER);
+            CleanUp();
 
 #endregion Scoring
         } else {
@@ -244,6 +252,17 @@ public class Dealer : MonoBehaviour
 #endregion
 
 #region Utility Callbacks
+
+    [Button("How many enhanced cards")]
+    public void DebugDeck(){
+        Debug.Log(MAINPLAYER._currentDeck.cards.FindAll(n=>n.enhancements.Count > 0).Count);
+    }
+
+    private void CleanUp() {
+        Deck.Clear();
+        playedCards.Clear();
+        // calculatingScore = false;
+    }
 
     public void Score(List<Card> cardsToValue, bool isDamage) {
         int scoreFromBase = 0;
@@ -375,7 +394,6 @@ public class Dealer : MonoBehaviour
             _currentSelected = clicked;
         } else if(_currentSelected != clicked) {
             // Send something to handcontroller to highlight it?
-
             _currentSelected = clicked;
         } else if (_currentSelected == clicked) {
             // Play the card.

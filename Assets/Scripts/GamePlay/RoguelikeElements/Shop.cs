@@ -90,12 +90,15 @@ public class Shop : MonoBehaviour
     private List<Card> currentForSale = new List<Card>();
 
     public void BuyCard() {
+        shopCards.Find(n => n.cardUI.card.Compare(currentOpen)).animator.SetTrigger("Hide");
         _currentPlayer._currentDeck.AddCard(currentOpen);
         _currentPlayer.scoring.Buy(ConvertRarityToPrice(currentOpen.rarity));
         shopCards.Find(n => n.cardUI.card.Compare(currentOpen)).Sold();
 
         GameManager.instance.handlerUI.UpdateGold(_currentPlayer);
 
+        currentOpen = null;
+        
         SetupDeck();
     }
 
@@ -104,7 +107,7 @@ public class Shop : MonoBehaviour
             Rarity t = ReturnRarity();
             Card temp = CreateCard(t);
 
-            while(Contains(temp)) temp = CreateCard(t); // ISSUE Could be a problem.
+            while(Contains(temp)) temp = CreateCard(t); 
 
             shopCards[i].Setup(temp, ConvertRarityToPrice(t));
             currentForSale.Add(temp);
@@ -134,10 +137,8 @@ public class Shop : MonoBehaviour
     public void ShowButton(CardUI card) {
         if(currentOpen == null) currentOpen = card.card;
         else if(!card.card.Compare(currentOpen)) {
-
             shopCards.Find(n => n.cardUI.card.Compare(currentOpen)).animator.SetTrigger("Hide");
             currentOpen = card.card;
-
         } else if (card.card.Compare(currentOpen)) return;
 
         shopCards.Find(n => n.cardUI == card).animator.SetTrigger("Display");
@@ -146,9 +147,6 @@ public class Shop : MonoBehaviour
     private Card currentOpen;
 
     public void ShowComparison(CardUI card) {
-
-
-
         currentOpen = card.card;
         comparison.Setup(GameManager.instance.dealer.MAINPLAYER._currentDeck.cards.Find(n => n.Compare(card.card)), card.card);
     }
@@ -182,7 +180,6 @@ public class Shop : MonoBehaviour
     }
 
     public void ReRoll() {
-        Debug.Log("Attempting to reroll.");
         if(rerolling) return;
 
         if(_currentPlayer.scoring.CanBuy(currentAmount))
@@ -205,7 +202,6 @@ public class Shop : MonoBehaviour
     }
 
     private IEnumerator UpdateCardsAndTrinkets() {
-        Debug.Log("Attempting to reroll.");
         // TODO:
         //      Show Animation Of Hiding the Current cards / Trinkets
         for(int i = 0; i < shopCards.Count; i++) {
@@ -232,8 +228,22 @@ public class Shop : MonoBehaviour
 
     public void Continue() {
         // TODO:    Cleanup
+        
         //          Animate an exit.
+        StartCoroutine(ToGamePlay());
+    }
+
+    private IEnumerator ToGamePlay() {
+        GameManager.instance.handlerUI.roundEnd.ResetAnim();
+        GameManager.instance.handlerUI.cardTransition.RandomizeAndShow();
+        // Wait for Anim
+        yield return new WaitUntil(() => !GameManager.instance.handlerUI.roundEnd.animPlaying);
+
+        // Set State to gameplay
         GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.Gameplay);
+        GameManager.instance.dealer.GameSetup();
+
+        GameManager.instance.handlerUI.cardTransition.Remove();
     }
 
 #endregion

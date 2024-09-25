@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [System.Serializable]
@@ -25,6 +26,12 @@ public class Player
                 scoring.currentGold += value;
                 break;
         }
+    }
+
+    public void ClearQueues() {
+        health.damageQueue.Clear();
+        scoring.goldQueue.Clear();
+        scoring.scoreQueue.Clear();
     }
     
 
