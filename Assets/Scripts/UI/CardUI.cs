@@ -44,6 +44,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log("Hello");
         GameManager.instance.shop.ShowButton(this);
     }
 #endregion

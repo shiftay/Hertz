@@ -55,6 +55,8 @@ public class Shop : MonoBehaviour
 
         currentAmount = Utils.BASEREROLL;
 
+        currentOpen = null;
+
         SetLabel();
         SetupDeck();
         SetupCards();
@@ -90,6 +92,10 @@ public class Shop : MonoBehaviour
     public void BuyCard() {
         _currentPlayer._currentDeck.AddCard(currentOpen);
         _currentPlayer.scoring.Buy(ConvertRarityToPrice(currentOpen.rarity));
+        shopCards.Find(n => n.cardUI.card.Compare(currentOpen)).Sold();
+
+        GameManager.instance.handlerUI.UpdateGold(_currentPlayer);
+
         SetupDeck();
     }
 
@@ -97,9 +103,16 @@ public class Shop : MonoBehaviour
         for(int i = 0; i < shopCards.Count; i++) {
             Rarity t = ReturnRarity();
             Card temp = CreateCard(t);
+
+            while(Contains(temp)) temp = CreateCard(t); // ISSUE Could be a problem.
+
             shopCards[i].Setup(temp, ConvertRarityToPrice(t));
             currentForSale.Add(temp);
         }
+    }
+
+    private bool Contains(Card card) {
+        return shopCards.FindAll(n => n.cardUI.card == card).Count > 0;
     }
 
     public Card CreateCard(Rarity CardRarity) {
@@ -109,6 +122,8 @@ public class Shop : MonoBehaviour
 
         List<Enhancements> enhancements = new List<Enhancements>();
 
+        // FIXME    Allows Hearts to get the heal enhancment which is not allowed.
+
         for(int i = 0; i < amount; i++) {
             enhancements.Add(RandomEnhancement(enhancements));
         }
@@ -117,6 +132,14 @@ public class Shop : MonoBehaviour
     }
 
     public void ShowButton(CardUI card) {
+        if(currentOpen == null) currentOpen = card.card;
+        else if(!card.card.Compare(currentOpen)) {
+
+            shopCards.Find(n => n.cardUI.card.Compare(currentOpen)).animator.SetTrigger("Hide");
+            currentOpen = card.card;
+
+        } else if (card.card.Compare(currentOpen)) return;
+
         shopCards.Find(n => n.cardUI == card).animator.SetTrigger("Display");
     }
 
@@ -152,36 +175,56 @@ public class Shop : MonoBehaviour
     [Header("Reroll")]
     public TextMeshProUGUI rerollLabel;
     private int currentAmount;
+    private bool rerolling = false;
 
     private void SetLabel() {
         rerollLabel.text = "$" + currentAmount.ToString();
     }
 
     public void ReRoll() {
+        Debug.Log("Attempting to reroll.");
+        if(rerolling) return;
+
         if(_currentPlayer.scoring.CanBuy(currentAmount))
         {
+            rerolling = true;
             //          Update Gold.
             _currentPlayer.scoring.Buy(currentAmount);
             // TODO     Update reroll Amount
             //          Update Label
             SetLabel();
             //          ReRoll / Trinkets and Individual Cards
-            // StartCoroutine(UpdateCardsAndTrinkets());
+            StartCoroutine(UpdateCardsAndTrinkets());
+            GameManager.instance.handlerUI.UpdateGold(_currentPlayer);
         } 
         else
         {
             // Shake / Pop Label for Gold.
+            Debug.Log("Failing the can buy");
         } 
     }
 
     private IEnumerator UpdateCardsAndTrinkets() {
+        Debug.Log("Attempting to reroll.");
         // TODO:
         //      Show Animation Of Hiding the Current cards / Trinkets
-        yield return null;
+        for(int i = 0; i < shopCards.Count; i++) {
+            shopCards[i].animator.SetTrigger("Flip");
+            yield return new WaitForSeconds(0.25f);
+        }
+        
+        yield return new WaitForSeconds(0.25f);
         // Setup Cards 
         SetupCards();
+
+
+        for(int i = 0; i < shopCards.Count; i++) {
+            shopCards[i].animator.SetTrigger("Revert");
+            yield return new WaitForSeconds(0.25f);
+        }
         // Setup Trinkets
         // Featured does not reroll.
+        rerolling = false;
     }
 #endregion
 

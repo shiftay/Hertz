@@ -17,6 +17,9 @@ public class UIHandler : MonoBehaviour
     public RoundEnd roundEnd;
     public CardTransition cardTransition; 
 
+    [Header("Label Anims")]
+    public Animator score;
+    public Animator gold, health;
 
     public void SetState(Utils.GAMEPLAYSTATES state) {
         // TODO: Store previous state so that we can swap back if the state is Settings.
@@ -27,6 +30,16 @@ public class UIHandler : MonoBehaviour
     public void UpdateValues(Player p) {
         bottomBar.SetPlayerVals(p);
         topBar.SetPlayerVals(p);
+    }
+
+    public void UpdateGold(Player p) {
+        bottomBar.SetPlayerVals(p);
+        gold.SetTrigger("Pop");
+    }
+
+    public void UpdateHealth(Player p) {
+        bottomBar.SetPlayerVals(p);
+        health.SetTrigger("Pop");
     }
     
 }

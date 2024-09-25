@@ -9,12 +9,14 @@ public class ShopCard : MonoBehaviour
     public CardUI cardUI;
     public Animator animator;
     public GameObject sold;
+    public GameObject sold_extra;
     public TextMeshProUGUI priceLabel;
     private int price;
     public int PRICE { get { return price; }}
 
     public void Setup(Card card, int price) {
         sold.SetActive(false);
+        sold_extra.SetActive(true);
         this.price = price;
         priceLabel.text = price.ToString();
         cardUI.Setup(card, card.enhancements);
@@ -23,4 +25,11 @@ public class ShopCard : MonoBehaviour
     public void Buy() {
         GameManager.instance.shop.ShowComparison(cardUI);
     }
+
+    public void Sold() {
+        sold.SetActive(true);
+        sold_extra.SetActive(false);
+    }
+
+    public void FlipComplete() {}
 }
