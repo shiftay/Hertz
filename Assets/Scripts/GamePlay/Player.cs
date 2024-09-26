@@ -12,6 +12,7 @@ public class Player
     public Utils.DIFFICULITIES difficulty;
     public Health health;
     public Scoring scoring;
+    public List<Trinket> trinkets;
     public List<Unlockable> unlocks;
 
     public void AdjustValue(RoundEndTypes type, int value) {
@@ -39,11 +40,13 @@ public class Player
         if(player) { 
             unlocks = new List<Unlockable>();
             _currentDeck = new Deck();
+            trinkets = new List<Trinket>();
         }
         health = new Health();
         scoring = new Scoring();
         isPlayer = player;
         _currentHand = new Hand();
+
     }
 }
 

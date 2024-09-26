@@ -27,6 +27,14 @@ public class BottomBar : MonoBehaviour
         ScrollViewContent.sizeDelta = new Vector2(0, ScrollViewContent.childCount * 46.1475f + Utils.WONHANDUIMODIFIER);
     }
 
+    public void CleanUp() {
+        List<GameObject> objs = new List<GameObject>();
+
+        for(int i = 0; i < ScrollViewContent.childCount; i++) objs.Add(ScrollViewContent.GetChild(i).gameObject);
+
+        objs.ForEach(n => Destroy(n));
+    }
+
     public void SetPlayerVals(Player p) {
         healthAmt.text = p.health.currentHealth.ToString();
         goldAmt.text = p.scoring.currentGold.ToString();

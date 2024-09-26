@@ -7,8 +7,6 @@ public class Deck
 {
     public List<Card> cards = new List<Card>();
 
-
-
     public Deck() {
         for(int i = 0; i <= (int)Utils.CARDSUIT.CLUB; i++) {
             for(int j = 2; j <= Utils.ACE; j++) {

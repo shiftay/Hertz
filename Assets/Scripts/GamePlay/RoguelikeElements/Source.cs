@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 public enum SourceType { TRINKET, INTEREST, ENHANCEMENT, ENDOFROUND }
 public class Source {
     public SourceType type;
-    public int refID; // Used for Trinket ID
+    public int refID; // IDEA Used for Trinkets
     public int value;
     public List<Card> associatedCards;
 
@@ -33,7 +33,7 @@ public class Source {
 public sealed class SourceLabels {
     public SourceType type;
     public string Label;
-    public int refID;
+    public int refID; // IDEA Used for Trinkets
     public bool needsFormat;
 
     private SourceLabels(SourceType t, string l, int id, bool format) {
@@ -41,10 +41,8 @@ public sealed class SourceLabels {
     }
 
     public static SourceLabels Interest = new SourceLabels(SourceType.INTEREST, "INTEREST GAINED", -1, false);
-    public static SourceLabels Enhancement = new SourceLabels(SourceType.ENHANCEMENT, "UPGRADED_CARDS_TITLE", -1, true);
+    public static SourceLabels Enhancement = new SourceLabels(SourceType.ENHANCEMENT, "UPGRADED CARDS", -1, true);
     public static SourceLabels EndOfRound = new SourceLabels(SourceType.ENDOFROUND, "FROM ROUND", -1, true);
-
-
 
     // TODO When you add Labels add to the List
     public static List<SourceLabels> sourceLabels = new List<SourceLabels>() { Interest, Enhancement, EndOfRound };

@@ -142,6 +142,8 @@ MonoBehaviour:
     cardPlayed: 0
     handPlayed: 0
     winningCard: 0
+    enhancements: []
+    rarity: 0
   _currentSprite: {fileID: 4651268842439888105}
   _animator: {fileID: 7447243739533340432}
   enhancementObjects:
@@ -330,7 +332,7 @@ Transform:
   m_GameObject: {fileID: 3604446360524612307}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.31050172, w: 0.9505729}
-  m_LocalPosition: {x: 0.142, y: -0.192, z: 2.541515}
+  m_LocalPosition: {x: 0.142, y: -0.192, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -376,7 +378,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 93378c447e50ab2408495e9980374d22, type: 3}
   m_Color: {r: 1, g: 0.4117647, b: 0.7058824, a: 1}
   m_FlipX: 0

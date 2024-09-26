@@ -63,6 +63,7 @@ public class Dealer : MonoBehaviour
         int x = UnityEngine.Random.Range(0, dealPositions.Count);
 
         currentTurn = shortGame ? players.Find(n=> n.isPlayer) : players[x];
+        dealerCoin.SetActive(true);
         dealerCoin.transform.position = dealPositions[x].coinPos.position;
 
         calculatingScore = false;
@@ -97,7 +98,7 @@ public class Dealer : MonoBehaviour
             Deck[i]._currentCard.CURRENTOWNER = curPlayer;
             curPlayer._currentHand.cards.Add(Deck[i]);
             
-            if(!curPlayer.isPlayer && !Deck[i]._currentCard.ContainsXRAY) Deck[i]._currentSprite.sprite = GameManager.instance.spriteHandler.CardBack();
+            if(!curPlayer.isPlayer && !Deck[i]._currentCard.ContainsXRAY) Deck[i].ComputerOwned();
         }
 
         _gameStarted = true;
@@ -261,6 +262,7 @@ public class Dealer : MonoBehaviour
     private void CleanUp() {
         Deck.Clear();
         playedCards.Clear();
+        GameManager.instance.handlerUI.bottomBar.CleanUp();
         // calculatingScore = false;
     }
 
@@ -385,6 +387,10 @@ public class Dealer : MonoBehaviour
         }
 
         return true;
+    }
+
+    public int WonHands() {
+        return PlayerCards().Count / 4;
     }
 
 #endregion

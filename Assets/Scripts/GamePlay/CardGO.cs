@@ -12,6 +12,7 @@ public class CardGO : MonoBehaviour
     public List<EnhancementObjects> enhancementObjects;
 
     public void Setup(Card card) {
+        _currentCard = card;
         _currentSprite.maskInteraction = SpriteMaskInteraction.None;
         _currentSprite.sprite = GameManager.instance.spriteHandler.FindCard(card.cardInfo);
 
@@ -21,16 +22,21 @@ public class CardGO : MonoBehaviour
         });
 
         card.enhancements.ForEach(n => {
-            enhancementObjects.Find(x => x.type == n.type).Activate();
+            enhancementObjects.Find(x => x.type == n.type).ToggleObj(true);
         });
 
         if(card.enhancements.FindAll(n => n.type == Utils.CARDENHANCEMENT.DAMAGE).Count > 0) {
             enhancementObjects.ForEach(n => n.MaskInteraction());
             _currentSprite.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
-        }
-            
+        }    
     }
 
+    public void ComputerOwned() {
+        _currentSprite.sprite = GameManager.instance.spriteHandler.CardBack();
+        _currentCard.enhancements.ForEach(n => {
+            enhancementObjects.Find(x => x.type == n.type).ToggleObj(false);
+        });
+    }
 
     void OnMouseOver(){
         if(!_currentCard.CURRENTOWNER.isPlayer) return;
@@ -52,7 +58,7 @@ public class CardGO : MonoBehaviour
 
     private void OnMouseExit()
     {
-         GameManager.instance.dealer.playerController.CardMouseExit(this);
+        GameManager.instance.dealer.playerController.CardMouseExit(this);
     }
 }
 
@@ -62,9 +68,7 @@ public class EnhancementObjects {
     public Utils.CARDENHANCEMENT type;
     public SpriteRenderer spriteRenderer;
 
-    public void Activate() {
-        Object.SetActive(true);
-    }
+    public void ToggleObj(bool state) { Object.SetActive(state); }
 
     public void MaskInteraction() {
         spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;

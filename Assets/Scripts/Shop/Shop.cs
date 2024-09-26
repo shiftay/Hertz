@@ -10,15 +10,7 @@ public class Shop : MonoBehaviour
     private Player _currentPlayer;
     /*
         IMPLEMENT  
-        View Deck   
-                    > Clickable and opens up the deck, and shows currently the cards inside it.
-                    > Shows a count of the different enhancements on the side
-        
-        Buy Individual Card
-                    > Purchase a card and replaces it into the deck
-                    IF  Replacing another enhanced card show the player so they can decide to continue and sell the card it's replacing
-                    OR  Cancel the purchase
-        
+
         Buy Trinket
                     > Trinkets until trinket slots are filled.
         
@@ -31,6 +23,17 @@ public class Shop : MonoBehaviour
 
         IDEA BASE CARDS DO NOT SELL FOR ANYTHING
 
+        BASELINE
+
+        View Deck   
+                    > Clickable and opens up the deck, and shows currently the cards inside it.
+                    > Shows a count of the different enhancements on the side
+        
+        Buy Individual Card
+                    > Purchase a card and replaces it into the deck
+                    IF  Replacing another enhanced card show the player so they can decide to continue and sell the card it's replacing
+                    OR  Cancel the purchase
+        
         Reroll
                     > Reroll starts at X
                     > Goes up each reroll.
@@ -47,8 +50,6 @@ public class Shop : MonoBehaviour
     public List<CardUI> cards;
     public Animator cardViewer;
 
-
-
 #region Initialization
     public void SetupShop(Player player) {
         _currentPlayer = player;
@@ -63,6 +64,9 @@ public class Shop : MonoBehaviour
     }
 #endregion
 
+#region Trinket
+
+#endregion
 
 #region View Deck
     public void SetupDeck() {

@@ -6,15 +6,12 @@ using TMPro;
 using Unity.VisualScripting;
 using System;
 
-
-
 public class RoundEnd : MonoBehaviour
 {
     public List<RoundEndDescriptor> roundEndDescriptors;    
-
     public CardUI wonCardPrefab;
     public RoundEndValues incomePrefab;
-
+    public GameObject RoundEndHolder;
     public Animator popUp;
     public delegate void CallBack();
     private Player currentPlayer;
@@ -35,7 +32,6 @@ public class RoundEnd : MonoBehaviour
 
     /* 
         IMPLEMENT Decide Order of Healing / Damage
-
 
         IF Trinkets exist that effect the current tally, loop through the trinkets that do affect the one that is currently tallying
             Either flashing the trinket, having it slide down and add it's value, etc..
@@ -87,7 +83,12 @@ public class RoundEnd : MonoBehaviour
             temp.transform.SetParent(descriptor.holder.valuesParent);
             temp.transform.localScale = Vector3.one;
             value += queue[i].VALUE;
-            if(queue[i].associatedCards.Count > 0) yield return StartCoroutine(ShowCards(queue[i].associatedCards, descriptor.cardParent));
+            if(queue[i].associatedCards.Count > 0) {
+                GameObject reHolder = Instantiate(RoundEndHolder);
+                reHolder.transform.SetParent(descriptor.cardParent);
+                reHolder.transform.localScale = Vector3.one;
+                yield return StartCoroutine(ShowCards(queue[i].associatedCards, reHolder.transform));
+            }
         }
 
         // ResetAnim
@@ -134,7 +135,6 @@ public class RoundEnd : MonoBehaviour
         // Remove Card Transition
         GameManager.instance.handlerUI.cardTransition.Remove();
     }
-
 
     // Clean up Cards
     private List<GameObject> objects = new List<GameObject>();
