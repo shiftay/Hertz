@@ -12,7 +12,7 @@ public class Player
     public Utils.DIFFICULITIES difficulty;
     public Health health;
     public Scoring scoring;
-    public List<Trinket> trinkets;
+    public List<PlayerTrinket> trinkets;
     public List<Unlockable> unlocks;
 
     public void AdjustValue(RoundEndTypes type, int value) {
@@ -29,10 +29,18 @@ public class Player
         }
     }
 
+    public bool HasTrinket(TRINKET id) { return trinkets.FindAll(n=> n.baseTrinket.IDENTIFIER == id).Count > 0; }
+
     public void ClearQueues() {
         health.damageQueue.Clear();
         scoring.goldQueue.Clear();
         scoring.scoreQueue.Clear();
+    }
+
+    public int Value() {
+        int retVal = 0;
+        trinkets.ForEach(n => retVal += n.sellValue);
+        return retVal;
     }
     
 
@@ -40,13 +48,12 @@ public class Player
         if(player) { 
             unlocks = new List<Unlockable>();
             _currentDeck = new Deck();
-            trinkets = new List<Trinket>();
+            trinkets = new List<PlayerTrinket>();
         }
         health = new Health();
         scoring = new Scoring();
         isPlayer = player;
         _currentHand = new Hand();
-
     }
 }
 

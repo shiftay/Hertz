@@ -5,6 +5,10 @@ using UnityEngine;
 public class TrinketHandler : MonoBehaviour
 {
     public List<TrinketIdentifier> trinketIdentifiers;
+
+    public Sprite ReturnSprite(TRINKET t) {
+        return trinketIdentifiers.Find(n => n.identifier == t).baseSprite;
+    }
 }
 
 

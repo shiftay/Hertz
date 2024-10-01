@@ -61,11 +61,53 @@ public class Shop : MonoBehaviour
         SetLabel();
         SetupDeck();
         SetupCards();
+        SetupTrinkets();
     }
 #endregion
 
 #region Trinket
+    [Header("Trinkets")]
+    public List<ShopTrinket> shopTrinkets;
 
+    private ShopTrinket trinketOpen;
+
+    public void SetupTrinkets() {
+        shopTrinkets.ForEach(n => n.Setup());
+    }
+
+    public bool ContainsTrinket(Trinket trinket) {
+        return shopTrinkets.FindAll(n => n.Compare(trinket)).Count > 0;
+    }
+
+    public void BuyTrinket(ShopTrinket trinket) {
+        if(!_currentPlayer.scoring.CanBuy(trinket.playerTrinket.sellValue)) return;
+
+
+        Debug.Log("Buy Trinket!");
+
+        _currentPlayer.trinkets.Add(trinket.playerTrinket);
+        _currentPlayer.scoring.Buy(trinket.playerTrinket.sellValue);
+        GameManager.instance.handlerUI.UpdateGold(_currentPlayer);
+        trinket.Bought();
+        trinketOpen = null;
+
+        GameManager.instance.handlerUI.UpdateTrinkets(_currentPlayer);
+    }
+
+    public void ShowButton(ShopTrinket trinket) {
+        if(trinketOpen == null) trinketOpen = trinket;
+        else if(trinketOpen != trinket) {
+            shopTrinkets.Find(n => n == trinketOpen).trinket.animator.SetTrigger("Hide");
+            trinketOpen = trinket;
+        } else if (trinketOpen == trinket) return;
+
+        if(currentOpen != null) {
+            shopCards.Find(n => n.cardUI.card.Compare(currentOpen)).animator.SetTrigger("Hide");
+            currentOpen = null;
+        }
+
+        shopTrinkets.Find(n => n == trinket).trinket.animator.SetTrigger("Display");
+    }
 #endregion
 
 #region View Deck
@@ -92,6 +134,7 @@ public class Shop : MonoBehaviour
     public List<ShopCard> shopCards;
     public Comparison comparison;
     private List<Card> currentForSale = new List<Card>();
+    private Card currentOpen;
 
     public void BuyCard() {
         shopCards.Find(n => n.cardUI.card.Compare(currentOpen)).animator.SetTrigger("Hide");
@@ -145,10 +188,15 @@ public class Shop : MonoBehaviour
             currentOpen = card.card;
         } else if (card.card.Compare(currentOpen)) return;
 
+        if(trinketOpen != null) {
+            trinketOpen.trinket.animator.SetTrigger("Hide");
+            trinketOpen = null;
+        }
+
         shopCards.Find(n => n.cardUI == card).animator.SetTrigger("Display");
     }
 
-    private Card currentOpen;
+
 
     public void ShowComparison(CardUI card) {
         currentOpen = card.card;
@@ -206,20 +254,30 @@ public class Shop : MonoBehaviour
     }
 
     private IEnumerator UpdateCardsAndTrinkets() {
-        // TODO:
-        //      Show Animation Of Hiding the Current cards / Trinkets
+        // FIXME The animations for Hiding still don't hide the price, or the buy buttons
+        // FIXME Need to clear those so that it's a full refresh
         for(int i = 0; i < shopCards.Count; i++) {
             shopCards[i].animator.SetTrigger("Flip");
+            yield return new WaitForSeconds(0.25f);
+        }
+
+        for(int i = 0; i < shopTrinkets.Count; i++) {
+            shopTrinkets[i].trinket.animator.SetTrigger("Flip");
             yield return new WaitForSeconds(0.25f);
         }
         
         yield return new WaitForSeconds(0.25f);
         // Setup Cards 
         SetupCards();
-
+        SetupTrinkets();
 
         for(int i = 0; i < shopCards.Count; i++) {
             shopCards[i].animator.SetTrigger("Revert");
+            yield return new WaitForSeconds(0.25f);
+        }
+
+        for(int i = 0; i < shopTrinkets.Count; i++) {
+            shopTrinkets[i].trinket.animator.SetTrigger("Revert");
             yield return new WaitForSeconds(0.25f);
         }
         // Setup Trinkets

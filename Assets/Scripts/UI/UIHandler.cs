@@ -37,6 +37,10 @@ public class UIHandler : MonoBehaviour
         gold.SetTrigger("Pop");
     }
 
+    public void UpdateTrinkets(Player p) {
+        topBar.SetupTrinkets(p);
+    }
+
     public void UpdateHealth(Player p) {
         bottomBar.SetPlayerVals(p);
         health.SetTrigger("Pop");

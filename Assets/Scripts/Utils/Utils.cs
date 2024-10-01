@@ -53,4 +53,8 @@ public class Utils
         return (int)(newStart + ((value - originalStart) * scale));
     }
 #endregion
+
+    
+
+
 }

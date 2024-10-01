@@ -680,7 +680,7 @@ GameObject:
   - component: {fileID: 8317968104918603241}
   - component: {fileID: 4490618271481116585}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -754,6 +754,10 @@ PrefabInstance:
     - target: {fileID: 1090987146367506490, guid: 17718a8796a52304486f638bb3d99f78, type: 3}
       propertyPath: m_Name
       value: PackArt
+      objectReference: {fileID: 0}
+    - target: {fileID: 1090987146367506490, guid: 17718a8796a52304486f638bb3d99f78, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5608443347766286531, guid: 17718a8796a52304486f638bb3d99f78, type: 3}
       propertyPath: m_Pivot.x
