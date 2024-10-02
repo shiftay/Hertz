@@ -298,6 +298,9 @@ public class Shop : MonoBehaviour
         
         //          Animate an exit.
         StartCoroutine(ToGamePlay());
+
+        if(currentOpen != null) shopCards.Find(n => n.cardUI.card.Compare(currentOpen)).animator.SetTrigger("Hide");
+        if(trinketOpen != null) trinketOpen.trinket.animator.SetTrigger("Hide");
     }
 
     private IEnumerator ToGamePlay() {
