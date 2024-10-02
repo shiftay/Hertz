@@ -221,10 +221,7 @@ public class Dealer : MonoBehaviour
             // }
             // TODO Start defining "Shoot the moon"
             // Debug.Log("Did someone shoot the moon? " + shotTheMoon);
-            MAINPLAYER.trinkets.ForEach(n => {
-                if(n.baseTrinket.check == VALUECHECK.SCORING) n.baseTrinket.effect(n.baseTrinket.ID);
-            });
-            
+     
             int MAXDAMAGE = DamageEnhancements + Utils.DEFAULTMAXDAMAGE;
             MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.ENDOFROUND, 
                                                         Utils.ConvertRange(0, MAXDAMAGE, 10, 1, (MAINPLAYER.health.CurrentDamageQueue())) + Mathf.FloorToInt(1.25f * (MAXDAMAGE - Utils.DEFAULTMAXDAMAGE))));  
@@ -236,7 +233,10 @@ public class Dealer : MonoBehaviour
 
             if(GoldCards().Count > 0) MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.ENHANCEMENT, GoldCards().Count, GoldCards()));
 
-
+            MAINPLAYER.trinkets.ForEach(n => {
+                if(n.baseTrinket.check == VALUECHECK.SCORING) n.baseTrinket.effect(n.baseTrinket.ID);
+            });
+            
             GameManager.instance.handlerUI.roundEnd.ResetAnim();
             GameManager.instance.handlerUI.cardTransition.RandomizeAndShow();
             // Wait for Anim

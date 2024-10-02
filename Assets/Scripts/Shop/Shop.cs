@@ -10,16 +10,20 @@ public class Shop : MonoBehaviour
     private Player _currentPlayer;
     /*
         IMPLEMENT  
-
-        Buy Trinket
-                    > Trinkets until trinket slots are filled.
-        
-        Buy Featured Pack
+        Buy Featured:
+                Pack
                     > Pack slides to center
                     > Rips open
                     > Player can choose what to do with however many cards are inside the pack
                     > Sell the cards
                     > Replace cards in the deck
+                Token
+                    > A passive that changes the Dealer Token
+                    > Gives passives like:  
+                                        > Multiplier to score
+                                        > Extra gold at end of turn
+                                        > Shop more likely to feature a specific suit
+                                        > etc..
 
         IDEA BASE CARDS DO NOT SELL FOR ANYTHING
 
@@ -41,7 +45,8 @@ public class Shop : MonoBehaviour
                         > Cards will flip over & Maybe Morph from Marvel snap scrunch up then turn back over.
                         > Trinkets will poof and then poof back.        
 
-        
+        Buy Trinket
+                    > Trinkets until trinket slots are filled.
         Continue
                     > Button to take you to the next round.
     */

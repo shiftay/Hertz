@@ -47,15 +47,15 @@ public class RoundEnd : MonoBehaviour
     public Animator goldTransition, scoringTransition;
     public Animator incomeScreen;
     public void ShowDamage() {                                                 
-        StartCoroutine(ShowScreen(healthTransition, currentPlayer.health.damageQueue, FindDescriptor(RoundEndTypes.Health), health, ShowScore));
+        StartCoroutine(ShowScreen(healthTransition, currentPlayer.health.damageQueue, FindDescriptor(RoundEndTypes.Health), health, TextAnchor.UpperRight, ShowScore));
     }
 
     public void ShowScore() {
-        StartCoroutine(ShowScreen(scoringTransition, currentPlayer.scoring.scoreQueue, FindDescriptor(RoundEndTypes.Score), score, ShowGold));
+        StartCoroutine(ShowScreen(scoringTransition, currentPlayer.scoring.scoreQueue, FindDescriptor(RoundEndTypes.Score), score, TextAnchor.UpperLeft, ShowGold));
     }
 
     public IEnumerator ShowScreen(Animator transition, List<Source> queue, RoundEndDescriptor descriptor,
-                            Animator mainValue, CallBack callBack = null) 
+                            Animator mainValue, TextAnchor corner, CallBack callBack = null) 
     {
         descriptor.holder.Setup(descriptor.color);
         // Reset Anim
@@ -79,7 +79,7 @@ public class RoundEnd : MonoBehaviour
         for(int i = 0; i < queue.Count; i++) {
             yield return new WaitForSeconds(0.3f);  // TODO: Turn into constant
             RoundEndValues temp = Instantiate(incomePrefab);
-            temp.SetValues(SourceLabels.FormatLabel(queue[i].type, descriptor.title), queue[i].VALUE, descriptor.color);
+            temp.SetValues(SourceLabels.FormatLabel(queue[i].type, descriptor.title, queue[i].refID), queue[i].VALUE, descriptor.color);
             temp.transform.SetParent(descriptor.holder.valuesParent);
             temp.transform.localScale = Vector3.one;
             value += queue[i].VALUE;
@@ -87,6 +87,7 @@ public class RoundEnd : MonoBehaviour
                 GameObject reHolder = Instantiate(RoundEndHolder);
                 reHolder.transform.SetParent(descriptor.cardParent);
                 reHolder.transform.localScale = Vector3.one;
+                reHolder.GetComponent<GridLayoutGroup>().childAlignment = corner;
                 yield return StartCoroutine(ShowCards(queue[i].associatedCards, reHolder.transform));
             }
         }
@@ -111,7 +112,7 @@ public class RoundEnd : MonoBehaviour
     }
 
     private void ShowGold() {
-        StartCoroutine(ShowScreen(goldTransition, currentPlayer.scoring.goldQueue, FindDescriptor(RoundEndTypes.Income), gold, MoveToShop));
+        StartCoroutine(ShowScreen(goldTransition, currentPlayer.scoring.goldQueue, FindDescriptor(RoundEndTypes.Income), gold, TextAnchor.UpperLeft, MoveToShop));
     }
 
     private void MoveToShop() {

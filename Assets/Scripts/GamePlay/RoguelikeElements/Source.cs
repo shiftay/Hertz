@@ -43,16 +43,21 @@ public sealed class SourceLabels {
     public static SourceLabels Interest = new SourceLabels(SourceType.INTEREST, "INTEREST GAINED", -1, false);
     public static SourceLabels Enhancement = new SourceLabels(SourceType.ENHANCEMENT, "UPGRADED CARDS", -1, true);
     public static SourceLabels EndOfRound = new SourceLabels(SourceType.ENDOFROUND, "FROM ROUND", -1, true);
+    public static SourceLabels Trink = new SourceLabels(SourceType.TRINKET, "FROM", -1, false);
+  
+
 
     // TODO When you add Labels add to the List
-    public static List<SourceLabels> sourceLabels = new List<SourceLabels>() { Interest, Enhancement, EndOfRound };
+    public static List<SourceLabels> sourceLabels = new List<SourceLabels>() { Interest, Enhancement, EndOfRound, Trink };
     public static SourceLabels FindLabel(SourceType t, int id = -1) {
         return sourceLabels.Find(n => n.type == t);
     }
 
-    public static string FormatLabel(SourceType t, string primaryVal) {
+    public static string FormatLabel(SourceType t, string primaryVal, int id = -1) {
         if(FindLabel(t).needsFormat)
             return String.Format("{0} {1}", primaryVal, FindLabel(t).Label);
+        else if(t == SourceType.TRINKET) 
+            return Trinket.FindTrinket((TRINKET)id).TITLE;
         else
             return FindLabel(t).Label;
     }

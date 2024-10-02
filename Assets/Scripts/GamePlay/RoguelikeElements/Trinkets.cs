@@ -53,22 +53,23 @@ public sealed class Trinket
     public static Trinket LotteryTicket = new Trinket(TrinketEffect.LotteryTicket, TRINKET.LOTTERYTICKET, VALUECHECK.SCORING, "Lottery Ticket", 5);
     public static Trinket Calculator = new Trinket(TrinketEffect.Calculator, TRINKET.CALCULATOR, VALUECHECK.SCORING, "Calculator", 5);
 
-
+    
     public static List<Trinket> trinkets = new List<Trinket>() { Calculator, Triage, Pennies, Stocks, LotteryTicket };
     public static Trinket ReturnTrinket() { return trinkets[Random.Range(0, trinkets.Count)]; }
     public static Trinket FindTrinket(TRINKET id) { return trinkets.Find(n => n.IDENTIFIER == id); }
 }
 
 public static class TrinketEffect {
-
     // Triage - Heals the player for every won hand.
     public static void Triage(int id) {
-        GameManager.instance.dealer.MAINPLAYER.health.damageQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.PlayerCards().Count / 4, id));
+        if(GameManager.instance.dealer.PlayerCards().Count / 4 > 0)
+            GameManager.instance.dealer.MAINPLAYER.health.damageQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.PlayerCards().Count / 4, id));
     }
 
     // Pennies - All 2s won count as an extra money.
     public static void Pennies(int id) {
-        GameManager.instance.dealer.MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.PlayerCards().FindAll(n => n.cardInfo.cardValue == 2).Count, id));
+        if(GameManager.instance.dealer.PlayerCards().FindAll(n => n.cardInfo.cardValue == 2).Count > 0)
+            GameManager.instance.dealer.MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.PlayerCards().FindAll(n => n.cardInfo.cardValue == 2).Count, id));
     }
 
     // Stocks - Get more interest between rounds. 
@@ -79,14 +80,12 @@ public static class TrinketEffect {
     }
     // Lottery Ticket - Chance to get double gold earned at the end of each round.
     public static void LotteryTicket(int id) {
-        GameManager.instance.dealer.MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.MAINPLAYER.scoring.currentGold, id));
+        if(Random.Range(0, 10) < 2)
+            GameManager.instance.dealer.MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.MAINPLAYER.scoring.currentGold, id));
     } 
     // Player gains score at the end of the round equal to their trinkets sell value.
     public static void Calculator(int id) {
-        GameManager.instance.dealer.MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.TRINKET, 1, id));
+        if(GameManager.instance.dealer.MAINPLAYER.Value() > 0)
+            GameManager.instance.dealer.MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.MAINPLAYER.Value(), id));
     }
 }
-
-
-
-
