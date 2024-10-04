@@ -6,10 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities.Editor;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Diagnostics;
 
 [System.Serializable]
 public class HandPositions {
@@ -20,6 +17,7 @@ public class HandPositions {
 
 public class Dealer : MonoBehaviour
 {
+
 #region DEBUG
     public bool shortGame;
     public int startingGold;
@@ -48,6 +46,7 @@ public class Dealer : MonoBehaviour
     private float playTime;
 
 #endregion
+
 #region Initialization
     void Awake()
     {
@@ -135,7 +134,7 @@ public class Dealer : MonoBehaviour
     }
 #endregion 
 
-#region Gameplay Loop
+#region Gameplay Loop+
     private void FixedUpdate() {
         if(!_gameStarted) return;
 
@@ -216,6 +215,7 @@ public class Dealer : MonoBehaviour
 
         if(winnerOfHand._currentHand.cards.Count == 0)  { // No more cards for the winner to play.
             dealerCoin.SetActive(false);
+
 #region Scoring  
              /* 
                 TODO > Look through trinkets.

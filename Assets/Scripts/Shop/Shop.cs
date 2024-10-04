@@ -207,7 +207,6 @@ public class Shop : MonoBehaviour
     }
 
 
-
     public void ShowComparison(CardUI card) {
         currentOpen = card.card;
         comparison.Setup(GameManager.instance.dealer.MAINPLAYER._currentDeck.cards.Find(n => n.Compare(card.card)), card.card);
@@ -300,7 +299,6 @@ public class Shop : MonoBehaviour
 
     public void Continue() {
         // TODO:    Cleanup
-        
         currentOpen = null;
         trinketOpen = null;
 
