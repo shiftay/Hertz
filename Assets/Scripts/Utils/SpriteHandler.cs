@@ -24,20 +24,23 @@ public class SpriteHandler : MonoBehaviour
     public Sprite Icon(bool isPlayer) { return playerIcons[isPlayer ? (int)Utils.ICON.PLAYER : (int)Utils.ICON.CPU]; }
 
     public Sprite FindCard(Utils.CARDSUIT suit, int cardValue) {
-        return baseSprites.Find(n => n.suit == suit).cardSprites[cardValue - Utils.CARDVALUEMODIFIER];
+        return baseSprites.Find(n => n.suit == suit).cardSprites[ReturnValue(cardValue) - Utils.CARDVALUEMODIFIER];
     }
 
     public Sprite FindCard(CardInfo info) {
-        return baseSprites.Find(n => n.suit == info.cardSuit).cardSprites[info.cardValue - Utils.CARDVALUEMODIFIER];
+        return baseSprites.Find(n => n.suit == info.cardSuit).cardSprites[ReturnValue(info.cardValue) - Utils.CARDVALUEMODIFIER];
     }
 
     public Sprite WonHandCard(Utils.CARDSUIT suit, int cardValue) {
-        return wonHandSprites.Find(n => n.suit == suit).cardSprites[cardValue - Utils.CARDVALUEMODIFIER];
+        return wonHandSprites.Find(n => n.suit == suit).cardSprites[ReturnValue(cardValue) - Utils.CARDVALUEMODIFIER];
     }
     public Sprite RandomCard() {
         return baseSprites.Find(n => n.suit == Utils.CARDSUIT.HEART).cardSprites[Random.Range(0, 13)];
     }
 
+    public int ReturnValue(int value) {
+        return (value == 1) ? Utils.ACE : value;
+    }
 
 }
 

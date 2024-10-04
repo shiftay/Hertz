@@ -63,6 +63,12 @@ public class Shop : MonoBehaviour
 
         currentOpen = null;
 
+        player.trinkets.ForEach(n => {
+            if(n.baseTrinket.check == VALUECHECK.SHOP) {
+                n.baseTrinket.effect(_currentPlayer, n.baseTrinket.ID);
+            }
+        });
+
         SetLabel();
         SetupDeck();
         SetupCards();
@@ -88,12 +94,11 @@ public class Shop : MonoBehaviour
         if(!_currentPlayer.scoring.CanBuy(trinket.playerTrinket.sellValue)) return;
 
 
-        Debug.Log("Buy Trinket!");
-
         _currentPlayer.trinkets.Add(trinket.playerTrinket);
         _currentPlayer.scoring.Buy(trinket.playerTrinket.sellValue);
         GameManager.instance.handlerUI.UpdateGold(_currentPlayer);
         trinket.Bought();
+        trinketOpen.trinket.animator.SetTrigger("Hide");
         trinketOpen = null;
 
         GameManager.instance.handlerUI.UpdateTrinkets(_currentPlayer);
@@ -296,11 +301,11 @@ public class Shop : MonoBehaviour
     public void Continue() {
         // TODO:    Cleanup
         
+        currentOpen = null;
+        trinketOpen = null;
+
         //          Animate an exit.
         StartCoroutine(ToGamePlay());
-
-        if(currentOpen != null) shopCards.Find(n => n.cardUI.card.Compare(currentOpen)).animator.SetTrigger("Hide");
-        if(trinketOpen != null) trinketOpen.trinket.animator.SetTrigger("Hide");
     }
 
     private IEnumerator ToGamePlay() {

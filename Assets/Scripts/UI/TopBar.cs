@@ -18,7 +18,7 @@ public class TopBar : MonoBehaviour
         TrinketUI temp = Instantiate(trinketPrefab);
         temp.transform.SetParent(trinketParent);
         temp.transform.localScale = Vector3.one;
-        temp.Setup(trinket);
+        temp.Setup(trinket, -1);
         currentTrinkets.Add(temp);
     }
 

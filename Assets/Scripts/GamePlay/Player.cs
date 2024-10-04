@@ -14,6 +14,8 @@ public class Player
     public Scoring scoring;
     public List<PlayerTrinket> trinkets;
     public List<Unlockable> unlocks;
+    public GameplayChanges gamePlayChanges;
+    
 
     public void AdjustValue(RoundEndTypes type, int value) {
         switch(type) {
@@ -49,6 +51,7 @@ public class Player
             unlocks = new List<Unlockable>();
             _currentDeck = new Deck();
             trinkets = new List<PlayerTrinket>();
+            gamePlayChanges = new GameplayChanges();
         }
         health = new Health();
         scoring = new Scoring();
@@ -57,6 +60,16 @@ public class Player
     }
 }
 
+/* 
+    Gameplay Changes used to track bools or values that trinkets can change.
+*/
+public class GameplayChanges {
+    public int maxTrinkets = 3;
+    public bool AcesLow = false;
+    public bool QueenScoring = false; 
+
+    public void Reset() { AcesLow = QueenScoring = false; }
+}
 
 
 /* 

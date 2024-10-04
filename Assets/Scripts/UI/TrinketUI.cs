@@ -10,10 +10,13 @@ public class TrinketUI : MonoBehaviour
     public Image trinketImage, trinketOutline;
     public TextMeshProUGUI priceLabel;
     public Trinket trinket;
+    private int currentPrice;
+    public int SELLPRICE { get { return currentPrice; } }
 
-    public void Setup(PlayerTrinket trinket) {
+    public void Setup(PlayerTrinket trinket, int price) {
+        currentPrice = price;
         this.trinket = trinket.baseTrinket;
         trinketImage.sprite = trinketOutline.sprite = GameManager.instance.trinketHandler.ReturnSprite(trinket.baseTrinket.IDENTIFIER);
-        priceLabel.text = trinket.sellValue.ToString();
+        priceLabel.text = currentPrice.ToString();
     }
 }

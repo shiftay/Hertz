@@ -66,13 +66,29 @@ public class Dealer : MonoBehaviour
         dealerCoin.SetActive(true);
         dealerCoin.transform.position = dealPositions[x].coinPos.position;
 
+        MAINPLAYER.trinkets.ForEach(n => {
+            if(n.baseTrinket.check == VALUECHECK.PLAY) n.baseTrinket.effect(MAINPLAYER, n.baseTrinket.ID);
+        });
+
         calculatingScore = false;
+        ValidateDeck();
         CreateCards();
         Shuffle(Deck);
         Deal();
 
+
+
         GameManager.instance.handlerUI.UpdateValues(MAINPLAYER);
         currentCard = currentHand = 0;
+    }
+
+    // IDEA
+    //   To be used for Validating that the deck is conformed to any gameplay changes that effect card value.
+    public void ValidateDeck() {
+        for(int i = 0; i < MAINPLAYER._currentDeck.cards.Count; i++) {
+            if(MAINPLAYER.gamePlayChanges.AcesLow && MAINPLAYER._currentDeck.cards[i].cardInfo.cardValue == Utils.ACE)
+                MAINPLAYER._currentDeck.cards[i].cardInfo.cardValue = 1;
+        }
     }
 
     private void SetupPlayers() {
@@ -84,8 +100,6 @@ public class Dealer : MonoBehaviour
         }
 
         MAINPLAYER.scoring.currentGold = startingGold;
-
-
     }
 
 
@@ -110,6 +124,8 @@ public class Dealer : MonoBehaviour
 
         for(int i = 0; i < MAINPLAYER._currentDeck.cards.Count; i++) {
             current = Instantiate(cardPrefab);
+
+
             current._currentCard = new Card(MAINPLAYER._currentDeck.cards[i].cardInfo);
             current.Setup(MAINPLAYER._currentDeck.cards[i]);
             current.name = MAINPLAYER._currentDeck.cards[i].cardInfo.DebugInfo();
@@ -171,6 +187,7 @@ public class Dealer : MonoBehaviour
         List<Card> hand = new List<Card>();
         for(int i = currentHand * 4; i < (currentHand * 4) + 4; i++) {
             hand.Add(playedCards[i]);
+            
             if(CurrentSUIT() == playedCards[i].cardInfo.cardSuit && highCard.cardInfo.cardValue < playedCards[i].cardInfo.cardValue) {
                 highCard = playedCards[i];
             }
@@ -234,7 +251,7 @@ public class Dealer : MonoBehaviour
             if(GoldCards().Count > 0) MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.ENHANCEMENT, GoldCards().Count, GoldCards()));
 
             MAINPLAYER.trinkets.ForEach(n => {
-                if(n.baseTrinket.check == VALUECHECK.SCORING) n.baseTrinket.effect(n.baseTrinket.ID);
+                if(n.baseTrinket.check == VALUECHECK.SCORING) n.baseTrinket.effect(MAINPLAYER, n.baseTrinket.ID);
             });
             
             GameManager.instance.handlerUI.roundEnd.ResetAnim();
@@ -275,7 +292,7 @@ public class Dealer : MonoBehaviour
         foreach(Card card in cardsToValue) {
             if(card.isHeart()) scoreFromBase += 1;
 
-            if(card.IsQueenOfSpades()) scoreFromBase += 10;
+            if(card.IsQueenOfSpades() && !MAINPLAYER.gamePlayChanges.QueenScoring) scoreFromBase += 10;
 
             if(card.ContainsDamage) scoreFromEnhancements += 1;
         }
@@ -398,6 +415,7 @@ public class Dealer : MonoBehaviour
 
 #endregion
 
+#region Input
     public void Clicked(CardGO clicked) {
         if(_currentSelected == null) {
             _currentSelected = clicked;
@@ -409,5 +427,6 @@ public class Dealer : MonoBehaviour
             EndTurn(clicked);
         }
     }
+#endregion
 
 }

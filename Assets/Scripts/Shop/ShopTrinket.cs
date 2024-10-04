@@ -21,7 +21,7 @@ public class ShopTrinket : MonoBehaviour
 
         playerTrinket = new PlayerTrinket(temp, mod);
 
-        trinket.Setup(playerTrinket);
+        trinket.Setup(playerTrinket, playerTrinket.sellValue);
     }
 
     public bool Compare(Trinket t) {
