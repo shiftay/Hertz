@@ -58,8 +58,8 @@ public sealed class Trinket
     public static Trinket Eclipse = new Trinket(TrinketEffect.Eclipse, TRINKET.ECLIPSE, VALUECHECK.PLAY, "Eclipse", 5);
     //public static Trinket Default = new Trinket(TrinketEffect.Default, TRINKET.Default, VALUECHECK.Default, "Default", 5);
 
-
-    public static List<Trinket> trinkets = new List<Trinket>() { Calculator, Triage, Pennies, Stocks, LotteryTicket, Coupon, AcesLow, QueenScoring };
+    // TODO ALWAYS UPDATE THIS LIST PLEASE 
+    public static List<Trinket> trinkets = new List<Trinket>() { Calculator, Triage, Pennies, Stocks, LotteryTicket, Coupon, AcesLow, QueenScoring, Eclipse };
     public static Trinket ReturnTrinket() { return trinkets[Random.Range(0, trinkets.Count)]; }
     public static Trinket FindTrinket(TRINKET id) { return trinkets.Find(n => n.IDENTIFIER == id); }
 }

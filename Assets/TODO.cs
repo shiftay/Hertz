@@ -36,6 +36,7 @@ public class TODO
                 > Upon getting to 0 health or below go to Game Over Screen
                     > Show progress to next unlock
                     > Show close milestones, etc..
+        IMPLEMENTED
             > Implement 'Shoot the moon'
                 > Allow players and CPUs to accomplish this
                     With the player getting rewarded with extra score and or multipliers

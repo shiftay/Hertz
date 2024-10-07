@@ -15,7 +15,8 @@ public class Player
     public List<PlayerTrinket> trinkets;
     public List<Unlockable> unlocks;
     public GameplayChanges gamePlayChanges;
-    
+    public Token currentToken;
+    public PlayerStats playerStats; // TODO Flood throughout code to update stats and to check against stats.
 
     public void AdjustValue(RoundEndTypes type, int value) {
         switch(type) {

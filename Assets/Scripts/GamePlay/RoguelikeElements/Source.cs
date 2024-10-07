@@ -5,7 +5,7 @@ using System.Data.Common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public enum SourceType { TRINKET, INTEREST, ENHANCEMENT, ENDOFROUND, SHOTTHEMOON }
+public enum SourceType { TRINKET, INTEREST, ENHANCEMENT, ENDOFROUND, SHOTTHEMOON, TOKEN }
 public class Source {
     public SourceType type;
     public int refID; // IDEA Used for Trinkets
@@ -48,11 +48,12 @@ public sealed class SourceLabels {
     public static SourceLabels EndOfRound = new SourceLabels(SourceType.ENDOFROUND, "FROM ROUND", -1, true);
     public static SourceLabels Trink = new SourceLabels(SourceType.TRINKET, "FROM", -1, false);
     public static SourceLabels ShotTheMoon = new SourceLabels(SourceType.SHOTTHEMOON, "SHOT THE MOON", -1, false);
+    public static SourceLabels Token = new SourceLabels(SourceType.TOKEN, "TOKEN", -1, false);
   
 
 
     // TODO When you add Labels add to the List
-    public static List<SourceLabels> sourceLabels = new List<SourceLabels>() { Interest, Enhancement, EndOfRound, Trink, ShotTheMoon };
+    public static List<SourceLabels> sourceLabels = new List<SourceLabels>() { Interest, Enhancement, EndOfRound, Trink, ShotTheMoon, Token };
     public static SourceLabels FindLabel(SourceType t, int id = -1) {
         return sourceLabels.Find(n => n.type == t);
     }

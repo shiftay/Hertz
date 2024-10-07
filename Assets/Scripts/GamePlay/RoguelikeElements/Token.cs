@@ -29,10 +29,13 @@ public sealed class Token
     public static Token Multi = new Token(TOKENTYPES.Multi, TokenEffects.Multi, 15);
     public static Token Gold = new Token(TOKENTYPES.Gold, TokenEffects.Gold, 12);
     public static Token Score = new Token(TOKENTYPES.Score, TokenEffects.Score, 10);
+
+    public static List<Token> tokens = new List<Token> { Multi, Gold, Score };
+    public Token returnToken(TOKENTYPES t) { return tokens.Find(n => n.type == t); }
 }
 
 public static class TokenEffects {
-    public static void Multi(Player p) { }
-    public static void Gold(Player p) { }
-    public static void Score(Player p) { }
+    public static void Multi(Player p) { p.scoring.scoreQueue.Add(new Source(SourceType.TOKEN, 2, true)); }
+    public static void Gold(Player p) { p.scoring.goldQueue.Add(new Source(SourceType.TOKEN, 5));}
+    public static void Score(Player p) { p.scoring.scoreQueue.Add(new Source(SourceType.TOKEN, 25)); }
 }
