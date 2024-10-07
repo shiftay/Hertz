@@ -10,6 +10,7 @@ public class Utils
     public const int ACE = 14;
     public const int CARDVALUEMODIFIER = 2;
     public const int DEFAULTMAXDAMAGE = 23;
+    public const int DEFAULTQUEENDAMAGE = 10;
     public const float HANDLINEVALUEX = 3.0f;
     public const float HANDLINEVALUEY = 0.75f;
     public const float ROTATEVALY = 10.0f;
@@ -18,6 +19,7 @@ public class Utils
     public const AXIS PLAYERAXIS = AXIS.SOUTH;
     public const float WONHANDUIMODIFIER = 35.0f;
     public const float HANDALIGNMENTMOD = 0.5f;
+
 
 #region Coroutine Values
     public const float ROUNDENDTRANSITION = 0.3f;

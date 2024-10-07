@@ -11,6 +11,13 @@ public class GameManager : MonoBehaviour
     public SpriteHandler spriteHandler;
     public Shop shop;
 
+    public bool animPlaying;
+    public void AnimationComplete() {
+        animPlaying = false;
+    }
+
+    public void ResetAnim() { animPlaying = true; }
+
     private void Awake() {
         instance = this;
     }

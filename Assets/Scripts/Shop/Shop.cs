@@ -307,10 +307,10 @@ public class Shop : MonoBehaviour
     }
 
     private IEnumerator ToGamePlay() {
-        GameManager.instance.handlerUI.roundEnd.ResetAnim();
+        GameManager.instance.ResetAnim();
         GameManager.instance.handlerUI.cardTransition.RandomizeAndShow();
         // Wait for Anim
-        yield return new WaitUntil(() => !GameManager.instance.handlerUI.roundEnd.animPlaying);
+        yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
         // Set State to gameplay
         GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.Gameplay);

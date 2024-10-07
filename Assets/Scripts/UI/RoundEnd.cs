@@ -23,10 +23,7 @@ public class RoundEnd : MonoBehaviour
         ShowDamage();
     }
 
-    public bool animPlaying;
-    public void AnimationComplete() {
-        animPlaying = false;
-    }
+
 
     public Animator health, gold, score;
 
@@ -40,7 +37,7 @@ public class RoundEnd : MonoBehaviour
 
     */
 
-    public void ResetAnim() { animPlaying = true; }
+
 
     [Header("Transistions")]
     public Animator healthTransition;
@@ -59,30 +56,35 @@ public class RoundEnd : MonoBehaviour
     {
         descriptor.holder.Setup(descriptor.color);
         // Reset Anim
-        ResetAnim();
+        GameManager.instance.ResetAnim();
         // Show Pop Up
         descriptor.holder.animator.SetTrigger("Display");
         // Wait for Anim
-        yield return new WaitUntil(() => !animPlaying);
+        yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
 
         //Reset Anim
-        ResetAnim();
+        GameManager.instance.ResetAnim();
         // Slide Gold ontop of pop up
         transition.SetTrigger("Update" + descriptor.title);
         // Wait for Anim
-        yield return new WaitUntil(() => !animPlaying);
+        yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
         yield return StartCoroutine(GhostWrite(descriptor.title, descriptor.holder.title));
         // Load in each individual scoring reason
         int value = 0;
+        int multiplier = 0;
+
         for(int i = 0; i < queue.Count; i++) {
             yield return new WaitForSeconds(Utils.ROUNDENDTRANSITION); 
             RoundEndValues temp = Instantiate(incomePrefab);
             temp.SetValues(SourceLabels.FormatLabel(queue[i].type, descriptor.title, queue[i].refID), queue[i].VALUE, descriptor.color, queue[i].isMulti ? "x" : "");
             temp.transform.SetParent(descriptor.holder.valuesParent);
             temp.transform.localScale = Vector3.one;
-            value += queue[i].VALUE;
+
+            if(queue[i].isMulti) multiplier += queue[i].VALUE;
+            else value += queue[i].VALUE;
+
             if(queue[i].associatedCards.Count > 0) {
                 GameObject reHolder = Instantiate(RoundEndHolder);
                 reHolder.transform.SetParent(descriptor.cardParent);
@@ -93,19 +95,19 @@ public class RoundEnd : MonoBehaviour
         }
 
         // ResetAnim
-        ResetAnim();
+        GameManager.instance.ResetAnim();
         //Pop Gold Value to new Gold Value
-
-        currentPlayer.AdjustValue(descriptor.type, value);
+        currentPlayer.AdjustValue(descriptor.type, value * multiplier);
         GameManager.instance.handlerUI.UpdateValues(currentPlayer);
         mainValue.SetTrigger("Pop");
+        
         //wait for anim
-        yield return new WaitUntil(() => !animPlaying);
+        yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
-        ResetAnim();
+        GameManager.instance.ResetAnim();
         transition.SetTrigger("Hide" + descriptor.title); 
         descriptor.holder.animator.SetTrigger("Hide");
-        yield return new WaitUntil(() => !animPlaying);
+        yield return new WaitUntil(() => !GameManager.instance.animPlaying);
         
         ScheduleCardsForDeletion(descriptor.cardParent);
         if(callBack != null) callBack();
@@ -120,10 +122,10 @@ public class RoundEnd : MonoBehaviour
     }
 
     private IEnumerator Shop() {
-        ResetAnim();
+        GameManager.instance.ResetAnim();
         GameManager.instance.handlerUI.cardTransition.RandomizeAndShow();
         // Bring Card Transistion In
-        yield return new WaitUntil(() => !animPlaying);
+        yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
         // Clean Up Cards
         CleanUp();

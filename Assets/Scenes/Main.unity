@@ -9663,7 +9663,6 @@ MonoBehaviour:
   incomePrefab: {fileID: 8805038159051257315, guid: 72a030338518ac041887aec78deb2338, type: 3}
   RoundEndHolder: {fileID: 244801763105331707, guid: b15fefd1a8e282c48a52285674f09486, type: 3}
   popUp: {fileID: 0}
-  animPlaying: 0
   health: {fileID: 1641141655}
   gold: {fileID: 1723422992}
   score: {fileID: 925735541}
@@ -20403,6 +20402,7 @@ MonoBehaviour:
   handlerUI: {fileID: 1700453949}
   spriteHandler: {fileID: 1592568206}
   shop: {fileID: 1385498633}
+  animPlaying: 0
 --- !u!4 &1592568205
 Transform:
   m_ObjectHideFlags: 0
@@ -20591,7 +20591,7 @@ MonoBehaviour:
     identifier: 8
   - baseSprite: {fileID: 21300000, guid: 75ce719fcbb74bc44b8ee9d23c80238b, type: 3}
     identifier: 11
-  tokenIDentifiers: []
+  tokenIdentifiers: []
 --- !u!1001 &1594583657
 PrefabInstance:
   m_ObjectHideFlags: 0

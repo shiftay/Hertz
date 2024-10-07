@@ -225,27 +225,23 @@ public class Dealer : MonoBehaviour
             int shotTheMoon = ShotTheMoon();
 
             if(shotTheMoon > 0) {
-
+                
+                // If player shot the moon we give them default max score, and a multiplier
                 if(IsitPlayer(shotTheMoon)) {
-                    MAINPLAYER.scoring.scoreQueue.Add(new Source(SourceType.SHOTTHEMOON, Utils.DEFAULTMAXDAMAGE * 3));
+                    MAINPLAYER.scoring.scoreQueue.Add(new Source(SourceType.SHOTTHEMOON, Utils.DEFAULTMAXDAMAGE));
                     MAINPLAYER.scoring.scoreQueue.Add(new Source(SourceType.SHOTTHEMOON, 3, true));
                 } else {
-                    MAINPLAYER.health.damageQueue.Add(new Source(SourceType.SHOTTHEMOON, Utils.DEFAULTMAXDAMAGE));
+                    // If CPU shot the moon player takes default max damage
+                    if(MAINPLAYER.gamePlayChanges.QueenScoring)
+                        MAINPLAYER.health.damageQueue.Add(new Source(SourceType.SHOTTHEMOON, Utils.DEFAULTMAXDAMAGE - Utils.DEFAULTQUEENDAMAGE));
+                    else
+                        MAINPLAYER.health.damageQueue.Add(new Source(SourceType.SHOTTHEMOON, Utils.DEFAULTMAXDAMAGE));
                 }
-
-                // Someone shot the moon
-                /* 
-                    TODO    Figure out who shot the moon
-                            Score it appropriately.
-                            IF CPU Won
-                                Player takes full damage
-                            IF Player Won
-                                Player gets triple score AND a multiplier to all score
-                */
 
 
                 // Will have to show animation, after we update the queue, then 
 
+                yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
 
             } else {
@@ -271,10 +267,10 @@ public class Dealer : MonoBehaviour
                 if(n.baseTrinket.check == VALUECHECK.SCORING) n.baseTrinket.effect(MAINPLAYER, n.baseTrinket.ID);
             });
             
-            GameManager.instance.handlerUI.roundEnd.ResetAnim();
+            GameManager.instance.ResetAnim();
             GameManager.instance.handlerUI.cardTransition.RandomizeAndShow();
             // Wait for Anim
-            yield return new WaitUntil(() => !GameManager.instance.handlerUI.roundEnd.animPlaying);
+            yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
             GameManager.instance.handlerUI.cardTransition.Remove();
 
