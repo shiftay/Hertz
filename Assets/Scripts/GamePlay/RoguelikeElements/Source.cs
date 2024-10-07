@@ -5,27 +5,30 @@ using System.Data.Common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public enum SourceType { TRINKET, INTEREST, ENHANCEMENT, ENDOFROUND }
+public enum SourceType { TRINKET, INTEREST, ENHANCEMENT, ENDOFROUND, SHOTTHEMOON }
 public class Source {
     public SourceType type;
     public int refID; // IDEA Used for Trinkets
     public int value;
     public List<Card> associatedCards;
+    public bool isMulti;
 
     public int VALUE { get { return value; }}
 
-    public Source(SourceType t, int v, List<Card> cards, int id = -1) {
+    public Source(SourceType t, int v, List<Card> cards, bool isMulti = false, int id = -1) {
         associatedCards = new List<Card>(cards);
         type = t;
         value = v;
         refID = id;
+        this.isMulti = isMulti;
     }   
 
-    public Source(SourceType t, int v, int id = -1) {
+    public Source(SourceType t, int v, bool isMulti = false, int id = -1) {
         associatedCards = new List<Card>();
         type = t;
         value = v;
         refID = id;
+        this.isMulti = isMulti;
     }   
 }
 
@@ -44,6 +47,7 @@ public sealed class SourceLabels {
     public static SourceLabels Enhancement = new SourceLabels(SourceType.ENHANCEMENT, "UPGRADED CARDS", -1, true);
     public static SourceLabels EndOfRound = new SourceLabels(SourceType.ENDOFROUND, "FROM ROUND", -1, true);
     public static SourceLabels Trink = new SourceLabels(SourceType.TRINKET, "FROM", -1, false);
+    public static SourceLabels ShotTheMoon = new SourceLabels(SourceType.SHOTTHEMOON, "SHOT THE MOON", -1, false);
   
 
 

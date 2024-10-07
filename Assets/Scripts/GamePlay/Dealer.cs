@@ -29,7 +29,7 @@ public class Dealer : MonoBehaviour
     public Player MAINPLAYER { get { return players.Find(n => n.isPlayer); }}
     public CardGO cardPrefab;
     public List<HandPositions> dealPositions;
-    public GameObject dealerCoin;
+    public DealerToken dealerCoin;
     public HandController playerController;
 #endregion
 
@@ -62,7 +62,7 @@ public class Dealer : MonoBehaviour
         int x = UnityEngine.Random.Range(0, dealPositions.Count);
 
         currentTurn = shortGame ? players.Find(n=> n.isPlayer) : players[x];
-        dealerCoin.SetActive(true);
+        dealerCoin.gameObject.SetActive(true);
         dealerCoin.transform.position = dealPositions[x].coinPos.position;
 
         MAINPLAYER.trinkets.ForEach(n => {
@@ -214,7 +214,7 @@ public class Dealer : MonoBehaviour
         currentCard = 0;
 
         if(winnerOfHand._currentHand.cards.Count == 0)  { // No more cards for the winner to play.
-            dealerCoin.SetActive(false);
+            dealerCoin.gameObject.SetActive(false);
 
 #region Scoring  
              /* 
@@ -222,22 +222,39 @@ public class Dealer : MonoBehaviour
                     > Find Scoring / Healing trinkets
                         > Add the values.
             */
+            int shotTheMoon = ShotTheMoon();
 
-            Score(DamageOrScoring(true), true);
-            Score(DamageOrScoring(false) , false);
+            if(shotTheMoon > 0) {
 
-            // FIXME Make this under utilities as a quick and easy call back.
-            // int count = 0;
-            // bool shotTheMoon = false;
-            // for(int i = 0; i < players.Count; i++) {
-            //     count = 0;
-            //     damageCards.ForEach(n => {
-            //         if(n.CURRENTOWNER == players[i]) count++;
-            //     });
-            //     if(count == 14) shotTheMoon = true;
-            // }
-            // TODO Start defining "Shoot the moon"
-            // Debug.Log("Did someone shoot the moon? " + shotTheMoon);
+                if(IsitPlayer(shotTheMoon)) {
+                    MAINPLAYER.scoring.scoreQueue.Add(new Source(SourceType.SHOTTHEMOON, Utils.DEFAULTMAXDAMAGE * 3));
+                    MAINPLAYER.scoring.scoreQueue.Add(new Source(SourceType.SHOTTHEMOON, 3, true));
+                } else {
+                    MAINPLAYER.health.damageQueue.Add(new Source(SourceType.SHOTTHEMOON, Utils.DEFAULTMAXDAMAGE));
+                }
+
+                // Someone shot the moon
+                /* 
+                    TODO    Figure out who shot the moon
+                            Score it appropriately.
+                            IF CPU Won
+                                Player takes full damage
+                            IF Player Won
+                                Player gets triple score AND a multiplier to all score
+                */
+
+
+                // Will have to show animation, after we update the queue, then 
+
+
+
+            } else {
+
+                Score(DamageOrScoring(true), true);
+                Score(DamageOrScoring(false) , false);
+            }
+
+
      
             int MAXDAMAGE = DamageEnhancements + Utils.DEFAULTMAXDAMAGE;
             MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.ENDOFROUND, 
@@ -274,9 +291,25 @@ public class Dealer : MonoBehaviour
 
 #region Utility Callbacks
 
-    [Button("How many enhanced cards")]
-    public void DebugDeck(){
-        Debug.Log(MAINPLAYER._currentDeck.cards.FindAll(n=>n.enhancements.Count > 0).Count);
+    public int ShotTheMoon() {
+        int count = 0;
+        int shotTheMoon = -1;
+
+        for(int i = 0; i < players.Count; i++) {
+            count = 0;
+            DamageCards(false).ForEach(n => {
+                if(n.CURRENTOWNER == players[i]) count++;
+            });
+
+            if(players[i] == MAINPLAYER && MAINPLAYER.gamePlayChanges.ShootWithoutQueen && count == 13) shotTheMoon = i;
+            else if(count == 14) shotTheMoon = i;
+        }
+
+        return shotTheMoon;
+    }
+
+    public bool IsitPlayer(int index) {
+        return players[index] == MAINPLAYER; 
     }
 
     private void CleanUp() {
@@ -361,8 +394,8 @@ public class Dealer : MonoBehaviour
         return currentCard;
     }
 
-    public List<Card> DamageOrScoring(bool isDamage) {
-        return playedCards.FindAll(n => (n.isHeart() || n.IsQueenOfSpades() || n.ContainsDamage) && n.CURRENTOWNER.isPlayer == isDamage).ToList();
+    public List<Card> DamageOrScoring(bool isPlayer) {
+        return playedCards.FindAll(n => (n.isHeart() || n.IsQueenOfSpades() || n.ContainsDamage) && n.CURRENTOWNER.isPlayer == isPlayer).ToList();
     }
 
     public int DamageEnhancements => playedCards.FindAll(n => n.ContainsDamage).Count;

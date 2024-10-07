@@ -67,8 +67,9 @@ public class GameplayChanges {
     public int maxTrinkets = 3;
     public bool AcesLow = false;
     public bool QueenScoring = false; 
+    public bool ShootWithoutQueen = false;
 
-    public void Reset() { AcesLow = QueenScoring = false; }
+    public void Reset() { ShootWithoutQueen = AcesLow = QueenScoring = false; }
 }
 
 

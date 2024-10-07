@@ -6,6 +6,7 @@ public class TODO
 {
     /* 
         TODO Mega List
+        TODO Mega List
 
         > Unlockables
             > Progress to unlock: Tokens, Trinkets, More Trinket Slots, etc..
@@ -45,7 +46,8 @@ public class TODO
             > Trinkets
             > Tokens
     
-    
+        TODO Mega List
+        TODO Mega List
     
     
     

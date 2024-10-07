@@ -16,7 +16,7 @@ public class TrinketUI : MonoBehaviour
     public void Setup(PlayerTrinket trinket, int price) {
         currentPrice = price;
         this.trinket = trinket.baseTrinket;
-        trinketImage.sprite = trinketOutline.sprite = GameManager.instance.trinketHandler.ReturnSprite(trinket.baseTrinket.IDENTIFIER);
+        trinketImage.sprite = trinketOutline.sprite = GameManager.instance.spriteHandler.ReturnSprite(trinket.baseTrinket.IDENTIFIER);
         priceLabel.text = currentPrice.ToString();
     }
 }

@@ -19,9 +19,12 @@ public class Utils
     public const float WONHANDUIMODIFIER = 35.0f;
     public const float HANDALIGNMENTMOD = 0.5f;
 
+#region Coroutine Values
+    public const float ROUNDENDTRANSITION = 0.3f;
+#endregion
+
 #region RogueLike Elements
-    public enum EFFECT { PRE, DURING, POST }
-    public enum TRINKETTYPE { PLAY, SCORING, HEALING, GOLD }
+
     public enum UNLOCKTYPE { CARDENHANCEMENT, TRINKET, TRINKETSLOT }
     public enum CARDENHANCEMENT { DAMAGE, HEAL, GOLD, XRAY }
 

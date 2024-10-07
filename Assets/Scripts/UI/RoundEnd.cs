@@ -77,9 +77,9 @@ public class RoundEnd : MonoBehaviour
         // Load in each individual scoring reason
         int value = 0;
         for(int i = 0; i < queue.Count; i++) {
-            yield return new WaitForSeconds(0.3f);  // TODO: Turn into constant
+            yield return new WaitForSeconds(Utils.ROUNDENDTRANSITION); 
             RoundEndValues temp = Instantiate(incomePrefab);
-            temp.SetValues(SourceLabels.FormatLabel(queue[i].type, descriptor.title, queue[i].refID), queue[i].VALUE, descriptor.color);
+            temp.SetValues(SourceLabels.FormatLabel(queue[i].type, descriptor.title, queue[i].refID), queue[i].VALUE, descriptor.color, queue[i].isMulti ? "x" : "");
             temp.transform.SetParent(descriptor.holder.valuesParent);
             temp.transform.localScale = Vector3.one;
             value += queue[i].VALUE;

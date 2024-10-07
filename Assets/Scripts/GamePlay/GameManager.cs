@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     public UIHandler handlerUI;
     public SpriteHandler spriteHandler;
     public Shop shop;
-    public TrinketHandler trinketHandler;
 
     private void Awake() {
         instance = this;
