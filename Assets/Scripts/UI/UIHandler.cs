@@ -16,6 +16,7 @@ public class UIHandler : MonoBehaviour
     public TopBar topBar;
     public RoundEnd roundEnd;
     public CardTransition cardTransition; 
+    public MoonTransition shotTheMoon;
 
     [Header("Label Anims")]
     public Animator score;
@@ -45,5 +46,7 @@ public class UIHandler : MonoBehaviour
         bottomBar.SetPlayerVals(p);
         health.SetTrigger("Pop");
     }
+
+    public void ShotTheMoon() {}
     
 }

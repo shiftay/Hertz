@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities.Editor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [System.Serializable]
 public class HandPositions {
@@ -19,8 +20,9 @@ public class Dealer : MonoBehaviour
 {
 
 #region DEBUG
-    public bool shortGame;
-    public int startingGold;
+    public bool debug_shortGame;
+    public int debug_startingGold;
+    public bool debug_shotTheMoon;
 #endregion
 
 #region Setup Vars
@@ -61,7 +63,7 @@ public class Dealer : MonoBehaviour
     public void GameSetup() { 
         int x = UnityEngine.Random.Range(0, dealPositions.Count);
 
-        currentTurn = shortGame ? players.Find(n=> n.isPlayer) : players[x];
+        currentTurn = debug_shortGame ? players.Find(n=> n.isPlayer) : players[x];
         dealerCoin.gameObject.SetActive(true);
         dealerCoin.transform.position = dealPositions[x].coinPos.position;
 
@@ -98,12 +100,12 @@ public class Dealer : MonoBehaviour
             players.Add(temp);
         }
 
-        MAINPLAYER.scoring.currentGold = startingGold;
+        MAINPLAYER.scoring.currentGold = debug_startingGold;
     }
 
 
     public void Deal() {
-        for(int i = 0; i < (shortGame ? 4 : Deck.Count); i++) {
+        for(int i = 0; i < (debug_shortGame ? 4 : Deck.Count); i++) {
             // I % 4 to make sure we deal to 4 different players.
             Player curPlayer = players[i % 4];
             Deck[i].transform.position = dealPositions[i % 4].dealPos.transform.position;
@@ -217,19 +219,19 @@ public class Dealer : MonoBehaviour
             dealerCoin.gameObject.SetActive(false);
 
 #region Scoring  
-             /* 
-                TODO > Look through trinkets.
-                    > Find Scoring / Healing trinkets
-                        > Add the values.
-            */
             int shotTheMoon = ShotTheMoon();
+
+            if(debug_shotTheMoon) shotTheMoon = players.FindIndex(n => n == MAINPLAYER);
 
             if(shotTheMoon > 0) {
                 
                 // If player shot the moon we give them default max score, and a multiplier
+                // Player gets max gold and a gold multiplier.
                 if(IsitPlayer(shotTheMoon)) {
                     MAINPLAYER.scoring.scoreQueue.Add(new Source(SourceType.SHOTTHEMOON, Utils.DEFAULTMAXDAMAGE));
                     MAINPLAYER.scoring.scoreQueue.Add(new Source(SourceType.SHOTTHEMOON, 3, true));
+                    MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.SHOTTHEMOON, 10));
+                    MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.SHOTTHEMOON, 2, true));
                 } else {
                     // If CPU shot the moon player takes default max damage
                     if(MAINPLAYER.gamePlayChanges.QueenScoring)
@@ -238,31 +240,40 @@ public class Dealer : MonoBehaviour
                         MAINPLAYER.health.damageQueue.Add(new Source(SourceType.SHOTTHEMOON, Utils.DEFAULTMAXDAMAGE));
                 }
 
+                Debug.Log("Run animation");
 
                 // Will have to show animation, after we update the queue, then 
+                GameManager.instance.ResetAnim();
+                GameManager.instance.handlerUI.shotTheMoon.Setup(IsitPlayer(shotTheMoon));
 
                 yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
-
+                GameManager.instance.handlerUI.shotTheMoon.Reset();
             } else {
-
+                // BASE Scoring
+                int MAXDAMAGE = DamageEnhancements + Utils.DEFAULTMAXDAMAGE;
+                MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.ENDOFROUND, 
+                                                            Utils.ConvertRange(0, MAXDAMAGE, 10, 1, (MAINPLAYER.health.CurrentDamageQueue())) + Mathf.FloorToInt(1.25f * (MAXDAMAGE - Utils.DEFAULTMAXDAMAGE)))); 
                 Score(DamageOrScoring(true), true);
                 Score(DamageOrScoring(false) , false);
             }
 
 
-     
-            int MAXDAMAGE = DamageEnhancements + Utils.DEFAULTMAXDAMAGE;
-            MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.ENDOFROUND, 
-                                                        Utils.ConvertRange(0, MAXDAMAGE, 10, 1, (MAINPLAYER.health.CurrentDamageQueue())) + Mathf.FloorToInt(1.25f * (MAXDAMAGE - Utils.DEFAULTMAXDAMAGE))));  
+             
+
+            Debug.Log("Animation should be over");
+
+            // INTEREST
             if(MAINPLAYER.scoring.currentGold / 5 > 5) {
                 MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.INTEREST, 5));
             } else {
                 MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.INTEREST, MAINPLAYER.scoring.currentGold / 5));
             }
 
+            // Gold Cards
             if(GoldCards().Count > 0) MAINPLAYER.scoring.goldQueue.Add(new Source(SourceType.ENHANCEMENT, GoldCards().Count, GoldCards()));
 
+            // Trinkets
             MAINPLAYER.trinkets.ForEach(n => {
                 if(n.baseTrinket.check == VALUECHECK.SCORING) n.baseTrinket.effect(MAINPLAYER, n.baseTrinket.ID);
             });

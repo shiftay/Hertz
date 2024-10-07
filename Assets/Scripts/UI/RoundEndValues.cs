@@ -12,7 +12,7 @@ public class RoundEndValues : MonoBehaviour
 
     public void SetValues(string title, int value, Color color, string valueModifier = "") {
         this.title.text = title;
-        this.value.text = value.ToString();
+        this.value.text = valueModifier + value.ToString();
         background.color = color;
     }
 }

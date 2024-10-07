@@ -59,7 +59,12 @@ public class Utils
     }
 #endregion
 
-    
+#region Animation Keywords
+
+    public const string DISPLAY = "Display";
+    public const string HIDE = "Hide";
+
+#endregion
 
 
 }

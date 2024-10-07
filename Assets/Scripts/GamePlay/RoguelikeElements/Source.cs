@@ -52,7 +52,7 @@ public sealed class SourceLabels {
 
 
     // TODO When you add Labels add to the List
-    public static List<SourceLabels> sourceLabels = new List<SourceLabels>() { Interest, Enhancement, EndOfRound, Trink };
+    public static List<SourceLabels> sourceLabels = new List<SourceLabels>() { Interest, Enhancement, EndOfRound, Trink, ShotTheMoon };
     public static SourceLabels FindLabel(SourceType t, int id = -1) {
         return sourceLabels.Find(n => n.type == t);
     }

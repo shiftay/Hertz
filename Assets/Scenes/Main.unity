@@ -3524,6 +3524,8 @@ GameObject:
   - component: {fileID: 231192775}
   - component: {fileID: 231192776}
   - component: {fileID: 231192777}
+  - component: {fileID: 231192778}
+  - component: {fileID: 231192779}
   m_Layer: 5
   m_Name: ShotTheMoon
   m_TagString: Untagged
@@ -3585,6 +3587,36 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &231192778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231192774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89915e378a89d194a80f9fe9cf50f050, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &231192779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231192774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93f7bb67de9338848bc9985d8e169c1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 231192776}
+  icons:
+  - {fileID: 53344353}
+  - {fileID: 346428233}
+  - {fileID: 1112709879}
+  - {fileID: 160073460}
 --- !u!1001 &245356511
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15975,8 +16007,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 599b165a69bc66746a2259fb08e52fea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shortGame: 1
-  startingGold: 5
+  debug_shortGame: 1
+  debug_startingGold: 5
+  debug_shotTheMoon: 1
   Deck: []
   cardPrefab: {fileID: 1773448044835626266, guid: 858791a15949c4249afe38dc05b6765f, type: 3}
   dealPositions:
@@ -15992,7 +16025,7 @@ MonoBehaviour:
   - dealPos: {fileID: 1023258105}
     coinPos: {fileID: 4384299}
     cardPlayedPos: {fileID: 1990525948}
-  dealerCoin: {fileID: 38298932}
+  dealerCoin: {fileID: 38298935}
   playerController: {fileID: 846550454}
   _currentSelected: {fileID: 0}
 --- !u!4 &1266580979
@@ -22477,6 +22510,7 @@ MonoBehaviour:
   topBar: {fileID: 1516440937}
   roundEnd: {fileID: 734739926}
   cardTransition: {fileID: 1835777097}
+  shotTheMoon: {fileID: 231192779}
   score: {fileID: 925735541}
   gold: {fileID: 1723422992}
   health: {fileID: 1641141655}
