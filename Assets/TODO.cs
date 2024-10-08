@@ -8,24 +8,41 @@ public class TODO
         TODO Mega List
         TODO Mega List
 
+        Main Menu
+            > Selectable States:
+                > Start Run
+                > Continue Run
+                > Progress
+                > Options
+
+            > Continue Run
+                > Shows small screen of what the run stats are
+                    > HP + Score + Gold + Trinkets + Current Round, etc..
+                > Abandon Run
+                    IF Run abandoned do we tally score?
+                > Continue Run
+
+
+            > Progress
+                > Shows upcoming unlockables
+                    > Progress bar, with a number for the next milestone
+                > Shows already unlocked things
+            
+            > Options
+                > Volume
+                > Game Speed
+                    > Enum based for simplicity
+                > Reset Progress
+
         > Unlockables
             > Progress to unlock: Tokens, Trinkets, More Trinket Slots, etc..
-
-        > SAVING
-        > LOADING
-
-
 
         > SHOP
             > Featured Item
                 > Packs with multiple random cards (2 / 3)
                 > Tokens that change the look of dealer token, and gives a passive.
         
-        > SETTINGS
-            > Volume
-            > Game Speed
-                > Enum based for simplicity
-            > Reset Progress
+
 
         > GAMEPLAY
             > Losing the game
@@ -41,11 +58,16 @@ public class TODO
                     > Show progress to next unlock
                     > Show close milestones, etc..
         IMPLEMENTED
+        > SAVING
+        > LOADING
+
             > Implement 'Shoot the moon'
                 > Allow players and CPUs to accomplish this
                     With the player getting rewarded with extra score and or multipliers
                     The amount of damage the player takes from the CPU Shooting the moon, should be sufficient for the downside
 
+
+        IDEA
         > Brain storm more content
             > Enhancements
             > Trinkets
