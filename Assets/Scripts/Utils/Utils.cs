@@ -7,6 +7,7 @@ public class Utils
     public enum CARDSUIT { HEART, SPADE, DIAMOND, CLUB, NULL }
     public enum AXIS { NORTH, EAST, SOUTH, WEST }
     public enum DIFFICULITIES { EASY, NORMAL, HARD }
+    public enum SPEED { SLOW, NORMAL, FAST }
     public const int ACE = 14;
     public const int CARDVALUEMODIFIER = 2;
     public const int DEFAULTMAXDAMAGE = 23;

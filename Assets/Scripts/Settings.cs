@@ -2,8 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Settings : MonoBehaviour
+[System.Serializable]
+public class Settings
 {
+
+    public float SFX = 0.5f;
+    public float MUSIC = 0.5f;
+    public Utils.SPEED gameSpeed = Utils.SPEED.NORMAL;
+
+    public Settings() {}
+
     /*
         IMPLEMENT
 

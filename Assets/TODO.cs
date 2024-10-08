@@ -10,8 +10,12 @@ public class TODO
 
         > Unlockables
             > Progress to unlock: Tokens, Trinkets, More Trinket Slots, etc..
-            > Savable.
-        
+
+        > SAVING
+        > LOADING
+
+
+
         > SHOP
             > Featured Item
                 > Packs with multiple random cards (2 / 3)

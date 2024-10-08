@@ -21,7 +21,7 @@ using UnityEngine;
 
 
 
-
+[System.Serializable]
 public sealed class Unlockable
 {
     public Utils.UNLOCKTYPE type;

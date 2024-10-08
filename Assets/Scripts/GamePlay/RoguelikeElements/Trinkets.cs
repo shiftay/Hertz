@@ -29,11 +29,11 @@ public enum TRINKET {   FULL_MOON, TRIAGE, ECLIPSE, CALCULATOR, JACKS_WILD_HEART
 // Used to check when to activate the trinket
 public enum VALUECHECK { SCORING, SHOP, MOON, PLAY }
 
+[System.Serializable]
 public sealed class Trinket 
 {
-    private TRINKET identifier;
+    public TRINKET identifier;
     public int ID { get { return (int)identifier; } }
-    public TRINKET IDENTIFIER { get { return identifier; } }
 
     private int baseValue;
     public int VALUE { get { return baseValue; } }
@@ -61,37 +61,37 @@ public sealed class Trinket
     // TODO ALWAYS UPDATE THIS LIST PLEASE 
     public static List<Trinket> trinkets = new List<Trinket>() { Calculator, Triage, Pennies, Stocks, LotteryTicket, Coupon, AcesLow, QueenScoring, Eclipse };
     public static Trinket ReturnTrinket() { return trinkets[Random.Range(0, trinkets.Count)]; }
-    public static Trinket FindTrinket(TRINKET id) { return trinkets.Find(n => n.IDENTIFIER == id); }
+    public static Trinket FindTrinket(TRINKET id) { return trinkets.Find(n => n.identifier == id); }
 }
 
 public static class TrinketEffect {
     // Triage - Heals the player for every won hand.
     public static void Triage(Player p, int id) {
         if(GameManager.instance.dealer.PlayerCards().Count / 4 > 0)
-            p.health.damageQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.PlayerCards().Count / 4, false, id));
+            p.currentGameStats.health.damageQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.PlayerCards().Count / 4, false, id));
     }
 
     // Pennies - All 2s won count as an extra money.
     public static void Pennies(Player p, int id) {
         if(GameManager.instance.dealer.PlayerCards().FindAll(n => n.cardInfo.cardValue == 2).Count > 0)
-           p.scoring.goldQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.PlayerCards().FindAll(n => n.cardInfo.cardValue == 2).Count, false, id));
+           p.currentGameStats.scoring.goldQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.PlayerCards().FindAll(n => n.cardInfo.cardValue == 2).Count, false, id));
     }
 
     // Stocks - Get more interest between rounds. 
     public static void Stocks(Player p, int id) {
-        p.scoring.goldQueue.Add(new Source(SourceType.TRINKET, 
-        p.scoring.currentGold / 5 > 5 ? 5 : p.scoring.currentGold / 5, // Basic INTEREST Math.
+        p.currentGameStats.scoring.goldQueue.Add(new Source(SourceType.TRINKET, 
+        p.currentGameStats.scoring.currentGold / 5 > 5 ? 5 : p.currentGameStats.scoring.currentGold / 5, // Basic INTEREST Math.
         false, id));
     }
     // Lottery Ticket - Chance to get double gold earned at the end of each round.
     public static void LotteryTicket(Player p, int id) {
         if(Random.Range(0, 10) < 2)
-            p.scoring.goldQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.MAINPLAYER.scoring.currentGold, false, id));
+            p.currentGameStats.scoring.goldQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.MAINPLAYER.currentGameStats.scoring.currentGold, false, id));
     } 
     // Player gains score at the end of the round equal to their trinkets sell value.
     public static void Calculator(Player p, int id) {
         if(p.Value() > 0)
-            p.scoring.goldQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.dealer.MAINPLAYER.Value(), false, id));
+            p.currentGameStats.scoring.goldQueue.Add(new Source(SourceType.TRINKET, GameManager.instance.MAINPLAYER.Value(), false, id));
     }
 
     public static void Coupon(Player p, int id) {

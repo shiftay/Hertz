@@ -14,7 +14,7 @@ public class ShopTrinket : MonoBehaviour
         extras.SetActive(true);
         Trinket temp = Trinket.ReturnTrinket();
 
-        while(  GameManager.instance.dealer.MAINPLAYER.HasTrinket(temp.IDENTIFIER)
+        while(  GameManager.instance.MAINPLAYER.HasTrinket(temp.identifier)
                 || GameManager.instance.shop.ContainsTrinket(temp)) temp = Trinket.ReturnTrinket();
 
         TRINKETMOD mod = PlayerTrinket.ReturnMod();

@@ -63,7 +63,7 @@ public class Shop : MonoBehaviour
 
         currentOpen = null;
 
-        player.trinkets.ForEach(n => {
+        player.currentGameStats.trinkets.ForEach(n => {
             if(n.baseTrinket.check == VALUECHECK.SHOP) {
                 n.baseTrinket.effect(_currentPlayer, n.baseTrinket.ID);
             }
@@ -91,11 +91,11 @@ public class Shop : MonoBehaviour
     }
 
     public void BuyTrinket(ShopTrinket trinket) {
-        if(!_currentPlayer.scoring.CanBuy(trinket.playerTrinket.sellValue)) return;
+        if(!_currentPlayer.currentGameStats.scoring.CanBuy(trinket.playerTrinket.sellValue)) return;
 
 
-        _currentPlayer.trinkets.Add(trinket.playerTrinket);
-        _currentPlayer.scoring.Buy(trinket.playerTrinket.sellValue);
+        _currentPlayer.currentGameStats.trinkets.Add(trinket.playerTrinket);
+        _currentPlayer.currentGameStats.scoring.Buy(trinket.playerTrinket.sellValue);
         GameManager.instance.handlerUI.UpdateGold(_currentPlayer);
         trinket.Bought();
         trinketOpen.trinket.animator.SetTrigger("Hide");
@@ -122,11 +122,11 @@ public class Shop : MonoBehaviour
 
 #region View Deck
     public void SetupDeck() {
-        _currentPlayer._currentDeck.Sort();
+        _currentPlayer.currentGameStats.deck.Sort();
 
         for(int i = 0; i < cards.Count; i++) {
-            cards[i].Setup( GameManager.instance.dealer.MAINPLAYER._currentDeck.cards[i],
-                            GameManager.instance.dealer.MAINPLAYER._currentDeck.cards[i].enhancements);
+            cards[i].Setup( GameManager.instance.MAINPLAYER.currentGameStats.deck.cards[i],
+                            GameManager.instance.MAINPLAYER.currentGameStats.deck.cards[i].enhancements);
         }
     }
 
@@ -148,8 +148,8 @@ public class Shop : MonoBehaviour
 
     public void BuyCard() {
         shopCards.Find(n => n.cardUI.card.Compare(currentOpen)).animator.SetTrigger("Hide");
-        _currentPlayer._currentDeck.AddCard(currentOpen);
-        _currentPlayer.scoring.Buy(ConvertRarityToPrice(currentOpen.rarity));
+        _currentPlayer.currentGameStats.deck.AddCard(currentOpen);
+        _currentPlayer.currentGameStats.scoring.Buy(ConvertRarityToPrice(currentOpen.rarity));
         shopCards.Find(n => n.cardUI.card.Compare(currentOpen)).Sold();
 
         GameManager.instance.handlerUI.UpdateGold(_currentPlayer);
@@ -209,7 +209,7 @@ public class Shop : MonoBehaviour
 
     public void ShowComparison(CardUI card) {
         currentOpen = card.card;
-        comparison.Setup(GameManager.instance.dealer.MAINPLAYER._currentDeck.cards.Find(n => n.Compare(card.card)), card.card);
+        comparison.Setup(GameManager.instance.MAINPLAYER.currentGameStats.deck.cards.Find(n => n.Compare(card.card)), card.card);
     }
 
     /*
@@ -243,11 +243,11 @@ public class Shop : MonoBehaviour
     public void ReRoll() {
         if(rerolling) return;
 
-        if(_currentPlayer.scoring.CanBuy(currentAmount))
+        if(_currentPlayer.currentGameStats.scoring.CanBuy(currentAmount))
         {
             rerolling = true;
             //          Update Gold.
-            _currentPlayer.scoring.Buy(currentAmount);
+            _currentPlayer.currentGameStats.scoring.Buy(currentAmount);
             // TODO     Update reroll Amount
             //          Update Label
             SetLabel();

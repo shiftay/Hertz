@@ -13,7 +13,6 @@ public class Health {
         foreach(Source source in damageQueue) retVal += source.VALUE;
         return retVal;
     }
-    public int healingQueue;   
 
     public Health() {
         currentHealth = MAXHEALTH;

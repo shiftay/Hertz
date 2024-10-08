@@ -8,7 +8,7 @@ using UnityEngine.Android;
 public class Card 
 {
     public CardInfo cardInfo;
-    private Player _currentOwner;
+    private PlayerChecks _currentOwner;
     public int cardPlayed, handPlayed;
     public bool winningCard;
     public List<Enhancements> enhancements;
@@ -19,7 +19,7 @@ public class Card
         return (card.cardInfo.cardSuit == cardInfo.cardSuit && card.cardInfo.cardValue == cardInfo.cardValue);
     }
 
-    public Player CURRENTOWNER {
+    public PlayerChecks CURRENTOWNER {
         get { return _currentOwner; }
         set { _currentOwner = value; }
     }

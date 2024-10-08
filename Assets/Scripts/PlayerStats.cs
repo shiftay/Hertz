@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class PlayerStats 
 {
 #region Score
@@ -19,6 +20,10 @@ public class PlayerStats
     public int highestGoldAmount = 0;
 #endregion
 
+#region Unlocks
+    public int totalScore = 0;
+    // TODO: Create a dictionary that stores values + unlockable.
+#endregion
     public PlayerStats() {}
 
 #region Utils

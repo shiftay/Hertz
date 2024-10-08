@@ -36,8 +36,8 @@ public class BottomBar : MonoBehaviour
     }
 
     public void SetPlayerVals(Player p) {
-        healthAmt.text = p.health.currentHealth.ToString();
-        goldAmt.text = p.scoring.currentGold.ToString();
+        healthAmt.text = p.currentGameStats.health.currentHealth.ToString();
+        goldAmt.text = p.currentGameStats.scoring.currentGold.ToString();
     }
 
     public void ToggleCompletedHands() {

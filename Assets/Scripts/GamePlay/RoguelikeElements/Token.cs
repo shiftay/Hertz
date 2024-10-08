@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum TOKENTYPES { Multi, Gold, Score }
 
+[System.Serializable]
 public sealed class Token 
 {
     /*
@@ -35,7 +36,7 @@ public sealed class Token
 }
 
 public static class TokenEffects {
-    public static void Multi(Player p) { p.scoring.scoreQueue.Add(new Source(SourceType.TOKEN, 2, true)); }
-    public static void Gold(Player p) { p.scoring.goldQueue.Add(new Source(SourceType.TOKEN, 5));}
-    public static void Score(Player p) { p.scoring.scoreQueue.Add(new Source(SourceType.TOKEN, 25)); }
+    public static void Multi(Player p) { p.currentGameStats.scoring.scoreQueue.Add(new Source(SourceType.TOKEN, 2, true)); }
+    public static void Gold(Player p) { p.currentGameStats.scoring.goldQueue.Add(new Source(SourceType.TOKEN, 5));}
+    public static void Score(Player p) { p.currentGameStats.scoring.scoreQueue.Add(new Source(SourceType.TOKEN, 25)); }
 }

@@ -6,58 +6,56 @@ using UnityEngine;
 [System.Serializable]
 public class Player
 {
-    public Deck _currentDeck;
-    public Hand _currentHand;
-    public bool isPlayer;
-    public Utils.DIFFICULITIES difficulty;
-    public Health health;
-    public Scoring scoring;
-    public List<PlayerTrinket> trinkets;
     public List<Unlockable> unlocks;
     public GameplayChanges gamePlayChanges;
-    public Token currentToken;
     public PlayerStats playerStats; // TODO Flood throughout code to update stats and to check against stats.
+    public Settings settings;
+    public CurrentGameStats currentGameStats;
+
 
     public void AdjustValue(RoundEndTypes type, int value) {
         switch(type) {
             case RoundEndTypes.Health:
-                health.currentHealth += value;
+                currentGameStats.health.currentHealth += value;
+
+                playerStats.healingDone += value;
                 break;
             case RoundEndTypes.Score:
-                scoring.currentScore += value;
+                currentGameStats.scoring.currentScore += value;
+
+                playerStats.LargestScore(value);
+                playerStats.totalScore += value;
                 break;
             case RoundEndTypes.Income:
-                scoring.currentGold += value;
+                currentGameStats.scoring.currentGold += value;
+
+                playerStats.goldCollected += value;
+                playerStats.HighestGold(value);
                 break;
         }
     }
 
-    public bool HasTrinket(TRINKET id) { return trinkets.FindAll(n=> n.baseTrinket.IDENTIFIER == id).Count > 0; }
+    public bool HasTrinket(TRINKET id) { return currentGameStats.trinkets.FindAll(n=> n.baseTrinket.identifier == id).Count > 0; }
 
     public void ClearQueues() {
-        health.damageQueue.Clear();
-        scoring.goldQueue.Clear();
-        scoring.scoreQueue.Clear();
+        currentGameStats.health.damageQueue.Clear();
+        currentGameStats.scoring.goldQueue.Clear();
+        currentGameStats.scoring.scoreQueue.Clear();
     }
 
     public int Value() {
         int retVal = 0;
-        trinkets.ForEach(n => retVal += n.sellValue);
+        currentGameStats.trinkets.ForEach(n => retVal += n.sellValue);
         return retVal;
     }
     
 
-    public Player(bool player) {
-        if(player) { 
-            unlocks = new List<Unlockable>();
-            _currentDeck = new Deck();
-            trinkets = new List<PlayerTrinket>();
-            gamePlayChanges = new GameplayChanges();
-        }
-        health = new Health();
-        scoring = new Scoring();
-        isPlayer = player;
-        _currentHand = new Hand();
+    public Player() {
+        unlocks = new List<Unlockable>();
+        gamePlayChanges = new GameplayChanges();
+        playerStats = new PlayerStats();
+        settings = new Settings();
+        currentGameStats = new CurrentGameStats();
     }
 }
 
@@ -79,7 +77,7 @@ public class GameplayChanges {
 
     Player Health.
         Any points received by the player count as damage and are scored at the end of the entire round.
-        The game ends when the player loses all of their health.
+        The game ends when the player loses all of their currentGameStats.health.
     
 
     Any points given to the AI count as points the player gains
@@ -97,7 +95,7 @@ public class GameplayChanges {
             > If a player gets a different enhanced card they can replace the current one and sell it for a portion of it's initial price.
                 > Example: Player gets a Gold and Healing mutliplier Ace of Diamonds, they can then sell their current Score Multiplier Ace of Diamonds back to the store.
         Trinkets
-            > These are passives that allow the player to gain health, gain more gold, gain more multiplier to their overall score
+            > These are passives that allow the player to gain currentGameStats.health, gain more gold, gain more multiplier to their overall score
             > Ability to heal and various other iterations.
             > Trinkets can be sold to open up their slot for a different trinket.
 

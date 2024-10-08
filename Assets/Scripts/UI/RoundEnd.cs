@@ -33,7 +33,7 @@ public class RoundEnd : MonoBehaviour
         IF Trinkets exist that effect the current tally, loop through the trinkets that do affect the one that is currently tallying
             Either flashing the trinket, having it slide down and add it's value, etc..
 
-        TODO Implement Trinkets into scoring, damage, healing behvaiour      
+        TODO Implement Trinkets into currentGameStats.scoring, damage, healing behvaiour      
 
     */
 
@@ -44,11 +44,11 @@ public class RoundEnd : MonoBehaviour
     public Animator goldTransition, scoringTransition;
     public Animator incomeScreen;
     public void ShowDamage() {                                                 
-        StartCoroutine(ShowScreen(healthTransition, currentPlayer.health.damageQueue, FindDescriptor(RoundEndTypes.Health), health, TextAnchor.UpperRight, ShowScore));
+        StartCoroutine(ShowScreen(healthTransition, currentPlayer.currentGameStats.health.damageQueue, FindDescriptor(RoundEndTypes.Health), health, TextAnchor.UpperRight, ShowScore));
     }
 
     public void ShowScore() {
-        StartCoroutine(ShowScreen(scoringTransition, currentPlayer.scoring.scoreQueue, FindDescriptor(RoundEndTypes.Score), score, TextAnchor.UpperLeft, ShowGold));
+        StartCoroutine(ShowScreen(scoringTransition, currentPlayer.currentGameStats.scoring.scoreQueue, FindDescriptor(RoundEndTypes.Score), score, TextAnchor.UpperLeft, ShowGold));
     }
 
     public IEnumerator ShowScreen(Animator transition, List<Source> queue, RoundEndDescriptor descriptor,
@@ -71,7 +71,7 @@ public class RoundEnd : MonoBehaviour
         yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
         yield return StartCoroutine(GhostWrite(descriptor.title, descriptor.holder.title));
-        // Load in each individual scoring reason
+        // Load in each individual currentGameStats.scoring reason
         int value = 0;
         int multiplier = 0;
 
@@ -114,7 +114,7 @@ public class RoundEnd : MonoBehaviour
     }
 
     private void ShowGold() {
-        StartCoroutine(ShowScreen(goldTransition, currentPlayer.scoring.goldQueue, FindDescriptor(RoundEndTypes.Income), gold, TextAnchor.UpperLeft, MoveToShop));
+        StartCoroutine(ShowScreen(goldTransition, currentPlayer.currentGameStats.scoring.goldQueue, FindDescriptor(RoundEndTypes.Income), gold, TextAnchor.UpperLeft, MoveToShop));
     }
 
     private void MoveToShop() {

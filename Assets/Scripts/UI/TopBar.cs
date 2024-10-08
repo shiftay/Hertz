@@ -11,7 +11,7 @@ public class TopBar : MonoBehaviour
     public List<TrinketUI> currentTrinkets;
 
     public void SetPlayerVals(Player p) {
-        scoreLabel.text = p.scoring.currentScore.ToString();
+        scoreLabel.text = p.currentGameStats.scoring.currentScore.ToString();
     }
 
     public void SetupTrinket(PlayerTrinket trinket) {
@@ -23,10 +23,10 @@ public class TopBar : MonoBehaviour
     }
 
     public void SetupTrinkets(Player p) {
-        for(int i = 0; i < p.trinkets.Count; i++) {
-            if(currentTrinkets.FindAll(n => n.trinket == p.trinkets[i].baseTrinket).Count > 0) continue;
+        for(int i = 0; i < p.currentGameStats.trinkets.Count; i++) {
+            if(currentTrinkets.FindAll(n => n.trinket == p.currentGameStats.trinkets[i].baseTrinket).Count > 0) continue;
 
-            SetupTrinket(p.trinkets[i]);
+            SetupTrinket(p.currentGameStats.trinkets[i]);
         }
     }
 

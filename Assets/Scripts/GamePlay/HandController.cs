@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
 public class HandController : MonoBehaviour
 {
-    public Player player;
+    public PlayerChecks player;
 
     private float _startingPointX, _endPointX;
     private float _startingPointY, _endPointY;
@@ -23,7 +23,6 @@ public class HandController : MonoBehaviour
     public float _signOfMiddle;
     private int currentChildAmount, lastUpdateChildAmount;
     private float _rotationMod;
-    public BoxCollider2D boxCollider2D; 
     public Utils.AXIS currentAXIS;
 
     private bool shootForTheMoon;

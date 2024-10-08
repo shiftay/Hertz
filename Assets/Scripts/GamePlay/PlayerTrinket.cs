@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum TRINKETMOD { BASE = 100, GOLD = 20, /*PLATINUM,*/ DIAMOND = 5 }
 
+[System.Serializable]
 public class PlayerTrinket 
 {
     public Trinket baseTrinket;

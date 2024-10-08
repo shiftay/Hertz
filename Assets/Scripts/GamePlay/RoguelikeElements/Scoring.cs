@@ -10,11 +10,9 @@ public class Scoring
     public List<Source> goldQueue;
     public List<Source> scoreQueue;
     public float currentScore;
-    public float multiplierQueue;
 
     public Scoring() {
         currentGold =  0;
-        multiplierQueue = 0;
         currentScore = 0;
 
         scoreQueue = new List<Source>();

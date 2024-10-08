@@ -907,6 +907,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 38298933}
+  currentToken:
+    type: 0
+    price: 0
 --- !u!1 &44449456
 GameObject:
   m_ObjectHideFlags: 0
@@ -951,20 +954,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4773352331bce70469d5ab6eb468ebab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player:
-    isPlayer: 0
-    difficulty: 0
-    health:
-      currentHealth: 100
-      healingQueue: 0
-    scoring:
-      currentGold: 0
-      currentScore: 0
-      multiplierQueue: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
-  boxCollider2D: {fileID: 0}
   currentAXIS: 1
   children: []
 --- !u!1 &53344351
@@ -11306,20 +11298,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4773352331bce70469d5ab6eb468ebab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player:
-    isPlayer: 0
-    difficulty: 0
-    health:
-      currentHealth: 100
-      healingQueue: 0
-    scoring:
-      currentGold: 0
-      currentScore: 0
-      multiplierQueue: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
-  boxCollider2D: {fileID: 0}
   currentAXIS: 0
   children: []
 --- !u!1 &826806626
@@ -11649,20 +11630,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4773352331bce70469d5ab6eb468ebab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player:
-    isPlayer: 0
-    difficulty: 0
-    health:
-      currentHealth: 100
-      healingQueue: 0
-    scoring:
-      currentGold: 0
-      currentScore: 0
-      multiplierQueue: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
-  boxCollider2D: {fileID: 0}
   currentAXIS: 2
   children: []
 --- !u!61 &846550455
@@ -13591,20 +13561,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4773352331bce70469d5ab6eb468ebab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player:
-    isPlayer: 0
-    difficulty: 0
-    health:
-      currentHealth: 100
-      healingQueue: 0
-    scoring:
-      currentGold: 0
-      currentScore: 0
-      multiplierQueue: 0
   _currentXVal: 0
   _currentYVal: 0
   _signOfMiddle: 0
-  boxCollider2D: {fileID: 0}
   currentAXIS: 3
   children: []
 --- !u!1 &1028666970
@@ -20412,6 +20371,7 @@ GameObject:
   - component: {fileID: 1592568205}
   - component: {fileID: 1592568204}
   - component: {fileID: 1592568206}
+  - component: {fileID: 1592568207}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -20435,7 +20395,8 @@ MonoBehaviour:
   handlerUI: {fileID: 1700453949}
   spriteHandler: {fileID: 1592568206}
   shop: {fileID: 1385498633}
-  animPlaying: 0
+  inputOutput: {fileID: 1592568207}
+  checkLoad: 1
 --- !u!4 &1592568205
 Transform:
   m_ObjectHideFlags: 0
@@ -20624,7 +20585,23 @@ MonoBehaviour:
     identifier: 8
   - baseSprite: {fileID: 21300000, guid: 75ce719fcbb74bc44b8ee9d23c80238b, type: 3}
     identifier: 11
+  - baseSprite: {fileID: 21300000, guid: f6a1a0c227692cc43985d3d613b1e4fe, type: 3}
+    identifier: 13
+  - baseSprite: {fileID: 21300000, guid: 0e282f393118d0040be67e2db821e9d3, type: 3}
+    identifier: 2
   tokenIdentifiers: []
+--- !u!114 &1592568207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592568203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7bbad6635580e4a9026d86dbb85c20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1594583657
 PrefabInstance:
   m_ObjectHideFlags: 0
