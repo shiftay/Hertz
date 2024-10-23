@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 8145422598046428705}
   - component: {fileID: 5101907324550105421}
   - component: {fileID: 2286099822808883293}
+  - component: {fileID: 5046685320214107123}
   m_Layer: 5
   m_Name: WonHand
   m_TagString: Untagged
@@ -201,6 +202,18 @@ MonoBehaviour:
   - {fileID: 1233700002754759374}
   - {fileID: 9195100092213615977}
   - {fileID: 3700134660061351763}
+--- !u!225 &5046685320214107123
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2791960850134631789}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &2124571761265397026
 PrefabInstance:
   m_ObjectHideFlags: 0

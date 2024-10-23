@@ -8,4 +8,8 @@ public class AnimationCallback : MonoBehaviour
     public void AnimCallBack() {
         GameManager.instance.AnimationComplete();
     }
+
+    public void UpdateLastHand() {
+        GameManager.instance.handlerUI.bottomBar.UpdateHand();
+    }
 }

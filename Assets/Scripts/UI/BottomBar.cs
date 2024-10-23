@@ -6,33 +6,27 @@ using TMPro;
 
 public class BottomBar : MonoBehaviour
 {
-    public Animator completedHandsAnim;
-    public Animator roundEndAnim;
     public TextMeshProUGUI healthAmt, goldAmt;
-    public WonHandUI prefab;
-    public RectTransform ScrollViewContent;
-    public RectTransform Viewport;
-    public Image completedBTN;
-    private bool _switch = false;
+    public Animator lastHand;
+    public WonHandUI hand;
+    private List<Card> lastHandCards = new List<Card>();
+    private bool firstTime = true;
 
-    public void CreateWonHand(List<Card> hand) {
-        WonHandUI temp = Instantiate(prefab);
+    public void UpdateLastHand(List<Card> hand) {
+        lastHandCards = hand;
 
-        temp.SetupWonHand(hand);
-
-        temp.transform.SetParent(ScrollViewContent);
-        temp.transform.SetAsLastSibling();
-        temp.transform.localScale = Vector3.one;
-
-        ScrollViewContent.sizeDelta = new Vector2(0, ScrollViewContent.childCount * 46.1475f + Utils.WONHANDUIMODIFIER);
+        if(firstTime) {
+            firstTime = false;
+            this.hand.SetupWonHand(lastHandCards);
+            lastHand.SetTrigger("On");
+        } else {
+            lastHand.SetTrigger("Flip");
+        }
     }
 
     public void CleanUp() {
-        List<GameObject> objs = new List<GameObject>();
-
-        for(int i = 0; i < ScrollViewContent.childCount; i++) objs.Add(ScrollViewContent.GetChild(i).gameObject);
-
-        objs.ForEach(n => Destroy(n));
+        lastHand.SetTrigger("Off");
+        firstTime = true;
     }
 
     public void SetPlayerVals(Player p) {
@@ -40,13 +34,8 @@ public class BottomBar : MonoBehaviour
         goldAmt.text = p.currentGameStats.scoring.currentGold.ToString();
     }
 
-    public void ToggleCompletedHands() {
-        if(ScrollViewContent.childCount < 1) return; 
-
-        completedBTN.sprite =  GameManager.instance.spriteHandler.HandsBTN[_switch ? 0 : 1];
-        _switch = !_switch;
-
-        completedHandsAnim.SetTrigger("Trigger" + (ScrollViewContent.childCount < 3 ? ScrollViewContent.childCount : 3));  
+    public void UpdateHand() {
+        hand.SetupWonHand(lastHandCards);
     }
 
 }

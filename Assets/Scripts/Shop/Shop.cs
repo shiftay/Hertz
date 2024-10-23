@@ -8,6 +8,7 @@ using UnityEngine;
 public class Shop : MonoBehaviour
 {
     private Player _currentPlayer;
+    public Player PLAYER { set { _currentPlayer = value; }}
     /*
         IMPLEMENT  
         Buy Featured:
@@ -56,14 +57,12 @@ public class Shop : MonoBehaviour
     public Animator cardViewer;
 
 #region Initialization
-    public void SetupShop(Player player) {
-        _currentPlayer = player;
-
+    public void SetupShop() {
         currentAmount = Utils.BASEREROLL;
 
         currentOpen = null;
 
-        player.currentGameStats.trinkets.ForEach(n => {
+        _currentPlayer.currentGameStats.trinkets.ForEach(n => {
             if(n.baseTrinket.check == VALUECHECK.SHOP) {
                 n.baseTrinket.effect(_currentPlayer, n.baseTrinket.ID);
             }
@@ -301,23 +300,11 @@ public class Shop : MonoBehaviour
         // TODO:    Cleanup
         currentOpen = null;
         trinketOpen = null;
-
+        Debug.Log("Hello");
         //          Animate an exit.
-        StartCoroutine(ToGamePlay());
+       GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.Gameplay, GameManager.instance.dealer.GameSetup);
     }
 
-    private IEnumerator ToGamePlay() {
-        GameManager.instance.ResetAnim();
-        GameManager.instance.handlerUI.cardTransition.RandomizeAndShow();
-        // Wait for Anim
-        yield return new WaitUntil(() => !GameManager.instance.animPlaying);
-
-        // Set State to gameplay
-        GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.Gameplay);
-        GameManager.instance.dealer.GameSetup();
-
-        GameManager.instance.handlerUI.cardTransition.Remove();
-    }
 
 #endregion
 

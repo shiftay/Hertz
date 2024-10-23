@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -28,6 +29,15 @@ public class HandController : MonoBehaviour
     private bool shootForTheMoon;
 
     public List<CardGO> children = new List<CardGO>();
+
+    /// <summary>
+    /// Callback to draw gizmos that are pickable and always drawn.
+    /// </summary>
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.black;
+        Gizmos.DrawCube(transform.position, Vector3.one);
+    }
 
 
     private void Awake() {

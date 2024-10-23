@@ -9,9 +9,12 @@ public class TopBar : MonoBehaviour
     public Transform trinketParent;
     public TrinketUI trinketPrefab;
     public List<TrinketUI> currentTrinkets;
+    public CanvasGroup trinkets;
+
 
     public void SetPlayerVals(Player p) {
         scoreLabel.text = p.currentGameStats.scoring.currentScore.ToString();
+        trinkets.alpha = p.currentGameStats.trinkets.Count;
     }
 
     public void SetupTrinket(PlayerTrinket trinket) {

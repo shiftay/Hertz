@@ -17,15 +17,14 @@ public class RoundEnd : MonoBehaviour
     private Player currentPlayer;
 
     public void Setup(Player p) {
-        GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.RoundEnd);
+        GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.RoundEnd, ShowDamage);
         currentPlayer = p;
         roundEndDescriptors.ForEach(n => n.holder.Init());
-        ShowDamage();
+        // ShowDamage();
     }
 
 
 
-    public Animator health, gold, score;
 
     /* 
         IMPLEMENT Decide Order of Healing / Damage
@@ -39,20 +38,17 @@ public class RoundEnd : MonoBehaviour
 
 
 
-    [Header("Transistions")]
-    public Animator healthTransition;
-    public Animator goldTransition, scoringTransition;
+
     public Animator incomeScreen;
     public void ShowDamage() {                                                 
-        StartCoroutine(ShowScreen(healthTransition, currentPlayer.currentGameStats.health.damageQueue, FindDescriptor(RoundEndTypes.Health), health, TextAnchor.UpperRight, ShowScore));
+        StartCoroutine(ShowScreen(currentPlayer.currentGameStats.health.damageQueue, FindDescriptor(RoundEndTypes.Health), TextAnchor.UpperRight, ShowScore));
     }
 
     public void ShowScore() {
-        StartCoroutine(ShowScreen(scoringTransition, currentPlayer.currentGameStats.scoring.scoreQueue, FindDescriptor(RoundEndTypes.Score), score, TextAnchor.UpperLeft, ShowGold));
+        StartCoroutine(ShowScreen( currentPlayer.currentGameStats.scoring.scoreQueue, FindDescriptor(RoundEndTypes.Score), TextAnchor.UpperLeft, ShowGold));
     }
 
-    public IEnumerator ShowScreen(Animator transition, List<Source> queue, RoundEndDescriptor descriptor,
-                            Animator mainValue, TextAnchor corner, CallBack callBack = null) 
+    public IEnumerator ShowScreen(List<Source> queue, RoundEndDescriptor descriptor, TextAnchor corner, CallBack callBack = null) 
     {
         descriptor.holder.Setup(descriptor.color);
         // Reset Anim
@@ -63,15 +59,16 @@ public class RoundEnd : MonoBehaviour
         yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
 
-        //Reset Anim
-        GameManager.instance.ResetAnim();
-        // Slide Gold ontop of pop up
-        transition.SetTrigger("Update" + descriptor.title);
-        // Wait for Anim
-        yield return new WaitUntil(() => !GameManager.instance.animPlaying);
+        // //Reset Anim
+        // GameManager.instance.ResetAnim();
+        // // Slide Gold ontop of pop up
+        // // Wait for Anim
+        // yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
         yield return StartCoroutine(GhostWrite(descriptor.title, descriptor.holder.title));
         // Load in each individual currentGameStats.scoring reason
+
+        Debug.Log("Count: " + queue.Count);
         int value = 0;
         int multiplier = 0;
 
@@ -93,28 +90,28 @@ public class RoundEnd : MonoBehaviour
                 yield return StartCoroutine(ShowCards(queue[i].associatedCards, reHolder.transform));
             }
         }
-
         // ResetAnim
-        GameManager.instance.ResetAnim();
+        // GameManager.instance.ResetAnim();
         //Pop Gold Value to new Gold Value
         currentPlayer.AdjustValue(descriptor.type, value * multiplier);
         GameManager.instance.handlerUI.UpdateValues(currentPlayer);
-        mainValue.SetTrigger("Pop");
         
         //wait for anim
-        yield return new WaitUntil(() => !GameManager.instance.animPlaying);
+        // yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
         GameManager.instance.ResetAnim();
-        transition.SetTrigger("Hide" + descriptor.title); 
         descriptor.holder.animator.SetTrigger("Hide");
         yield return new WaitUntil(() => !GameManager.instance.animPlaying);
         
         ScheduleCardsForDeletion(descriptor.cardParent);
-        if(callBack != null) callBack();
+        if(callBack != null) {
+            Debug.Log("Hello? #");
+            callBack();
+        } 
     }
 
     private void ShowGold() {
-        StartCoroutine(ShowScreen(goldTransition, currentPlayer.currentGameStats.scoring.goldQueue, FindDescriptor(RoundEndTypes.Income), gold, TextAnchor.UpperLeft, MoveToShop));
+        StartCoroutine(ShowScreen( currentPlayer.currentGameStats.scoring.goldQueue, FindDescriptor(RoundEndTypes.Income), TextAnchor.UpperLeft, MoveToShop));
     }
 
     private void MoveToShop() {
@@ -122,21 +119,20 @@ public class RoundEnd : MonoBehaviour
     }
 
     private IEnumerator Shop() {
-        GameManager.instance.ResetAnim();
-        GameManager.instance.handlerUI.cardTransition.RandomizeAndShow();
+        // GameManager.instance.ResetAnim();
+        // GameManager.instance.handlerUI.cardTransition.RandomizeAndShow();
         // Bring Card Transistion In
-        yield return new WaitUntil(() => !GameManager.instance.animPlaying);
-
+        // yield return new WaitUntil(() => !GameManager.instance.animPlaying);
+        GameManager.instance.shop.PLAYER = currentPlayer;
         // Clean Up Cards
+        GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.Shop, GameManager.instance.shop.SetupShop);
         CleanUp();
 
         yield return new WaitForSeconds(1.0f); // TODO: Remove
         // Setup Store
-        GameManager.instance.shop.SetupShop(currentPlayer);
+        
         // Anim to open the store
-        GameManager.instance.handlerUI.SetState(Utils.GAMEPLAYSTATES.Shop);
-        // Remove Card Transition
-        GameManager.instance.handlerUI.cardTransition.Remove();
+
     }
 
     // Clean up Cards

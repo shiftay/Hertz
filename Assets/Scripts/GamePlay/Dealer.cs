@@ -53,7 +53,7 @@ public class Dealer : MonoBehaviour
     void Awake()
     {
         Init(); // TODO Move this into another portion of the game. Doesn't need to be in Awake.
-        GameSetup();
+        // GameSetup();
     }
 
     private void Init() {
@@ -77,14 +77,11 @@ public class Dealer : MonoBehaviour
         Shuffle(Deck);
         Deal();
 
-
-
         GameManager.instance.handlerUI.UpdateValues(GameManager.instance.MAINPLAYER);
         currentCard = currentHand = 0;
     }
 
-    // IDEA
-    //   To be used for Validating that the deck is conformed to any gameplay changes that effect card value.
+    // IDEA -- To be used for Validating that the deck is conformed to any gameplay changes that effect card value.
     public void ValidateDeck() {
         for(int i = 0; i < GameManager.instance.MAINPLAYER.currentGameStats.deck.cards.Count; i++) {
             if(GameManager.instance.MAINPLAYER.gamePlayChanges.AcesLow && GameManager.instance.MAINPLAYER.currentGameStats.deck.cards[i].cardInfo.cardValue == Utils.ACE)
@@ -99,8 +96,6 @@ public class Dealer : MonoBehaviour
             handPos.dealPos.player = temp;
             players.Add(temp);
         }
-
-        GameManager.instance.MAINPLAYER.currentGameStats.scoring.currentGold = debug_startingGold;
     }
 
     private void CreateCards() {
@@ -211,7 +206,7 @@ public class Dealer : MonoBehaviour
         dealerCoin.transform.position = dealPositions[players.FindIndex(n => n == currentTurn)].coinPos.position;
         playedCards.FindAll(n => n.handPlayed == currentHand).ForEach(n => n.CURRENTOWNER = winnerOfHand);
 
-        GameManager.instance.handlerUI.bottomBar.CreateWonHand(WonHand(currentHand));
+        GameManager.instance.handlerUI.bottomBar.UpdateLastHand(WonHand(currentHand));
 
         currentHand++;
         currentCard = 0;
@@ -283,12 +278,13 @@ public class Dealer : MonoBehaviour
 
             GameManager.instance.MAINPLAYER.playerStats.handsWon += WonHands();
             
-            GameManager.instance.ResetAnim();
-            GameManager.instance.handlerUI.cardTransition.RandomizeAndShow();
-            // Wait for Anim
-            yield return new WaitUntil(() => !GameManager.instance.animPlaying);
+            // GameManager.instance.ResetAnim();
+            // GameManager.instance.handlerUI.cardTransition.RandomizeAndShow();
+            // // Wait for Anim
+            // yield return new WaitUntil(() => !GameManager.instance.animPlaying);
 
-            GameManager.instance.handlerUI.cardTransition.Remove();
+            // GameManager.instance.handlerUI.cardTransition.Remove();
+            
 
             GameManager.instance.handlerUI.roundEnd.Setup(GameManager.instance.MAINPLAYER);
             CleanUp();
