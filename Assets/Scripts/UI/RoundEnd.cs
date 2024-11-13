@@ -23,9 +23,6 @@ public class RoundEnd : MonoBehaviour
         // ShowDamage();
     }
 
-
-
-
     /* 
         IMPLEMENT Decide Order of Healing / Damage
 
@@ -36,16 +33,25 @@ public class RoundEnd : MonoBehaviour
 
     */
 
-
-
-
     public Animator incomeScreen;
-    public void ShowDamage() {                                                 
-        StartCoroutine(ShowScreen(currentPlayer.currentGameStats.health.damageQueue, FindDescriptor(RoundEndTypes.Health), TextAnchor.UpperRight, ShowScore));
+    public void ShowDamage() {     
+        if(currentPlayer.currentGameStats.health.damageQueue.Count > 0)                                            
+            StartCoroutine(ShowScreen(currentPlayer.currentGameStats.health.damageQueue, FindDescriptor(RoundEndTypes.Health), TextAnchor.UpperRight, ShowScore));
+        else 
+            ShowScore();
     }
 
     public void ShowScore() {
-        StartCoroutine(ShowScreen( currentPlayer.currentGameStats.scoring.scoreQueue, FindDescriptor(RoundEndTypes.Score), TextAnchor.UpperLeft, ShowGold));
+        if(currentPlayer.currentGameStats.scoring.scoreQueue.Count > 0)   
+            StartCoroutine(ShowScreen( currentPlayer.currentGameStats.scoring.scoreQueue, FindDescriptor(RoundEndTypes.Score), TextAnchor.UpperLeft, ShowGold));
+        else 
+            ShowGold();
+    }
+    private void ShowGold() {
+        if(currentPlayer.currentGameStats.scoring.goldQueue.Count > 0)   
+            StartCoroutine(ShowScreen(currentPlayer.currentGameStats.scoring.goldQueue, FindDescriptor(RoundEndTypes.Income), TextAnchor.UpperLeft, MoveToShop));
+        else
+            MoveToShop();
     }
 
     public IEnumerator ShowScreen(List<Source> queue, RoundEndDescriptor descriptor, TextAnchor corner, CallBack callBack = null) 
@@ -86,18 +92,20 @@ public class RoundEnd : MonoBehaviour
                 GameObject reHolder = Instantiate(RoundEndHolder);
                 reHolder.transform.SetParent(descriptor.cardParent);
                 reHolder.transform.localScale = Vector3.one;
-                reHolder.GetComponent<GridLayoutGroup>().childAlignment = corner;
+                // reHolder.GetComponent<GridLayoutGroup>().childAlignment = corner;
                 yield return StartCoroutine(ShowCards(queue[i].associatedCards, reHolder.transform));
             }
         }
         // ResetAnim
         // GameManager.instance.ResetAnim();
         //Pop Gold Value to new Gold Value
-        currentPlayer.AdjustValue(descriptor.type, value * multiplier);
+        Debug.Log(descriptor.type.ToString() + " _ Value: " + value + " _ Multi: "+ multiplier);
+
+        currentPlayer.AdjustValue(descriptor.type, value * (multiplier == 0 ? 1 : multiplier));
         GameManager.instance.handlerUI.UpdateValues(currentPlayer);
         
-        //wait for anim
-        // yield return new WaitUntil(() => !GameManager.instance.animPlaying);
+        //Wait for a set amount of time.
+        yield return new WaitForSeconds(1.25f);
 
         GameManager.instance.ResetAnim();
         descriptor.holder.animator.SetTrigger("Hide");
@@ -105,14 +113,11 @@ public class RoundEnd : MonoBehaviour
         
         ScheduleCardsForDeletion(descriptor.cardParent);
         if(callBack != null) {
-            Debug.Log("Hello? #");
             callBack();
         } 
     }
 
-    private void ShowGold() {
-        StartCoroutine(ShowScreen( currentPlayer.currentGameStats.scoring.goldQueue, FindDescriptor(RoundEndTypes.Income), TextAnchor.UpperLeft, MoveToShop));
-    }
+
 
     private void MoveToShop() {
         StartCoroutine(Shop());

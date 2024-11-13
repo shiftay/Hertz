@@ -18,6 +18,8 @@ public class TopBar : MonoBehaviour
     }
 
     public void SetupTrinket(PlayerTrinket trinket) {
+        if(trinkets.alpha == 0) trinkets.alpha = 1;
+        
         TrinketUI temp = Instantiate(trinketPrefab);
         temp.transform.SetParent(trinketParent);
         temp.transform.localScale = Vector3.one;

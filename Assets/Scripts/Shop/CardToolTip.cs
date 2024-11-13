@@ -12,9 +12,19 @@ public class CardToolTip : MonoBehaviour
 
     public void Setup(Shop.Rarity rarity, List<Enhancements> enhancements) {
         this.rarity.text = rarity.ToString();
+        //TODO: Rarity color
 
         enhancementTags.ForEach(n => n.mainObj.SetActive(false));
         // for(int i = 0; i < enh)
+
+
+        for(int i = 0; i < enhancements.Count; i++) { 
+            enhancementTags[i].label.text = enhancementUIs.Find(n => n.type == enhancements[i].type).Title;
+
+            enhancementTags[i].image.color = enhancementUIs.Find(n => n.type == enhancements[i].type).color;
+
+            enhancementTags[i].mainObj.SetActive(true);
+        }
     }
 }
 

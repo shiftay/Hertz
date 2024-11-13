@@ -16,19 +16,19 @@ public class Player
     public void AdjustValue(RoundEndTypes type, int value) {
         switch(type) {
             case RoundEndTypes.Health:
+                Debug.Log("Updating Health " + value);
                 currentGameStats.health.currentHealth += value;
-
                 playerStats.healingDone += value;
                 break;
             case RoundEndTypes.Score:
                 currentGameStats.scoring.currentScore += value;
-
+                Debug.Log("Updating Score " + value);
                 playerStats.LargestScore(value);
                 playerStats.totalScore += value;
                 break;
             case RoundEndTypes.Income:
                 currentGameStats.scoring.currentGold += value;
-
+                Debug.Log("Updating Income " + value);
                 playerStats.goldCollected += value;
                 playerStats.HighestGold(value);
                 break;

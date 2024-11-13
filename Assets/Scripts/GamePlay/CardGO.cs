@@ -31,6 +31,13 @@ public class CardGO : MonoBehaviour
         }    
     }
 
+    public void OnCardPlayed() {
+        _currentCard.enhancements.ForEach(n => {
+            enhancementObjects.Find(x => x.type == n.type).ToggleObj(true);
+        });
+    }
+
+
     public void ComputerOwned() {
         _currentSprite.sprite = GameManager.instance.spriteHandler.CardBack();
         _currentCard.enhancements.ForEach(n => {

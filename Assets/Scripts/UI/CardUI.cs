@@ -24,7 +24,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             enhancementObjects.Find(x => x.type == n.type).Activate();
         });
     }
-
+    
     public void SetImage(Sprite sprite) {
         _cardImage.sprite = sprite;
     }
@@ -33,13 +33,13 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     public void OnPointerEnter(PointerEventData eventData)
     {
         // TODO Show Tooltip
-        // Debug.Log("Mouse Over " + card.cardInfo.DebugInfo());
+        Debug.Log("Mouse Over " + card.cardInfo.DebugInfo());
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         // TODO Hide Tooltip
-        // Debug.Log("Mouse Exit " + card.cardInfo.DebugInfo());
+        Debug.Log("Mouse Exit " + card.cardInfo.DebugInfo());
     }
 
     public void OnPointerClick(PointerEventData eventData)

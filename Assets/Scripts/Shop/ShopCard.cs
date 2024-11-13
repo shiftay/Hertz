@@ -32,4 +32,12 @@ public class ShopCard : MonoBehaviour
     }
 
     public void FlipComplete() {}
+
+    private void OnMouseOver() {
+        Debug.Log("Show Tool Tip ??");
+    }
+
+    private void OnMouseExit() {
+        Debug.Log("Hide Tool Tip");
+    }
 }

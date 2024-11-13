@@ -129,7 +129,6 @@ public class Dealer : MonoBehaviour
         playTime = UnityEngine.Random.Range(1.25f, 2.5f);
     }
 
-
 #endregion 
 
 #region Gameplay Loop+
@@ -154,6 +153,7 @@ public class Dealer : MonoBehaviour
         playedCard.transform.SetParent(dealPositions.Find(n => n.dealPos.player == currentTurn).cardPlayedPos);
         playedCard.transform.localPosition = Vector3.zero;
         playedCard._currentSprite.sprite = GameManager.instance.spriteHandler.FindCard(playedCard._currentCard.cardInfo.cardSuit, playedCard._currentCard.cardInfo.cardValue);
+        playedCard.OnCardPlayed();
 
         currentTurn._currentHand.cards.Remove(playedCard);
         
@@ -173,8 +173,6 @@ public class Dealer : MonoBehaviour
             currentTurn = players[x];
         }
     }
-
-
 
 
     private IEnumerator DetermineHandWinner() {
